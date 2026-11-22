@@ -13,7 +13,8 @@ export function useSession() {
   return s;
 }
 
-export type SortKey = 'name' | 'priority' | 'price' | 'duration' | 'recent';
+export type SortKey = 'name' | 'rating' | 'priority' | 'price' | 'duration' | 'recent';
+export type ViewMode = 'list' | 'grid';
 
 export interface Filters {
   q: string;
@@ -27,6 +28,7 @@ export interface Filters {
   incompleteOnly: boolean;
   sort: SortKey;
   dir: 'asc' | 'desc';
+  view: ViewMode;
 }
 
 export const DEFAULT_FILTERS: Filters = {
@@ -40,6 +42,7 @@ export const DEFAULT_FILTERS: Filters = {
   incompleteOnly: false,
   sort: 'name',
   dir: 'asc',
+  view: 'list',
 };
 
 export interface GamesState {

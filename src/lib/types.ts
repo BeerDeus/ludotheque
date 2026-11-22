@@ -49,6 +49,8 @@ export interface GameBase {
   shop?: string;
   url?: string;
   priority: Priority;
+  /** Note personnelle 1–5 étoiles */
+  myRating?: number;
   notes: string;
   tags: string[];
   /** Matériel manquant / abîmé (markdown) */

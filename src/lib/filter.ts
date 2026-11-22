@@ -41,6 +41,14 @@ export function applyFilters(games: Game[], f: Filters): Game[] {
       case 'name':
         r = byName(a, b) * dir;
         break;
+      case 'rating':
+      {
+        // « croissant » = mieux notés d'abord ; non notés toujours en fin
+        const ra = a.myRating ?? 0;
+        const rb = b.myRating ?? 0;
+        r = !ra || !rb ? (!ra && !rb ? 0 : !ra ? 1 : -1) : (rb - ra) * dir;
+        break;
+      }
       case 'priority':
         r = (a.priority - b.priority) * dir;
         break;

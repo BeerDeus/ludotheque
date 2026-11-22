@@ -6,6 +6,7 @@ import ListPage from './pages/ListPage';
 import DetailPage from './pages/DetailPage';
 import FamilyPage from './pages/FamilyPage';
 import AlreadyInFamily from './pages/AlreadyInFamily';
+import Toaster from './components/Toaster';
 
 export default function App() {
   if (!firebaseConfigured) {
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/rejoindre/:code" element={<AlreadyInFamily />} />
           <Route path="*" element={<ListPage />} />
         </Routes>
+        <Toaster />
       </GamesProvider>
     </SessionGate>
   );
