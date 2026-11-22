@@ -246,8 +246,12 @@ const commands = {
     if (sub !== 'deploy') die('rules deploy');
     const root = join(dirname(fileURLToPath(import.meta.url)), '..');
     const source = readFileSync(join(root, 'firestore.rules'), 'utf8');
-    const ruleset = await getSecurityRules().releaseFirestoreRulesetFromSource(source);
-    out({ released: ruleset.name, createTime: ruleset.createTime });
+    const rules = getSecurityRules();
+    const ruleset = await rules.releaseFirestoreRulesetFromSource(source);
+    const live = await rules.getFirestoreRuleset();
+    const verified = live.name === ruleset.name && live.source[0]?.content === source;
+    out({ released: ruleset.name, createTime: ruleset.createTime, verified });
+    if (!verified) die('La release active ne correspond pas à firestore.rules.');
   },
 };
 
