@@ -11,6 +11,7 @@ import { applicationDefault, cert, initializeApp } from 'firebase-admin/app';
 import { getSecurityRules } from 'firebase-admin/security-rules';
 import { FieldValue, Timestamp, getFirestore } from 'firebase-admin/firestore';
 import { findGame, things, toGamePatch } from './lib/bgg.mjs';
+import { coverFromPages, toDataUrl, wikipediaImage } from './lib/covers.mjs';
 
 const USAGE = `Usage: node scripts/games.mjs <commande> [args] [--family <fid>]
 
@@ -23,6 +24,8 @@ Jeux
   delete <ref>                Supprime un jeu
   export [--pending]          Liste compacte (gzip+base64 entre marqueurs) pour les logs CI publics
   apply <dir> [--applied f]   Applique <dir>/<familyId>__<gameId>.json (update enrichi) ; f = fichiers appliqués
+  covers [ref] [--all]        Image manquante → cherche sur Wikipédia (FR/EN), stockée en JPEG compact
+                              (dans un JSON d'update/apply : "coverPages": [urls de pages produit ou d'images])
   autofill [ref] [--all] [--force]
                               Remplit image, âge, joueurs, durée, année, complexité, note, extensions BGG
                               via l'API XML BGG (BGG_API_TOKEN requis). Par défaut : jeux jamais traités
@@ -40,7 +43,7 @@ Familles / accès
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
 
 const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'myRating', 'notes', 'tags', 'missingParts', 'expansions'];
-const ENRICHED_FIELDS = ['bggId', 'coverUrl', 'thumbUrl', 'customCover', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
+const ENRICHED_FIELDS = ['bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
 const ALLOWED = new Set([...BASE_FIELDS, ...ENRICHED_FIELDS]);
 const STATUSES = ['owned', 'wishlist', 'watch'];
 
@@ -152,7 +155,7 @@ function validate(data, { partial }) {
   if ('status' in data && !STATUSES.includes(data.status)) die(`status invalide (${STATUSES.join('|')}).`);
   if ('priority' in data && ![1, 2, 3].includes(data.priority)) die('priority doit valoir 1, 2 ou 3.');
   if ('complexity' in data && data.complexity != null && !(data.complexity >= 1 && data.complexity <= 5)) die('complexity entre 1 et 5.');
-  for (const k of ['tags', 'sources', 'expansions', 'bggExpansions']) if (k in data && data[k] != null && !Array.isArray(data[k])) die(`${k} doit être un tableau.`);
+  for (const k of ['tags', 'sources', 'expansions', 'bggExpansions', 'coverPages']) if (k in data && data[k] != null && !Array.isArray(data[k])) die(`${k} doit être un tableau.`);
   if (Array.isArray(data.expansions)) {
     data.expansions = data.expansions.map((e) => {
       if (!e || typeof e.name !== 'string' || !e.name.trim()) die('expansions[] : { name, owned, bggId?, notes? } attendu.');
@@ -163,6 +166,18 @@ function validate(data, { partial }) {
     if (k in data && data[k] != null && typeof data[k] !== 'number') die(`${k} doit être un nombre.`);
   // null = suppression du champ
   return Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v === null ? FieldValue.delete() : v]));
+}
+
+/** coverPages (pages produit / URLs d'image) → coverUrl (data URL compacte). Mute `data`. */
+async function resolveCoverPages(data, name) {
+  const pages = data.coverPages;
+  delete data.coverPages;
+  if (!Array.isArray(pages) || !pages.length) return;
+  const hit = await coverFromPages(pages);
+  if (hit) {
+    Object.assign(data, hit, { customCover: true, thumbUrl: FieldValue.delete() });
+    console.log(`  image ← ${hit.coverSource}`);
+  } else console.log(`  ⚠ aucune image récupérée pour ${name}`);
 }
 
 // ---------- commandes ----------
@@ -183,6 +198,7 @@ const commands = {
   async update([ref, json]) {
     const snap = await resolveGame(ref);
     const data = validate(readJson(json), { partial: true });
+    await resolveCoverPages(data, snap.data().name);
     if (!flags.noEnrich) Object.assign(data, { enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' });
     await snap.ref.set(data, { merge: true });
     out(gameJson(await snap.ref.get()));
@@ -257,6 +273,7 @@ const commands = {
         if (!snap.exists) throw new Error('jeu introuvable');
         const data = validate(JSON.parse(readFileSync(join(dir, f), 'utf8')), { partial: true });
         delete data.expansions; // jamais écrasées par un enrichissement
+        await resolveCoverPages(data, snap.data().name);
         await ref.set({ ...data, enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' }, { merge: true });
         applied.push(join(dir, f));
         console.log(`✓ ${snap.data().name} (${Object.keys(data).length} champs)`);
@@ -268,6 +285,35 @@ const commands = {
     if (flags.applied) writeFileSync(flags.applied, applied.join('\n') + (applied.length ? '\n' : ''));
     console.log(`${applied.length} appliqué(s), ${failed} échec(s)`);
     if (failed) process.exitCode = 1;
+  },
+
+  /** Images manquantes : cherche sur Wikipédia (FR/EN). Ne retente pas un jeu déjà essayé sous le même nom. */
+  async covers([ref]) {
+    let snaps;
+    if (ref) snaps = [await resolveGame(ref)];
+    else {
+      const fid = await resolveFamily({ required: false });
+      snaps = (fid ? await db.collection(`families/${fid}/games`).get() : await db.collectionGroup('games').get()).docs.filter((s) => {
+        const g = s.data();
+        return !g.coverUrl && (flags.all || g.coverTriedName !== g.name);
+      });
+    }
+    console.log(`${snaps.length} jeu(x) sans image à chercher`);
+    for (const s of snaps) {
+      const g = s.data();
+      try {
+        const hit = await wikipediaImage(g.name);
+        if (hit) {
+          await s.ref.set({ coverUrl: await toDataUrl(hit.bytes), coverSource: hit.page, customCover: true, thumbUrl: FieldValue.delete(), coverTriedName: g.name }, { merge: true });
+          console.log(`✓ ${g.name} ← ${hit.page}`);
+        } else {
+          await s.ref.set({ coverTriedName: g.name }, { merge: true });
+          console.log(`· ${g.name} : rien sur Wikipédia`);
+        }
+      } catch (e) {
+        console.error(`✗ ${g.name} : ${e.message}`);
+      }
+    }
   },
 
   async autofill([ref]) {

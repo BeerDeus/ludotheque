@@ -1,7 +1,7 @@
-name: BGG autofill
+name: Images et autofill BGG
 
-# Complète automatiquement image, âge, joueurs, durée, année, complexité, note et extensions BGG
-# des jeux nouvellement ajoutés ou renommés. Nécessite le secret BGG_API_TOKEN.
+# Toutes les heures : images manquantes (Wikipédia) puis, si BGG_API_TOKEN est défini,
+# complétion BGG (image, âge, joueurs, durée, année, complexité, note, extensions).
 on:
   schedule:
     - cron: '17 * * * *'
@@ -24,8 +24,8 @@ jobs:
       - name: Vérifier les secrets
         id: check
         run: |
-          if [ -z "$BGG_API_TOKEN" ] || [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
-            echo "Secret BGG_API_TOKEN ou FIREBASE_SERVICE_ACCOUNT absent : rien à faire."
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "Secret FIREBASE_SERVICE_ACCOUNT absent : rien à faire."
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
       - if: steps.check.outputs.skip != 'true'
@@ -37,5 +37,9 @@ jobs:
           cache: npm
       - if: steps.check.outputs.skip != 'true'
         run: npm ci --no-audit --no-fund
-      - if: steps.check.outputs.skip != 'true'
+      - name: Autofill BGG
+        if: steps.check.outputs.skip != 'true' && env.BGG_API_TOKEN != ''
         run: node scripts/games.mjs autofill
+      - name: Images manquantes (Wikipédia)
+        if: steps.check.outputs.skip != 'true'
+        run: node scripts/games.mjs covers

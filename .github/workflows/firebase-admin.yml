@@ -12,7 +12,7 @@ on:
         type: choice
         required: true
         default: export-pending
-        options: [export-pending, export-all, autofill, autofill-all, rules-deploy, access-open, access-close, access-allow, access-show, seed]
+        options: [export-pending, export-all, covers, covers-all, autofill, autofill-all, rules-deploy, access-open, access-close, access-allow, access-show, seed]
       email:
         description: Email (pour access-allow)
         required: false
@@ -60,6 +60,8 @@ jobs:
             seed) node scripts/games.mjs add @scripts/seed.json "${FAM_ARGS[@]}" ;;
             export-pending) node scripts/games.mjs export --pending ;;
             export-all) node scripts/games.mjs export ;;
+            covers) node scripts/games.mjs covers ;;
+            covers-all) node scripts/games.mjs covers --all ;;
             autofill) node scripts/games.mjs autofill ;;
             autofill-all) node scripts/games.mjs autofill --all ;;
             *) echo "Commande inconnue: $CMD"; exit 1 ;;
