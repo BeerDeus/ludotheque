@@ -15,7 +15,7 @@ npm run deploy     # build + push dist/ sur la branche "deploy" (Hostinger Git)
 ### 1. Firebase (projet `ludotheque48`)
 
 1. Console Firebase > **Authentication** > Sign-in method : activer **Google** et **E-mail/Mot de passe**.
-2. Authentication > Paramètres > **Domaines autorisés** : ajouter `jeux.m2s-photo.fr`.
+2. Authentication > Paramètres > **Domaines autorisés** : ajouter `ludotheque.manaorbit.app`.
 3. **Firestore Database** > Créer la base : mode production, région `eur3` (ou `europe-west9` Paris).
 4. Déployer les règles (depuis ce dossier) :
    ```bash
@@ -52,18 +52,17 @@ npm run seed            # 3 jeux d'exemple dans l'unique famille (sinon: -- --fa
 node scripts/games.mjs families
 ```
 
-### 5. Hostinger — sous-domaine + déploiement Git
+### 5. Hostinger — déploiement Git
 
-1. hPanel > Domaines > **Sous-domaines** : créer `jeux.m2s-photo.fr` (dossier par défaut, ex. `public_html/jeux`).
-   - DNS : si `m2s-photo.fr` utilise les nameservers Hostinger, rien à faire. Sinon, chez le registrar : enregistrement `A jeux → <IP de l'hébergement>` (visible dans hPanel).
-2. hPanel > **SSL** : activer le certificat pour `jeux.m2s-photo.fr` + *Forcer HTTPS*.
+1. Site `ludotheque.manaorbit.app` : créé ✅ (noter son dossier racine dans hPanel > Gestionnaire de fichiers, ex. `public_html` ou `public_html/ludotheque`).
+2. hPanel > **SSL** : certificat actif pour `ludotheque.manaorbit.app` + *Forcer HTTPS*.
 3. Vider le dossier du sous-domaine (le déploiement Git exige un dossier vide la 1ʳᵉ fois).
 4. Premier push de la branche de déploiement depuis ta machine :
    ```bash
    npm run deploy
    ```
 5. hPanel > Avancé > **GIT** :
-   - Dépôt : `git@github.com:BeerDeus/ludotheque.git` — Branche : `deploy` — Dossier : celui du sous-domaine (ex. `jeux`).
+   - Dépôt : `git@github.com:BeerDeus/ludotheque.git` — Branche : `deploy` — Dossier : vide si le site a son propre `public_html`, sinon le sous-dossier du sous-domaine.
    - Repo privé : copier la **clé SSH** affichée par hPanel → GitHub > repo > Settings > *Deploy keys* (lecture seule).
    - Activer **Auto deployment** : copier l'URL du webhook → GitHub > Settings > *Webhooks* (événement *push*), **ou** la mettre dans `.env.deploy` :
      ```
