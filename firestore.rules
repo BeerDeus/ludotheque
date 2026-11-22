@@ -1,0 +1,99 @@
+rules_version = '2';
+
+// Modèle multi-familles :
+//   config/access                      { creatorEmails: string[], openSignup: bool }  (admin only, via scripts/games.mjs)
+//   users/{uid}                        { familyId, email, displayName }
+//   families/{fid}                     { name, ownerUid, inviteCode, createdAt }
+//   families/{fid}/members/{uid}       { role: 'owner'|'member', code, email, displayName, joinedAt }
+//   families/{fid}/games/{gid}         jeux (voir CLAUDE.md)
+//   invites/{code}                     { familyId, createdBy, createdAt }
+// Accès aux jeux : uniquement les membres de la famille (allowlist = sous-collection members).
+// firebase-admin (scripts) contourne ces règles.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function uid() { return request.auth.uid; }
+    function famPath(fid) { return /databases/$(database)/documents/families/$(fid); }
+    function memberPath(fid, u) { return /databases/$(database)/documents/families/$(fid)/members/$(u); }
+    function isMember(fid) { return signedIn() && exists(memberPath(fid, uid())); }
+    function isOwner(fid) { return signedIn() && get(famPath(fid)).data.ownerUid == uid(); }
+
+    function canCreateFamily() {
+      let cfgPath = /databases/$(database)/documents/config/access;
+      return signedIn()
+        && exists(cfgPath)
+        && (
+          get(cfgPath).data.get('openSignup', false) == true
+          || (request.auth.token.email_verified == true
+              && request.auth.token.email in get(cfgPath).data.get('creatorEmails', []))
+        );
+    }
+
+    match /config/{doc} {
+      allow read, write: if false;
+    }
+
+    match /users/{u} {
+      allow read, delete: if signedIn() && uid() == u;
+      allow create, update: if signedIn() && uid() == u
+        && request.resource.data.keys().hasOnly(['familyId', 'email', 'displayName']);
+    }
+
+    match /invites/{code} {
+      // get par code uniquement (pas de listing) : le code fait office de secret
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && code.size() >= 8
+        && request.resource.data.createdBy == uid()
+        && existsAfter(memberPath(request.resource.data.familyId, uid()));
+      allow delete: if signedIn()
+        && (resource.data.createdBy == uid() || isOwner(resource.data.familyId));
+      allow update: if false;
+    }
+
+    match /families/{fid} {
+      allow read: if isMember(fid);
+      allow create: if canCreateFamily()
+        && request.resource.data.ownerUid == uid()
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 80;
+      allow update: if isOwner(fid)
+        && request.resource.data.ownerUid == resource.data.ownerUid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'inviteCode']);
+      allow delete: if isOwner(fid);
+
+      match /members/{m} {
+        allow read: if isMember(fid);
+        allow create: if signedIn() && m == uid()
+          && request.resource.data.keys().hasOnly(['role', 'code', 'email', 'displayName', 'joinedAt'])
+          && (
+            // créateur de la famille (même batch que la création)
+            (request.resource.data.role == 'owner'
+              && getAfter(famPath(fid)).data.ownerUid == uid())
+            ||
+            // rejoindre avec un code d'invitation valide pour cette famille
+            (request.resource.data.role == 'member'
+              && request.resource.data.code is string
+              && get(/databases/$(database)/documents/invites/$(request.resource.data.code)).data.familyId == fid)
+          );
+        allow update: if false;
+        // quitter (soi-même, sauf owner) ou exclusion par l'owner
+        allow delete: if signedIn()
+          && ((m == uid() && !isOwner(fid)) || (isOwner(fid) && m != uid()));
+      }
+
+      match /games/{gid} {
+        allow read, delete: if isMember(fid);
+        allow create, update: if isMember(fid)
+          && request.resource.data.name is string
+          && request.resource.data.name.size() > 0
+          && request.resource.data.name.size() <= 200
+          && request.resource.data.status in ['owned', 'wishlist', 'watch'];
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+node_modules
+dist
+dev-dist
+*.local
+.env
+.env.*
+!.env.example
+# Firebase service account / credentials — NEVER commit
+*service-account*.json
+*serviceAccount*.json
+*-firebase-adminsdk-*.json
+credentials*.json
+.firebase/
+firebase-debug.log
+firestore-debug.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.deploy-tmp/

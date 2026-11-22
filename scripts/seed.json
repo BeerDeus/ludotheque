@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Les Aventuriers du Rail",
+    "status": "owned",
+    "playersMin": 2,
+    "playersMax": 5,
+    "durationMin": 60,
+    "priceBought": 39.9,
+    "shop": "Philibert",
+    "priority": 2,
+    "notes": "Version Europe à envisager.",
+    "tags": ["famille", "trains", "gateway"]
+  },
+  {
+    "name": "Cascadia",
+    "status": "wishlist",
+    "playersMin": 1,
+    "playersMax": 4,
+    "durationMin": 45,
+    "priceTarget": 30,
+    "shop": "Philibert",
+    "url": "https://www.philibertnet.com/",
+    "priority": 1,
+    "notes": "",
+    "tags": ["famille", "placement de tuiles", "solo"]
+  },
+  {
+    "name": "Ark Nova",
+    "status": "watch",
+    "playersMin": 1,
+    "playersMax": 4,
+    "durationMin": 150,
+    "priceTarget": 50,
+    "priority": 3,
+    "notes": "Attendre une promo, vérifier la VF.",
+    "tags": ["expert", "moteur", "solo"]
+  }
+]
