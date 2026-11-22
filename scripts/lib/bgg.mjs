@@ -119,8 +119,10 @@ export function toGamePatch(game, d, { force = false } = {}) {
     if (force || game[k] === undefined || game[k] === null || game[k] === '' || game[k] === 0) patch[k] = v;
   };
   patch.bggId = d.bggId;
-  setIfEmpty('coverUrl', d.image);
-  setIfEmpty('thumbUrl', d.thumbnail);
+  if (!game.customCover) {
+    setIfEmpty('coverUrl', d.image);
+    setIfEmpty('thumbUrl', d.thumbnail);
+  }
   setIfEmpty('yearPublished', d.yearPublished);
   setIfEmpty('playersMin', d.minPlayers);
   setIfEmpty('playersMax', d.maxPlayers);

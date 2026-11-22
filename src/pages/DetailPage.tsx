@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import BggAttribution from '../components/BggAttribution';
 import Cover from '../components/Cover';
+import CoverPicker from '../components/CoverPicker';
 import { EditableField, EditableMarkdown } from '../components/Editable';
 import Expansions from '../components/Expansions';
 import GameForm from '../components/GameForm';
@@ -25,6 +26,7 @@ export default function DetailPage() {
   const { family } = useSession();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
+  const [picking, setPicking] = useState(false);
   const game = games.find((g) => g.id === id);
 
   const back = (
@@ -66,7 +68,10 @@ export default function DetailPage() {
       />
       <main className="mx-auto flex max-w-3xl flex-col gap-4 px-3 pt-4 pb-16">
         <section className="flex gap-4">
-          <Cover name={game.name} url={game.coverUrl || game.thumbUrl} className="size-32 shrink-0 rounded-2xl text-3xl shadow-md" />
+          <button className="relative shrink-0" onClick={() => setPicking(true)} aria-label="Changer l'image">
+            <Cover name={game.name} url={game.coverUrl || game.thumbUrl} className="size-32 rounded-2xl text-3xl shadow-md" />
+            <span className="absolute right-1.5 bottom-1.5 grid size-7 place-items-center rounded-full bg-black/60 text-sm text-white">📷</span>
+          </button>
           <div className="flex min-w-0 flex-1 flex-col justify-center gap-1.5">
             <h2 className="text-xl leading-tight font-bold">{game.name}</h2>
             <StarRating value={game.myRating} onChange={(v) => save({ myRating: v })} size="lg" className="-ml-0.5" />
@@ -221,6 +226,7 @@ export default function DetailPage() {
       </main>
 
       {editing && <GameForm game={game} onClose={() => setEditing(false)} />}
+      {picking && <CoverPicker game={game} onClose={() => setPicking(false)} />}
     </>
   );
 }

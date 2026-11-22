@@ -46,7 +46,7 @@ export default function GameCard({ game, showStatus }: { game: Game; showStatus:
   return (
     <li className="card flex items-stretch gap-3 p-2.5 transition active:scale-[.99]">
       <Link to={`/jeu/${game.id}`} className="flex min-w-0 flex-1 items-center gap-3">
-        <Cover name={game.name} url={game.thumbUrl || game.coverUrl} className="size-16 shrink-0 rounded-xl text-lg" />
+        <Cover name={game.name} url={game.customCover ? game.coverUrl : game.thumbUrl || game.coverUrl} className="size-16 shrink-0 rounded-xl text-lg" />
         <div className="min-w-0 flex-1">
           <h3 className="truncate font-semibold">{game.name}</h3>
           <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">

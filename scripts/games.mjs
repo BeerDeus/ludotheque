@@ -40,7 +40,7 @@ Familles / accès
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
 
 const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'myRating', 'notes', 'tags', 'missingParts', 'expansions'];
-const ENRICHED_FIELDS = ['bggId', 'coverUrl', 'thumbUrl', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
+const ENRICHED_FIELDS = ['bggId', 'coverUrl', 'thumbUrl', 'customCover', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
 const ALLOWED = new Set([...BASE_FIELDS, ...ENRICHED_FIELDS]);
 const STATUSES = ['owned', 'wishlist', 'watch'];
 

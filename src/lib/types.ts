@@ -64,6 +64,8 @@ export interface GameEnriched {
   bggId?: number;
   coverUrl?: string;
   thumbUrl?: string;
+  /** Image choisie par l'utilisateur (photo ou URL) : l'autofill BGG ne la remplace pas */
+  customCover?: boolean;
   yearPublished?: number;
   bggRating?: number;
   /** Extensions connues sur BGG (suggestions) */
