@@ -11,7 +11,7 @@ on:
         type: choice
         required: true
         default: rules-deploy
-        options: [rules-deploy, access-allow, access-show, seed, families]
+        options: [rules-deploy, access-allow, access-open, access-close, access-show, seed, families]
       email:
         description: Email (pour access-allow)
         required: false
@@ -52,6 +52,8 @@ jobs:
             access-allow)
               [[ "$EMAIL" =~ ^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$ ]] || { echo "Email invalide"; exit 1; }
               node scripts/games.mjs access allow "$EMAIL" ;;
+            access-open) node scripts/games.mjs access open true ;;
+            access-close) node scripts/games.mjs access open false ;;
             access-show) node scripts/games.mjs access show ;;
             seed) node scripts/games.mjs add @scripts/seed.json "${FAM_ARGS[@]}" ;;
             families) node scripts/games.mjs families ;;
