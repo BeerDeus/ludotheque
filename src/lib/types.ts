@@ -23,10 +23,15 @@ export const PRIORITY_LABEL: Record<Priority, string> = {
   3: 'Basse',
 };
 
+export type ExpansionKind = 'standalone' | 'expansion';
+
+/** Élément d'une gamme : boîte autonome (jouable seule) ou extension */
 export interface Expansion {
   id: string;
   name: string;
   owned: boolean;
+  /** défaut : 'expansion' */
+  kind?: ExpansionKind;
   bggId?: number;
   notes?: string;
 }

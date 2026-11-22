@@ -46,8 +46,6 @@ jobs:
       - name: Autofill BGG
         if: env.BGG_API_TOKEN != ''
         run: node scripts/games.mjs autofill
-      - name: Images manquantes (Wikipédia)
-        run: node scripts/games.mjs covers
       - name: Échec d'application ?
         if: steps.apply.outputs.status != '0'
         run: exit 1

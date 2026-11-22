@@ -123,8 +123,11 @@ Quand l'utilisateur dit « enrichis les jeux » (ou « enrichis <nom> ») :
    4. Remplir **tous** les champs enrichis (cf. tableau) + `sources` (URLs réellement consultées).
       **Image** : ajouter `"coverPages": [url1, url2, …]` = pages produit FR (play-in, espritjeu, philibert, ludum, éditeur…)
       trouvées par WebSearch, ou URLs d'image directes. La CI télécharge l'image og:image de la première page qui
-      répond, la réduit (600 px, JPEG ≤ 180 Ko) et la stocke dans `coverUrl` (`coverSource` = page). Sans `coverPages`,
-      le workflow horaire tente Wikipédia (`covers`). Pour un jeu déjà enrichi, un fichier `{ "coverPages": [...] }` suffit. `bggId` exact en priorité :
+      répond, la réduit (600 px, JPEG ≤ 180 Ko) et la stocke dans `coverUrl` (`coverSource` = page). **Toujours une page produit
+      montrant la boîte** (pas Wikipédia : ses images sont souvent du matériel, pas la boîte ; `covers` reste manuel).
+      Pour un jeu déjà enrichi, un fichier `{ "coverPages": [...] }` suffit.
+      **Gammes** (boîtes autonomes + extensions) : une seule fiche au nom de la gamme ; `expansionsAdd: [{ name, owned, kind: 'standalone'|'expansion' }]`
+      ajoute les éléments absents de `expansions` sans toucher à ceux saisis par l'utilisateur. `bggId` exact en priorité :
       l'autofill complète ensuite image, miniature, note, extensions BGG.
    5. Champs de base `playersMin`, `playersMax`, `durationMin`, `ageMin` : les compléter **uniquement s'ils sont vides/0** (ne jamais écraser une saisie utilisateur). Ne pas toucher `status`, prix, `priority`, `notes`, `tags`, `missingParts`, `expansions`.
    6. Écrire le JSON dans un fichier temporaire (ex. `/tmp/ludo-<id>.json`) puis `node scripts/games.mjs update <familyId>/<id> @/tmp/ludo-<id>.json`. Vérifier la sortie.

@@ -43,7 +43,7 @@ Familles / accès
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
 
 const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'myRating', 'notes', 'tags', 'missingParts', 'expansions'];
-const ENRICHED_FIELDS = ['bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
+const ENRICHED_FIELDS = ['expansionsAdd', 'bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
 const ALLOWED = new Set([...BASE_FIELDS, ...ENRICHED_FIELDS]);
 const STATUSES = ['owned', 'wishlist', 'watch'];
 
@@ -155,17 +155,37 @@ function validate(data, { partial }) {
   if ('status' in data && !STATUSES.includes(data.status)) die(`status invalide (${STATUSES.join('|')}).`);
   if ('priority' in data && ![1, 2, 3].includes(data.priority)) die('priority doit valoir 1, 2 ou 3.');
   if ('complexity' in data && data.complexity != null && !(data.complexity >= 1 && data.complexity <= 5)) die('complexity entre 1 et 5.');
-  for (const k of ['tags', 'sources', 'expansions', 'bggExpansions', 'coverPages']) if (k in data && data[k] != null && !Array.isArray(data[k])) die(`${k} doit être un tableau.`);
-  if (Array.isArray(data.expansions)) {
-    data.expansions = data.expansions.map((e) => {
+  for (const k of ['tags', 'sources', 'expansions', 'expansionsAdd', 'bggExpansions', 'coverPages']) if (k in data && data[k] != null && !Array.isArray(data[k])) die(`${k} doit être un tableau.`);
+  for (const key of ['expansions', 'expansionsAdd']) {
+    if (!Array.isArray(data[key])) continue;
+    data[key] = data[key].map((e) => {
       if (!e || typeof e.name !== 'string' || !e.name.trim()) die('expansions[] : { name, owned, bggId?, notes? } attendu.');
-      return { id: e.id || randomUUID(), name: e.name.trim(), owned: Boolean(e.owned), ...(e.bggId ? { bggId: Number(e.bggId) } : {}), ...(e.notes ? { notes: String(e.notes) } : {}) };
+      return {
+        id: e.id || randomUUID(),
+        name: e.name.trim(),
+        owned: Boolean(e.owned),
+        ...(e.kind === 'standalone' ? { kind: 'standalone' } : {}),
+        ...(e.bggId ? { bggId: Number(e.bggId) } : {}),
+        ...(e.notes ? { notes: String(e.notes) } : {}),
+      };
     });
   }
   for (const k of ['playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'bggId', 'complexity', 'yearPublished', 'bggRating'])
     if (k in data && data[k] != null && typeof data[k] !== 'number') die(`${k} doit être un nombre.`);
   // null = suppression du champ
   return Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v === null ? FieldValue.delete() : v]));
+}
+
+/** expansionsAdd : ajoute à la liste existante les éléments absents (même nom normalisé), sans toucher aux autres */
+function mergeExpansionsAdd(data, current = []) {
+  const add = data.expansionsAdd;
+  delete data.expansionsAdd;
+  if (!Array.isArray(add) || !add.length) return;
+  const key = (n) => n.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const have = new Set(current.map((e) => key(e.name)));
+  const fresh = add.filter((e) => !have.has(key(e.name)));
+  if (fresh.length) data.expansions = [...current, ...fresh];
+  console.log(`  extensions : +${fresh.length} (${add.length - fresh.length} déjà présente(s))`);
 }
 
 /** coverPages (pages produit / URLs d'image) → coverUrl (data URL compacte). Mute `data`. */
@@ -198,6 +218,7 @@ const commands = {
   async update([ref, json]) {
     const snap = await resolveGame(ref);
     const data = validate(readJson(json), { partial: true });
+    mergeExpansionsAdd(data, snap.data().expansions);
     await resolveCoverPages(data, snap.data().name);
     if (!flags.noEnrich) Object.assign(data, { enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' });
     await snap.ref.set(data, { merge: true });
@@ -273,6 +294,7 @@ const commands = {
         if (!snap.exists) throw new Error('jeu introuvable');
         const data = validate(JSON.parse(readFileSync(join(dir, f), 'utf8')), { partial: true });
         delete data.expansions; // jamais écrasées par un enrichissement
+        mergeExpansionsAdd(data, snap.data().expansions);
         await resolveCoverPages(data, snap.data().name);
         await ref.set({ ...data, enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' }, { merge: true });
         applied.push(join(dir, f));

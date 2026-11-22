@@ -30,8 +30,8 @@ function Badges({ game, showStatus }: { game: Game; showStatus: boolean }) {
       {price != null && <span className="chip bg-slate-500/10 text-slate-600 dark:text-slate-300">{formatPrice(price)}</span>}
       {game.missingParts?.trim() && <span className="chip bg-amber-500/15 text-amber-700 dark:text-amber-300">⚠ incomplet</span>}
       {exps.length > 0 && (
-        <span className="chip bg-slate-500/10 text-slate-600 dark:text-slate-300" title="Extensions possédées / suivies">
-          +{exps.filter((e) => e.owned).length}/{exps.length} ext.
+        <span className="chip bg-slate-500/10 text-slate-600 dark:text-slate-300" title="Boîtes et extensions possédées / suivies">
+          {exps.filter((e) => e.owned).length}/{exps.length} boîtes & ext.
         </span>
       )}
       {!isEnriched(game) && <span className="chip bg-sky-500/15 text-sky-700 dark:text-sky-300">non enrichi</span>}
