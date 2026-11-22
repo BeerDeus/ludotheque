@@ -3,7 +3,10 @@
 // Auth : GOOGLE_APPLICATION_CREDENTIALS=/chemin/hors-repo/service-account.json
 // Doc complète : CLAUDE.md
 import { readFileSync } from 'node:fs';
-import { applicationDefault, initializeApp } from 'firebase-admin/app';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { applicationDefault, cert, initializeApp } from 'firebase-admin/app';
+import { getSecurityRules } from 'firebase-admin/security-rules';
 import { FieldValue, Timestamp, getFirestore } from 'firebase-admin/firestore';
 
 const USAGE = `Usage: node scripts/games.mjs <commande> [args] [--family <fid>]
@@ -22,6 +25,7 @@ Familles / accès
   access allow <email>        Autorise <email> à créer une famille
   access revoke <email>       Retire l'autorisation
   access open <true|false>    Création de famille ouverte à tout compte connecté
+  rules deploy                Publie firestore.rules (la base Firestore doit exister)
 
 <json> : JSON inline, @fichier.json, ou - (stdin).
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
@@ -52,11 +56,21 @@ function die(msg, code = 1) {
 }
 if (!cmd || flags.help) die(USAGE, cmd ? 0 : 1);
 
-if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-  die('GOOGLE_APPLICATION_CREDENTIALS non défini (chemin du JSON de compte de service, hors du repo).');
+// Credentials : GOOGLE_APPLICATION_CREDENTIALS (chemin du JSON) ou FIREBASE_SERVICE_ACCOUNT (contenu du JSON)
+let credential;
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+  try {
+    credential = cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT));
+  } catch {
+    die('FIREBASE_SERVICE_ACCOUNT ne contient pas un JSON de compte de service valide.');
+  }
+} else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  credential = applicationDefault();
+} else {
+  die('Définir GOOGLE_APPLICATION_CREDENTIALS (chemin du JSON, hors repo) ou FIREBASE_SERVICE_ACCOUNT (contenu du JSON).');
 }
 
-initializeApp({ credential: applicationDefault() });
+initializeApp({ credential });
 const db = getFirestore();
 
 // ---------- helpers ----------
@@ -226,6 +240,14 @@ const commands = {
     }
     const s = await ref.get();
     out(s.exists ? s.data() : { creatorEmails: [], openSignup: false });
+  },
+
+  async rules([sub]) {
+    if (sub !== 'deploy') die('rules deploy');
+    const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+    const source = readFileSync(join(root, 'firestore.rules'), 'utf8');
+    const ruleset = await getSecurityRules().releaseFirestoreRulesetFromSource(source);
+    out({ released: ruleset.name, createTime: ruleset.createTime });
   },
 };
 

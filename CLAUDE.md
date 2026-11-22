@@ -20,7 +20,7 @@ families/{fid}/games/{gid}       jeu (schéma ci-dessous)
 invites/{code}                   { familyId, createdBy, createdAt }
 ```
 
-Règles : `firestore.rules` (accès aux jeux = membres de la famille). Déploiement des règles : `npx firebase-tools deploy --only firestore:rules`.
+Règles : `firestore.rules` (accès aux jeux = membres de la famille). Déploiement des règles : `npm run rules:deploy` (compte de service) ou `npx firebase-tools deploy --only firestore:rules`.
 
 ### Schéma d'un jeu
 
@@ -59,7 +59,7 @@ Niveau de détail : **intermédiaire** — structuré et utilisable à table pou
 
 ## Script admin `scripts/games.mjs`
 
-Prérequis : `GOOGLE_APPLICATION_CREDENTIALS` pointe vers le JSON du compte de service (hors du repo, jamais commité, jamais affiché).
+Prérequis : `GOOGLE_APPLICATION_CREDENTIALS` pointe vers le JSON du compte de service (hors du repo, jamais commité, jamais affiché), ou `FIREBASE_SERVICE_ACCOUNT` contient ce JSON.
 
 ```bash
 node scripts/games.mjs families                       # familles, membres, nb de jeux
@@ -70,6 +70,7 @@ node scripts/games.mjs update <ref> <json> --no-enrich  # merge simple (correcti
 node scripts/games.mjs add <json> [--family F]        # objet ou tableau
 node scripts/games.mjs delete <ref>
 node scripts/games.mjs access show|allow <email>|revoke <email>|open true|false
+node scripts/games.mjs rules deploy                   # publie firestore.rules (= npm run rules:deploy)
 ```
 
 `<json>` = JSON inline, `@fichier.json` ou `-` (stdin). Une valeur `null` supprime le champ.

@@ -11,7 +11,8 @@
     "typecheck": "tsc -b",
     "deploy": "node scripts/deploy.mjs",
     "games": "node scripts/games.mjs",
-    "seed": "node scripts/games.mjs add @scripts/seed.json"
+    "seed": "node scripts/games.mjs add @scripts/seed.json",
+    "rules:deploy": "node scripts/games.mjs rules deploy"
   },
   "dependencies": {
     "firebase": "^13.4.0",

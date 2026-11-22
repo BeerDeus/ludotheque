@@ -17,10 +17,9 @@ npm run deploy     # build + push dist/ sur la branche "deploy" (Hostinger Git)
 1. Console Firebase > **Authentication** > Sign-in method : activer **Google** et **E-mail/Mot de passe**.
 2. Authentication > Paramètres > **Domaines autorisés** : ajouter `ludotheque.manaorbit.app`.
 3. **Firestore Database** > Créer la base : mode production, région `eur3` (ou `europe-west9` Paris).
-4. Déployer les règles (depuis ce dossier) :
+4. Déployer les règles (après l'étape 6, depuis ce dossier) :
    ```bash
-   npx firebase-tools login
-   npx firebase-tools deploy --only firestore:rules
+   npm run rules:deploy      # via le compte de service (alternative : npx firebase-tools deploy --only firestore:rules)
    ```
 5. Paramètres du projet > **Comptes de service** > *Générer une nouvelle clé privée* → ranger le JSON **hors du repo**, ex. `~/.config/ludotheque/service-account.json` (`chmod 600`).
 6. Dans le shell où tourne Claude Code (ex. `~/.zshrc`) :
