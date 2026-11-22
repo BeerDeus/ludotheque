@@ -75,6 +75,13 @@ Options : `npm run deploy -- --dry-run` (sans push), `--skip-build`. Variables :
 
 Dans ce dossier, avec `GOOGLE_APPLICATION_CREDENTIALS` exporté : lancer `claude` puis dire **« enrichis les jeux »**.
 
+## GitHub Actions — `Firebase admin`
+
+Secret repo `FIREBASE_SERVICE_ACCOUNT` (contenu du JSON). Actions > *Firebase admin* > *Run workflow* :
+`rules-deploy` (aussi auto à chaque push modifiant `firestore.rules`), `access-open` / `access-close`, `access-allow` (+ email), `access-show`, `seed` (+ familyId si plusieurs), `families`.
+
+État actuel : règles publiées, `openSignup: true` (tout compte connecté peut créer sa famille).
+
 ## Notes
 
 - `.htaccess` (dans `public/`) : fallback SPA, `.git` masqué, cache du service worker désactivé.
