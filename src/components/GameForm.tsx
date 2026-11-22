@@ -93,22 +93,25 @@ export default function GameForm({
 
         <StatusControl value={f.status} onChange={(s) => set('status', s)} />
 
+        <p className="-mb-2 text-xs text-slate-500 dark:text-slate-400">
+          Champs vides = complétés automatiquement depuis BoardGameGeek (image, joueurs, durée, âge…) peu après l’enregistrement.
+        </p>
         <div className="grid grid-cols-4 gap-2">
           <div>
             <label className="label" htmlFor="gf-pmin">J. min</label>
-            <input id="gf-pmin" className="input" inputMode="numeric" type="number" min={1} max={99} value={f.playersMin} onChange={(e) => set('playersMin', e.target.value)} />
+            <input id="gf-pmin" className="input" placeholder="auto" inputMode="numeric" type="number" min={1} max={99} value={f.playersMin} onChange={(e) => set('playersMin', e.target.value)} />
           </div>
           <div>
             <label className="label" htmlFor="gf-pmax">J. max</label>
-            <input id="gf-pmax" className="input" inputMode="numeric" type="number" min={1} max={99} value={f.playersMax} onChange={(e) => set('playersMax', e.target.value)} />
+            <input id="gf-pmax" className="input" placeholder="auto" inputMode="numeric" type="number" min={1} max={99} value={f.playersMax} onChange={(e) => set('playersMax', e.target.value)} />
           </div>
           <div>
             <label className="label" htmlFor="gf-dur">Minutes</label>
-            <input id="gf-dur" className="input" inputMode="numeric" type="number" min={1} max={1440} value={f.durationMin} onChange={(e) => set('durationMin', e.target.value)} />
+            <input id="gf-dur" className="input" placeholder="auto" inputMode="numeric" type="number" min={1} max={1440} value={f.durationMin} onChange={(e) => set('durationMin', e.target.value)} />
           </div>
           <div>
             <label className="label" htmlFor="gf-age">Âge</label>
-            <input id="gf-age" className="input" inputMode="numeric" type="number" min={1} max={99} value={f.ageMin} onChange={(e) => set('ageMin', e.target.value)} />
+            <input id="gf-age" className="input" placeholder="auto" inputMode="numeric" type="number" min={1} max={99} value={f.ageMin} onChange={(e) => set('ageMin', e.target.value)} />
           </div>
         </div>
 
