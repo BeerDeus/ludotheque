@@ -1,0 +1,21 @@
+{
+  "bggId": 316377,
+  "playersMin": 3,
+  "playersMax": 7,
+  "durationMin": 30,
+  "ageMin": 10,
+  "yearPublished": 2020,
+  "rulesSummary": "**2ᵉ édition (2020)**. Chaque joueur dirige une cité antique et construit sa **Merveille** pendant **trois Âges**. Tout le monde joue **en même temps** : on choisit une carte dans sa main, puis on passe le reste à son voisin (draft).\n\n- Les cartes produisent des ressources, de l'argent, des points, de la puissance militaire ou des symboles scientifiques.\n- On commerce avec ses **deux voisins** pour acheter les ressources qui manquent.\n- À la fin de chaque Âge, **conflit militaire** avec chacun de ses voisins.\n- Après l'Âge III, **le plus de points de victoire** l'emporte, en additionnant plusieurs façons de marquer (militaire, science, bâtiments civils, Merveille, commerce, guildes, argent).",
+  "setup": "- Chaque joueur reçoit un **plateau Merveille** (au hasard ou au choix), face **jour** ou **nuit** selon la variante choisie, et **3 pièces**.\n- Préparer les 3 paquets d'Âge en ne gardant que les cartes adaptées au **nombre de joueurs** (indication 3+, 4+, 5+… sur les cartes).\n- Âge III : ajouter **des Guildes au hasard** (nombre de joueurs + 2).\n- Placer les jetons Conflit (victoire/défaite) et la banque de pièces à portée.\n- Distribuer **7 cartes de l'Âge I** à chaque joueur.",
+  "turnStructure": "Chaque Âge se joue en **6 tours** simultanés :\n\n1. Chacun choisit **une carte** de sa main et la pose face cachée.\n2. On révèle et chacun l'utilise d'une des trois façons :\n   - **la construire** : payer son coût en ressources (et/ou pièces) ; gratuite si on possède le bâtiment qui la **chaîne** ;\n   - **construire une étape de sa Merveille** : glisser la carte sous le plateau en payant le coût de l'étape ;\n   - **la défausser** pour gagner **3 pièces**.\n3. On passe le reste de sa main : **à gauche** aux Âges I et III, **à droite** à l'Âge II.\n\n- **Commerce** : acheter une ressource produite par un voisin direct coûte **2 pièces** (moins avec certaines cartes commerciales) ; le voisin ne perd rien.\n- On ne peut pas construire deux bâtiments identiques.\n- Au 6ᵉ tour, la 7ᵉ carte restante est défaussée.\n- **Fin d'Âge** : comparer ses boucliers avec chaque voisin ; le plus fort gagne un jeton Victoire (1, 3 puis 5 points selon l'Âge), le plus faible un jeton Défaite (−1).",
+  "endCondition": "Après le conflit de l'Âge III, on compte les points : conflits militaires, **1 point par lot de 3 pièces**, étapes de Merveille, bâtiments civils (bleus), bâtiments commerciaux et Guildes, et **science** (pour chaque symbole : nombre d'exemplaires au carré, + 7 points par série de 3 symboles différents). Le plus de points l'emporte ; en cas d'égalité, le plus de pièces gagne.",
+  "tips": "- Surveille ce que tu **passes** : défausser une carte utile à ton voisin peut valoir mieux que la jouer.\n- Les ressources de base (marron/grises) s'achètent tôt : plus tard, les mains en contiennent peu.\n- La science rapporte beaucoup en se concentrant sur un ou deux symboles, mais elle se voit vite.\n- Le militaire ne se joue que contre tes **deux voisins** : un petit avantage suffit souvent.\n- Règle souvent oubliée : acheter chez un voisin ne lui retire pas sa ressource, et il garde l'argent.",
+  "variants": "- Face **jour** ou **nuit** des plateaux Merveille (effets d'étapes différents).\n- Pas de variante 2 joueurs dans cette édition (pour 2, voir **7 Wonders Duel**).\n- Extensions compatibles 2ᵉ édition : **Leaders**, **Cities**, **Edifice**. Les extensions de la 1ʳᵉ édition ne sont **pas** compatibles.",
+  "sources": [
+    "https://dicetower.com/board-game/316377",
+    "https://meeplescorner.co.uk/blogs/shop-news/7-wonders-2nd-edition-changes",
+    "https://opinionatedgamers.com/2020/08/08/dale-yu-first-impressions-of-7-wonders-2020-edition/",
+    "https://www.geeksundergrace.com/tabletop/7-wonders-second-edition/",
+    "https://rprod.com/en/press/7-wonders"
+  ]
+}
