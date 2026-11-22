@@ -1,0 +1,19 @@
+{
+  "bggId": 285967,
+  "durationMin": 120,
+  "ageMin": 14,
+  "yearPublished": 2021,
+  "rulesSummary": "Aventure **compétitive** pilotée par une **application** (pas de maître du jeu). Chaque joueur incarne un personnage dans un monde médiéval sombre et reçoit une **carte Destinée secrète** proposant **deux chemins de victoire** très différents.\n\n- On explore une carte faite de tuiles qui se dévoilent au fil de la partie, on rencontre des personnages et on fait des choix narratifs via l'application.\n- Les actions risquées passent par des **tests de compétence** aux dés.\n- On gagne de l'**expérience** pour améliorer ses compétences et on récupère des objets.\n- **Le premier joueur à accomplir l'une de ses deux destinées** (sa « Finale ») gagne la partie.",
+  "setup": "- Installer l'application et choisir un **scénario** (il détermine le monde, les destinées disponibles et la carte de départ).\n- Chaque joueur choisit un personnage : plateau, figurine, marqueurs de compétence sur les positions de départ.\n- Chaque joueur reçoit sa **carte Destinée** en secret (deux objectifs possibles).\n- Placer les tuiles de départ et les objets de départ indiqués par l'application.",
+  "turnStructure": "À son tour, le joueur actif :\n\n1. **Se déplace** sur la carte.\n2. **Interagit** avec un lieu, un personnage ou un objet en le scannant dans l'application ; il lit **à voix haute** les textes et fait ses choix.\n3. Résout les **tests de compétence** demandés :\n   - on lance toujours les **2 dés blancs**, et on peut ajouter jusqu'à **3 dés violets** (effort) ;\n   - on compare les résultats à la position du marqueur de la compétence testée pour compter les **succès** (jamais plus de 6 requis) ;\n   - échec : petite pénalité, mais on gagne un **jeton d'expérience**.\n4. Reçoit objets, informations et expérience.\n\nÀ tout moment de son tour (sauf pendant un test), on peut **dépenser son expérience** pour améliorer ses compétences.",
+  "endCondition": "La partie s'arrête dès qu'un joueur termine la **Finale** de l'un des deux chemins de sa carte Destinée : il est déclaré vainqueur. Garder un œil sur ce que font les autres permet parfois de deviner leur destinée et de les ralentir.",
+  "tips": "- Lis bien tes **deux** objectifs : le second chemin devient souvent plus simple selon ce que tu découvres.\n- Ajoute des dés violets quand le test est décisif : ils augmentent nettement les chances de succès.\n- Investis tôt ton expérience dans la compétence dont ta destinée a le plus besoin.\n- Explore les lieux secondaires : ils donnent objets et expérience qui débloquent les étapes clés.\n- Prévois un appareil chargé et visible par tous : tout passe par l'application.",
+  "variants": "- **Solo** : jouable à 1 joueur.\n- Boîtes de scénarios supplémentaires (ex. **Bound by Fate**) qui ajoutent de nouvelles histoires et personnages.",
+  "sources": [
+    "https://www.orderofgamers.com/downloads/Destinies_v1.1.pdf",
+    "https://rulespal.com/destinies/rulebook",
+    "https://www.boardgamequest.com/destinies-review/",
+    "https://www.asmodee.co.uk/products/lkytldr01en-destinies",
+    "https://www.asmodee.co.uk/products/lkytldk02en-destinies-bound-by-fate"
+  ]
+}

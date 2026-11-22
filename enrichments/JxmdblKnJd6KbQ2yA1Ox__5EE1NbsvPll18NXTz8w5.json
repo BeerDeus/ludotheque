@@ -1,0 +1,23 @@
+{
+  "name": "Gloomhaven : Les Mâchoires du Lion",
+  "bggId": 291457,
+  "playersMin": 1,
+  "playersMax": 4,
+  "durationMin": 90,
+  "ageMin": 14,
+  "yearPublished": 2020,
+  "complexity": 3.5,
+  "rulesSummary": "Jeu **coopératif** de combats tactiques en campagne, prequel autonome de Gloomhaven. Les joueurs incarnent 4 mercenaires aux styles très différents qui enquêtent sur des disparitions dans la ville de Gloomhaven.\n\n- Campagne de **25 scénarios** ; le **livre de scénarios sert de plateau** (pas de tuiles à assembler).\n- Les **5 premiers scénarios** forment un tutoriel qui introduit les règles progressivement.\n- Pas de dés : chaque action vient de **cartes de capacité**, et les attaques sont modifiées par un **paquet de modificateurs**.\n- On gagne le scénario en remplissant son objectif ; on le perd si **tous les personnages sont épuisés**.\n- Entre les scénarios : or, expérience, montée de niveau, nouvelles cartes et objets.",
+  "setup": "- Ouvrir le livre au scénario choisi et lire l'introduction.\n- Placer les figurines/socles des monstres selon le **nombre de joueurs** (couleur indiquée sur la carte).\n- Prendre la carte de statistiques et le paquet de capacités de chaque type de monstre.\n- Chaque joueur : plateau de personnage, **main de cartes de capacité** (limite selon la classe), cadran de PV au maximum de son niveau, paquet de modificateurs d'attaque (avec ses atouts), objets équipés.\n- Préparer la piste des éléments (tous inertes) et le niveau du scénario (ajuste la force des monstres).",
+  "turnStructure": "Chaque **round** :\n\n1. **Choix des cartes** : chaque joueur choisit en secret **2 cartes** (ou annonce un repos long). On peut parler stratégie, mais sans dévoiler de chiffres précis.\n2. **Révélation** : la carte de tête donne l'**initiative**. On révèle une carte de capacité par type de monstre actif.\n3. **Activation** dans l'ordre d'initiative (le plus petit d'abord), joueurs et monstres mélangés :\n   - Un joueur fait l'**action du haut d'une carte** et l'**action du bas de l'autre** (ou une action par défaut : Attaque 2 en haut / Déplacement 2 en bas).\n   - Les monstres suivent leur carte et choisissent leur cible selon des règles fixes (ennemi le plus proche, puis initiative la plus basse).\n4. **Fin de round** : les cartes jouées vont en défausse, ou en **perte** si elles portent le symbole correspondant ; les éléments s'affaiblissent.\n\n- **Attaque** : tirer une carte modificateur (de ×0 à ×2) ; les cartes ×0 et ×2 font remélanger le paquet en fin de round.\n- **Repos court** (fin de round) : reprendre sa défausse, une carte au hasard est perdue.\n- **Repos long** (initiative 99) : choisir la carte perdue, soigner 2 PV, rafraîchir ses objets.",
+  "endCondition": "Le scénario se termine dès que son **objectif** est rempli (souvent : tuer tous les ennemis) à la fin du round → victoire. Il est perdu si **tous les personnages sont épuisés** (0 PV, ou impossible de jouer 2 cartes / de se reposer). Dans tous les cas, chacun conserve l'or et l'expérience gagnés ; une victoire débloque la suite de la campagne.",
+  "tips": "- **Les cartes, c'est ton endurance** : chaque carte « perte » raccourcit le scénario. Garde les grosses actions pour les moments décisifs.\n- Coordonne les **initiatives** : agir avant un monstre peut le tuer avant qu'il frappe.\n- N'oublie pas de **ramasser l'argent** sur ta case en fin de tour : il est perdu sinon.\n- Infuse et consomme les **éléments** : ils renforcent énormément certaines capacités.\n- Le tutoriel est conçu pour être joué dans l'ordre avec le livret « Apprendre à jouer » : ne le saute pas.",
+  "variants": "- **Solo** : un joueur contrôle en général 2 personnages (recommandé pour l'équilibre).\n- **Difficulté** : modifier le niveau de scénario (+1/-1) pour durcir ou adoucir les monstres.\n- Compatible avec Gloomhaven (personnages et objets), même si les deux campagnes restent distinctes.",
+  "sources": [
+    "https://boardgame-directory.vercel.app/games/291457",
+    "https://1001-great-games.vercel.app/games/gloomhaven-jaws-of-the-lion-bgg-291457",
+    "https://www.play-in.com/fr/produit/390426/gloomhaven-les-machoires-du-lion",
+    "https://www.philibertnet.com/en/cephalofair-games/105873-gloomhaven-les-machoires-du-lion-3558380085829.html",
+    "https://gamesradar.com/tabletop-gaming/gloomhaven-jaws-of-the-lion-review-all-the-greatness-condensed"
+  ]
+}
