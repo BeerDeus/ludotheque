@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
+import BggAttribution from '../components/BggAttribution';
 import Cover from '../components/Cover';
 import { EditableField, EditableMarkdown } from '../components/Editable';
 import Expansions from '../components/Expansions';
@@ -192,6 +193,7 @@ export default function DetailPage() {
           <button className="btn-danger" onClick={remove}>
             <Icon name="trash" className="size-4" /> Supprimer
           </button>
+          <BggAttribution />
         </footer>
       </main>
 

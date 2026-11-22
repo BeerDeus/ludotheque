@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
+import BggAttribution from '../components/BggAttribution';
 import FilterBar from '../components/FilterBar';
 import GameCard from '../components/GameCard';
 import GameForm from '../components/GameForm';
@@ -46,6 +47,7 @@ export default function ListPage() {
             ))}
           </ul>
         )}
+        <BggAttribution />
       </main>
 
       <button
