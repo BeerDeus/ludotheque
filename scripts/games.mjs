@@ -2,12 +2,15 @@
 // CLI admin Ludothèque (firebase-admin, contourne les règles Firestore).
 // Auth : GOOGLE_APPLICATION_CREDENTIALS=/chemin/hors-repo/service-account.json
 // Doc complète : CLAUDE.md
-import { readFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { applicationDefault, cert, initializeApp } from 'firebase-admin/app';
 import { getSecurityRules } from 'firebase-admin/security-rules';
 import { FieldValue, Timestamp, getFirestore } from 'firebase-admin/firestore';
+import { findGame, things, toGamePatch } from './lib/bgg.mjs';
 
 const USAGE = `Usage: node scripts/games.mjs <commande> [args] [--family <fid>]
 
@@ -18,6 +21,12 @@ Jeux
                               (--no-enrich : merge simple, sans toucher enrichedAt/enrichedBy)
   add <json>                  Ajoute un jeu (ou un tableau de jeux)
   delete <ref>                Supprime un jeu
+  export [--pending]          Liste compacte (gzip+base64 entre marqueurs) pour les logs CI publics
+  apply <dir> [--applied f]   Applique <dir>/<familyId>__<gameId>.json (update enrichi) ; f = fichiers appliqués
+  autofill [ref] [--all] [--force]
+                              Remplit image, âge, joueurs, durée, année, complexité, note, extensions BGG
+                              via l'API XML BGG (BGG_API_TOKEN requis). Par défaut : jeux jamais traités
+                              ou renommés. --force : écrase aussi les champs déjà remplis.
 
 Familles / accès
   families                    Liste des familles (id, nom, membres, nb de jeux)
@@ -30,8 +39,8 @@ Familles / accès
 <json> : JSON inline, @fichier.json, ou - (stdin).
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
 
-const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'notes', 'tags'];
-const ENRICHED_FIELDS = ['bggId', 'coverUrl', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
+const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'notes', 'tags', 'missingParts', 'expansions'];
+const ENRICHED_FIELDS = ['bggId', 'coverUrl', 'thumbUrl', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
 const ALLOWED = new Set([...BASE_FIELDS, ...ENRICHED_FIELDS]);
 const STATUSES = ['owned', 'wishlist', 'watch'];
 
@@ -45,6 +54,9 @@ for (let i = 0; i < argv.length; i++) {
   else if (a.startsWith('--family=')) flags.family = a.slice(9);
   else if (a === '--pending') flags.pending = true;
   else if (a === '--no-enrich') flags.noEnrich = true;
+  else if (a === '--all') flags.all = true;
+  else if (a === '--force') flags.force = true;
+  else if (a === '--applied') flags.applied = argv[++i];
   else if (a === '-h' || a === '--help') flags.help = true;
   else pos.push(a);
 }
@@ -140,8 +152,14 @@ function validate(data, { partial }) {
   if ('status' in data && !STATUSES.includes(data.status)) die(`status invalide (${STATUSES.join('|')}).`);
   if ('priority' in data && ![1, 2, 3].includes(data.priority)) die('priority doit valoir 1, 2 ou 3.');
   if ('complexity' in data && data.complexity != null && !(data.complexity >= 1 && data.complexity <= 5)) die('complexity entre 1 et 5.');
-  for (const k of ['tags', 'sources']) if (k in data && !Array.isArray(data[k])) die(`${k} doit être un tableau.`);
-  for (const k of ['playersMin', 'playersMax', 'durationMin', 'priceBought', 'priceTarget', 'bggId', 'complexity'])
+  for (const k of ['tags', 'sources', 'expansions', 'bggExpansions']) if (k in data && data[k] != null && !Array.isArray(data[k])) die(`${k} doit être un tableau.`);
+  if (Array.isArray(data.expansions)) {
+    data.expansions = data.expansions.map((e) => {
+      if (!e || typeof e.name !== 'string' || !e.name.trim()) die('expansions[] : { name, owned, bggId?, notes? } attendu.');
+      return { id: e.id || randomUUID(), name: e.name.trim(), owned: Boolean(e.owned), ...(e.bggId ? { bggId: Number(e.bggId) } : {}), ...(e.notes ? { notes: String(e.notes) } : {}) };
+    });
+  }
+  for (const k of ['playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'bggId', 'complexity', 'yearPublished', 'bggRating'])
     if (k in data && data[k] != null && typeof data[k] !== 'number') die(`${k} doit être un nombre.`);
   // null = suppression du champ
   return Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v === null ? FieldValue.delete() : v]));
@@ -198,6 +216,121 @@ const commands = {
     const snap = await resolveGame(ref);
     await snap.ref.delete();
     out({ deleted: `${snap.ref.parent.parent.id}/${snap.id}` });
+  },
+
+  async export() {
+    const fid = await resolveFamily({ required: false });
+    const snap = fid ? await db.collection(`families/${fid}/games`).get() : await db.collectionGroup('games').get();
+    let games = snap.docs.map(gameJson);
+    if (flags.pending) games = games.filter((g) => !g.enrichedAt);
+    const compact = games
+      .sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+      .map((g) => ({
+        ref: `${g.familyId}/${g.id}`,
+        name: g.name,
+        status: g.status,
+        playersMin: g.playersMin,
+        playersMax: g.playersMax,
+        durationMin: g.durationMin,
+        ageMin: g.ageMin,
+        bggId: g.bggId,
+        enriched: Boolean(g.enrichedAt),
+        autofillNote: g.autofillNote,
+        expansions: (g.expansions ?? []).map((e) => e.name),
+      }));
+    const b64 = gzipSync(JSON.stringify(compact)).toString('base64');
+    console.log(`LUDO_EXPORT_BEGIN count=${compact.length}`);
+    for (let i = 0; i < b64.length; i += 2000) console.log(b64.slice(i, i + 2000));
+    console.log('LUDO_EXPORT_END');
+  },
+
+  async apply([dir]) {
+    if (!dir) die('apply <dir>');
+    const files = readdirSync(dir).filter((f) => /^[A-Za-z0-9]+__[A-Za-z0-9]+\.json$/.test(f));
+    const applied = [];
+    let failed = 0;
+    for (const f of files) {
+      const [fid, gid] = f.replace(/\.json$/, '').split('__');
+      const ref = db.doc(`families/${fid}/games/${gid}`);
+      try {
+        const snap = await ref.get();
+        if (!snap.exists) throw new Error('jeu introuvable');
+        const data = validate(JSON.parse(readFileSync(join(dir, f), 'utf8')), { partial: true });
+        delete data.expansions; // jamais écrasées par un enrichissement
+        await ref.set({ ...data, enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' }, { merge: true });
+        applied.push(join(dir, f));
+        console.log(`✓ ${snap.data().name} (${Object.keys(data).length} champs)`);
+      } catch (e) {
+        failed++;
+        console.error(`✗ ${f} : ${e.message}`);
+      }
+    }
+    if (flags.applied) writeFileSync(flags.applied, applied.join('\n') + (applied.length ? '\n' : ''));
+    console.log(`${applied.length} appliqué(s), ${failed} échec(s)`);
+    if (failed) process.exitCode = 1;
+  },
+
+  async autofill([ref]) {
+    const token = process.env.BGG_API_TOKEN;
+    if (!token) {
+      console.log('BGG_API_TOKEN absent : autofill ignoré (voir README > BGG).');
+      return;
+    }
+    let snaps;
+    if (ref) snaps = [await resolveGame(ref)];
+    else {
+      const fid = await resolveFamily({ required: false });
+      snaps = (fid ? await db.collection(`families/${fid}/games`).get() : await db.collectionGroup('games').get()).docs;
+      if (!flags.all)
+        snaps = snaps.filter((s) => {
+          const g = s.data();
+          return !g.autofilledAt || g.autofillName !== g.name || (g.bggId && g.autofillBggId !== g.bggId);
+        });
+    }
+    console.log(`${snaps.length} jeu(x) à traiter`);
+    const write = (snap, patch) =>
+      snap.ref.set(
+        { ...patch, autofilledAt: FieldValue.serverTimestamp(), autofillName: snap.data().name, autofillBggId: patch.bggId ?? snap.data().bggId ?? null },
+        { merge: true },
+      );
+
+    // 1) jeux avec bggId connu : par lots de 20
+    const withId = snaps.filter((s) => s.data().bggId);
+    for (let i = 0; i < withId.length; i += 20) {
+      const batch = withId.slice(i, i + 20);
+      const details = new Map((await things(batch.map((s) => s.data().bggId), token)).map((d) => [d.bggId, d]));
+      for (const s of batch) {
+        const d = details.get(s.data().bggId);
+        if (!d) {
+          await write(s, { autofillNote: `bggId ${s.data().bggId} introuvable sur BGG` });
+          console.log(`? ${s.data().name} : bggId introuvable`);
+          continue;
+        }
+        await write(s, { ...toGamePatch(s.data(), d, { force: flags.force }), autofillNote: FieldValue.delete() });
+        console.log(`✓ ${s.data().name} → ${d.name} (${d.bggId})`);
+      }
+    }
+    // 2) jeux sans bggId : recherche par nom
+    for (const s of snaps.filter((x) => !x.data().bggId)) {
+      const g = s.data();
+      try {
+        const r = await findGame(g.name, token);
+        if (r.match) {
+          await write(s, { ...toGamePatch(g, r.match, { force: flags.force }), autofillNote: FieldValue.delete() });
+          console.log(`✓ ${g.name} → ${r.match.name} (${r.match.bggId})`);
+        } else if (r.ambiguous) {
+          const list = r.ambiguous.map((d) => `${d.name}${d.yearPublished ? ` (${d.yearPublished})` : ''} #${d.bggId}`).join(' ; ');
+          await write(s, { autofillNote: `plusieurs jeux possibles, préciser le bggId : ${list}` });
+          console.log(`? ${g.name} : ambigu → ${list}`);
+        } else {
+          await write(s, { autofillNote: 'aucun jeu trouvé sur BGG avec ce nom' });
+          console.log(`✗ ${g.name} : introuvable`);
+        }
+      } catch (e) {
+        console.error(`✗ ${g.name} : ${e.message}`);
+        if (/token/.test(e.message)) process.exit(1);
+      }
+    }
   },
 
   async families() {

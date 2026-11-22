@@ -75,10 +75,22 @@ Options : `npm run deploy -- --dry-run` (sans push), `--skip-build`. Variables :
 
 Dans ce dossier, avec `GOOGLE_APPLICATION_CREDENTIALS` exporté : lancer `claude` puis dire **« enrichis les jeux »**.
 
-## GitHub Actions — `Firebase admin`
+## GitHub Actions
 
-Secret repo `FIREBASE_SERVICE_ACCOUNT` (contenu du JSON). Actions > *Firebase admin* > *Run workflow* :
-`rules-deploy` (aussi auto à chaque push modifiant `firestore.rules`), `access-open` / `access-close`, `access-allow` (+ email), `access-show`, `seed` (+ familyId si plusieurs), `families`.
+Secrets du repo (Settings > Secrets and variables > Actions) :
+- `FIREBASE_SERVICE_ACCOUNT` : contenu du JSON du compte de service ✅
+- `BGG_API_TOKEN` : token de l'API XML BoardGameGeek (remplissage auto des images, âge, joueurs…). Obtention :
+  se connecter sur boardgamegeek.com → https://boardgamegeek.com/using_the_xml_api → enregistrer une application
+  (usage perso, non commercial) → copier le token → l'ajouter en secret.
+
+Workflows :
+- *Firebase admin* (manuel) : `export-pending` / `export-all` (liste pour Claude), `autofill` / `autofill-all`,
+  `rules-deploy` (aussi auto à chaque push modifiant `firestore.rules`), `access-open` / `access-close` / `access-allow` (+ email) / `access-show`, `seed`.
+- *BGG autofill* (toutes les heures) : complète les jeux nouveaux/renommés depuis BGG.
+- *Appliquer les enrichissements* (push dans `enrichments/`) : écrit les enrichissements rédigés par Claude.
+
+⚠ Repo public = logs publics (noms des jeux visibles). Recommandé : passer le repo en privé
+(Settings > General > Danger Zone) — penser alors à la deploy key SSH côté Hostinger.
 
 État actuel : règles publiées, `openSignup: true` (tout compte connecté peut créer sa famille).
 

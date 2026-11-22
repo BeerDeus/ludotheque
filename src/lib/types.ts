@@ -23,6 +23,19 @@ export const PRIORITY_LABEL: Record<Priority, string> = {
   3: 'Basse',
 };
 
+export interface Expansion {
+  id: string;
+  name: string;
+  owned: boolean;
+  bggId?: number;
+  notes?: string;
+}
+
+export interface BggRef {
+  bggId: number;
+  name: string;
+}
+
 /** Champs saisis par l'utilisateur */
 export interface GameBase {
   name: string;
@@ -30,6 +43,7 @@ export interface GameBase {
   playersMin: number;
   playersMax: number;
   durationMin: number;
+  ageMin?: number;
   priceBought?: number;
   priceTarget?: number;
   shop?: string;
@@ -37,6 +51,9 @@ export interface GameBase {
   priority: Priority;
   notes: string;
   tags: string[];
+  /** Matériel manquant / abîmé (markdown) */
+  missingParts?: string;
+  expansions?: Expansion[];
   createdAt?: Timestamp | null;
 }
 
@@ -44,6 +61,13 @@ export interface GameBase {
 export interface GameEnriched {
   bggId?: number;
   coverUrl?: string;
+  thumbUrl?: string;
+  yearPublished?: number;
+  bggRating?: number;
+  /** Extensions connues sur BGG (suggestions) */
+  bggExpansions?: BggRef[];
+  autofilledAt?: Timestamp | null;
+  autofillNote?: string;
   complexity?: number;
   rulesSummary?: string;
   setup?: string;

@@ -1,0 +1,41 @@
+name: BGG autofill
+
+# Complète automatiquement image, âge, joueurs, durée, année, complexité, note et extensions BGG
+# des jeux nouvellement ajoutés ou renommés. Nécessite le secret BGG_API_TOKEN.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-admin
+  cancel-in-progress: false
+
+jobs:
+  autofill:
+    runs-on: ubuntu-latest
+    env:
+      FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      BGG_API_TOKEN: ${{ secrets.BGG_API_TOKEN }}
+    steps:
+      - name: Vérifier les secrets
+        id: check
+        run: |
+          if [ -z "$BGG_API_TOKEN" ] || [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "Secret BGG_API_TOKEN ou FIREBASE_SERVICE_ACCOUNT absent : rien à faire."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check.outputs.skip != 'true'
+        uses: actions/checkout@v5
+      - if: steps.check.outputs.skip != 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - if: steps.check.outputs.skip != 'true'
+        run: npm ci --no-audit --no-fund
+      - if: steps.check.outputs.skip != 'true'
+        run: node scripts/games.mjs autofill

@@ -29,6 +29,7 @@ export default function GameForm({
     playersMin: str(game?.playersMin),
     playersMax: str(game?.playersMax),
     durationMin: str(game?.durationMin),
+    ageMin: str(game?.ageMin),
     priceBought: str(game?.priceBought),
     priceTarget: str(game?.priceTarget),
     shop: game?.shop ?? '',
@@ -36,6 +37,7 @@ export default function GameForm({
     priority: (game?.priority ?? 2) as Priority,
     tags: (game?.tags ?? []).join(', '),
     notes: game?.notes ?? '',
+    missingParts: game?.missingParts ?? '',
   });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -53,6 +55,7 @@ export default function GameForm({
       playersMin: pMin,
       playersMax: pMax,
       durationMin: num(f.durationMin) ?? 0,
+      ageMin: num(f.ageMin),
       priceBought: num(f.priceBought),
       priceTarget: num(f.priceTarget),
       shop: f.shop.trim(),
@@ -60,6 +63,7 @@ export default function GameForm({
       priority: f.priority,
       tags: parseTags(f.tags),
       notes: f.notes,
+      missingParts: f.missingParts.trim(),
     };
     setBusy(true);
     try {
@@ -89,18 +93,22 @@ export default function GameForm({
 
         <StatusControl value={f.status} onChange={(s) => set('status', s)} />
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-4 gap-2">
           <div>
-            <label className="label" htmlFor="gf-pmin">Joueurs min</label>
+            <label className="label" htmlFor="gf-pmin">J. min</label>
             <input id="gf-pmin" className="input" inputMode="numeric" type="number" min={1} max={99} value={f.playersMin} onChange={(e) => set('playersMin', e.target.value)} />
           </div>
           <div>
-            <label className="label" htmlFor="gf-pmax">Joueurs max</label>
+            <label className="label" htmlFor="gf-pmax">J. max</label>
             <input id="gf-pmax" className="input" inputMode="numeric" type="number" min={1} max={99} value={f.playersMax} onChange={(e) => set('playersMax', e.target.value)} />
           </div>
           <div>
-            <label className="label" htmlFor="gf-dur">Durée (min)</label>
+            <label className="label" htmlFor="gf-dur">Minutes</label>
             <input id="gf-dur" className="input" inputMode="numeric" type="number" min={1} max={1440} value={f.durationMin} onChange={(e) => set('durationMin', e.target.value)} />
+          </div>
+          <div>
+            <label className="label" htmlFor="gf-age">Âge</label>
+            <input id="gf-age" className="input" inputMode="numeric" type="number" min={1} max={99} value={f.ageMin} onChange={(e) => set('ageMin', e.target.value)} />
           </div>
         </div>
 
@@ -150,6 +158,11 @@ export default function GameForm({
         <div>
           <label className="label" htmlFor="gf-notes">Notes</label>
           <textarea id="gf-notes" className="input min-h-20" value={f.notes} onChange={(e) => set('notes', e.target.value)} />
+        </div>
+
+        <div>
+          <label className="label" htmlFor="gf-missing">Matériel manquant / abîmé</label>
+          <textarea id="gf-missing" className="input min-h-16" placeholder="ex : 2 cartes Lac manquantes, 1 meeple rouge" value={f.missingParts} onChange={(e) => set('missingParts', e.target.value)} />
         </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}

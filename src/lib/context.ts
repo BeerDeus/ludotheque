@@ -21,7 +21,10 @@ export interface Filters {
   tags: string[];
   players: number | null;
   maxDuration: number | null;
+  /** âge du plus jeune joueur : garde les jeux dont ageMin ≤ age (ou inconnu) */
+  age: number | null;
   pendingOnly: boolean;
+  incompleteOnly: boolean;
   sort: SortKey;
   dir: 'asc' | 'desc';
 }
@@ -32,7 +35,9 @@ export const DEFAULT_FILTERS: Filters = {
   tags: [],
   players: null,
   maxDuration: null,
+  age: null,
   pendingOnly: false,
+  incompleteOnly: false,
   sort: 'name',
   dir: 'asc',
 };

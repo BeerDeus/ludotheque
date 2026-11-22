@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { useSession } from '../lib/context';
-import { formatDuration, formatPlayers, formatPrice, isEnriched, relevantPrice } from '../lib/format';
+import { formatAge, formatDuration, formatPlayers, formatPrice, isEnriched, relevantPrice } from '../lib/format';
 import { setStatus } from '../lib/games';
 import { STATUS_LABEL, type Game } from '../lib/types';
 import { STATUS_STYLE, cx } from '../lib/ui';
@@ -12,12 +12,14 @@ const PRIO_DOTS = { 1: '●●●', 2: '●●', 3: '●' } as const;
 export default function GameCard({ game, showStatus }: { game: Game; showStatus: boolean }) {
   const { family } = useSession();
   const price = relevantPrice(game);
-  const meta = [formatPlayers(game), formatDuration(game.durationMin), game.complexity ? `${game.complexity}/5` : ''].filter(Boolean);
+  const meta = [formatPlayers(game), formatDuration(game.durationMin), formatAge(game.ageMin), game.complexity ? `${game.complexity}/5` : ''].filter(Boolean);
+  const exps = game.expansions ?? [];
+  const ownedExps = exps.filter((e) => e.owned).length;
 
   return (
     <li className="card flex items-stretch gap-3 p-2.5">
       <Link to={`/jeu/${game.id}`} className="flex min-w-0 flex-1 items-center gap-3">
-        <Cover name={game.name} url={game.coverUrl} className="size-16 shrink-0 rounded-xl text-lg" />
+        <Cover name={game.name} url={game.thumbUrl || game.coverUrl} className="size-16 shrink-0 rounded-xl text-lg" />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
             <h3 className="truncate font-semibold">{game.name}</h3>
@@ -31,6 +33,12 @@ export default function GameCard({ game, showStatus }: { game: Game; showStatus:
               </span>
             )}
             {price != null && <span className="chip bg-slate-500/10 text-slate-600 dark:text-slate-300">{formatPrice(price)}</span>}
+            {game.missingParts?.trim() && <span className="chip bg-amber-500/15 text-amber-700 dark:text-amber-300">⚠ incomplet</span>}
+            {exps.length > 0 && (
+              <span className="chip bg-slate-500/10 text-slate-600 dark:text-slate-300" title="Extensions possédées / suivies">
+                +{ownedExps}/{exps.length} ext.
+              </span>
+            )}
             {!isEnriched(game) && <span className="chip bg-sky-500/15 text-sky-700 dark:text-sky-300">non enrichi</span>}
             {game.tags.slice(0, 3).map((t) => (
               <span key={t} className="chip text-slate-500 dark:text-slate-400">#{t}</span>

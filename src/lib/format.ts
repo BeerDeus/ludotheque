@@ -13,6 +13,8 @@ export const formatPlayers = (g: Pick<Game, 'playersMin' | 'playersMax'>) => {
   return `${a}–${b} j.`;
 };
 
+export const formatAge = (n?: number) => (n ? `dès ${n} ans` : '');
+
 export const formatDuration = (n?: number) => (n ? `${n} min` : '');
 
 export const formatDate = (t?: Timestamp | null) =>

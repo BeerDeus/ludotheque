@@ -7,7 +7,12 @@ export function applyFilters(games: Game[], f: Filters): Game[] {
   const out = games.filter((g) => {
     if (f.status !== 'all' && g.status !== f.status) return false;
     if (f.pendingOnly && isEnriched(g)) return false;
-    if (q && !normalize(`${g.name} ${g.tags.join(' ')} ${g.shop ?? ''} ${g.notes}`).includes(q)) return false;
+    if (f.incompleteOnly && !g.missingParts?.trim()) return false;
+    if (f.age != null && g.ageMin && g.ageMin > f.age) return false;
+    if (q) {
+      const hay = `${g.name} ${g.tags.join(' ')} ${g.shop ?? ''} ${g.notes} ${(g.expansions ?? []).map((e) => e.name).join(' ')}`;
+      if (!normalize(hay).includes(q)) return false;
+    }
     if (f.tags.length && !f.tags.every((t) => g.tags.includes(t))) return false;
     if (f.players != null) {
       const min = g.playersMin || 1;

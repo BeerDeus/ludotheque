@@ -14,13 +14,20 @@ const SORTS: { key: SortKey; label: string }[] = [
 ];
 
 const DURATIONS = [30, 45, 60, 90, 120, 180];
+const AGES = [3, 4, 5, 6, 7, 8, 10, 12, 14, 16];
 
 export default function FilterBar() {
   const { games, filters: f, setFilters } = useGames();
   const [open, setOpen] = useState(false);
   const tags = allTags(games);
   const count = (s: Status | 'all') => (s === 'all' ? games.length : games.filter((g) => g.status === s).length);
-  const active = (f.tags.length ? 1 : 0) + (f.players != null ? 1 : 0) + (f.maxDuration != null ? 1 : 0) + (f.pendingOnly ? 1 : 0);
+  const active =
+    (f.tags.length ? 1 : 0) +
+    (f.players != null ? 1 : 0) +
+    (f.maxDuration != null ? 1 : 0) +
+    (f.age != null ? 1 : 0) +
+    (f.pendingOnly ? 1 : 0) +
+    (f.incompleteOnly ? 1 : 0);
 
   return (
     <div className="flex flex-col gap-2">
@@ -88,6 +95,17 @@ export default function FilterBar() {
               </select>
             </div>
             <div>
+              <label className="label" htmlFor="f-age">Plus jeune joueur</label>
+              <select id="f-age" className="input" value={f.age ?? ''} onChange={(e) => setFilters({ age: e.target.value ? Number(e.target.value) : null })}>
+                <option value="">Peu importe</option>
+                {AGES.map((a) => (
+                  <option key={a} value={a}>
+                    {a} ans
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label className="label" htmlFor="f-sort">Tri</label>
               <select id="f-sort" className="input" value={f.sort} onChange={(e) => setFilters({ sort: e.target.value as SortKey })}>
                 {SORTS.map((s) => (
@@ -97,7 +115,7 @@ export default function FilterBar() {
                 ))}
               </select>
             </div>
-            <div>
+            <div className="col-span-2">
               <span className="label">Ordre</span>
               <button className="btn-soft w-full" onClick={() => setFilters({ dir: f.dir === 'asc' ? 'desc' : 'asc' })}>
                 <Icon name="sort" className="size-4" />
@@ -109,6 +127,10 @@ export default function FilterBar() {
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" className="size-4 accent-indigo-600" checked={f.pendingOnly} onChange={(e) => setFilters({ pendingOnly: e.target.checked })} />
             Seulement les jeux non enrichis
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" className="size-4 accent-indigo-600" checked={f.incompleteOnly} onChange={(e) => setFilters({ incompleteOnly: e.target.checked })} />
+            Seulement les jeux avec du matériel manquant
           </label>
 
           {tags.length > 0 && (

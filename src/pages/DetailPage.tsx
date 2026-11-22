@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import Cover from '../components/Cover';
 import { EditableField, EditableMarkdown } from '../components/Editable';
+import Expansions from '../components/Expansions';
 import GameForm from '../components/GameForm';
 import Header from '../components/Header';
 import Icon from '../components/Icon';
@@ -71,6 +72,13 @@ export default function DetailPage() {
                   {game.complexity}/5
                 </span>
               ) : null}
+              {game.ageMin ? <span className="chip bg-slate-500/10">dès {game.ageMin} ans</span> : null}
+              {game.yearPublished ? <span className="chip bg-slate-500/10">{game.yearPublished}</span> : null}
+              {game.bggRating ? (
+                <span className="chip bg-slate-500/10" title="Note moyenne BGG">
+                  ★ {game.bggRating.toFixed(1)}
+                </span>
+              ) : null}
               {game.bggId ? (
                 <a className="chip bg-orange-500/15 text-orange-700 dark:text-orange-300" href={`https://boardgamegeek.com/boardgame/${game.bggId}`} target="_blank" rel="noreferrer">
                   BGG
@@ -92,9 +100,11 @@ export default function DetailPage() {
           <EditableField label="Joueurs min" kind="number" value={game.playersMin ? String(game.playersMin) : ''} onSave={(v) => save({ playersMin: Number(v) || 0 })} />
           <EditableField label="Joueurs max" kind="number" value={game.playersMax ? String(game.playersMax) : ''} onSave={(v) => save({ playersMax: Number(v) || 0 })} />
           <EditableField label="Durée" kind="number" value={game.durationMin ? String(game.durationMin) : ''} display={`${game.durationMin} min`} onSave={(v) => save({ durationMin: Number(v) || 0 })} />
+          <EditableField label="Âge min" kind="number" value={game.ageMin ? String(game.ageMin) : ''} display={`${game.ageMin} ans`} onSave={(v) => save({ ageMin: toNum(v) })} />
           <EditableField label="Prix payé" kind="decimal" value={game.priceBought != null ? String(game.priceBought) : ''} display={formatPrice(game.priceBought)} onSave={(v) => save({ priceBought: toNum(v) })} />
           <EditableField label="Prix cible" kind="decimal" value={game.priceTarget != null ? String(game.priceTarget) : ''} display={formatPrice(game.priceTarget)} onSave={(v) => save({ priceTarget: toNum(v) })} />
           <EditableField label="Boutique" value={game.shop ?? ''} onSave={(v) => save({ shop: v })} />
+          <EditableField label="ID BGG" kind="number" value={game.bggId ? String(game.bggId) : ''} placeholder="auto" onSave={(v) => save({ bggId: toNum(v) })} />
           <div>
             <span className="label">Priorité</span>
             <div className="flex gap-1">
@@ -124,7 +134,25 @@ export default function DetailPage() {
           </div>
         </section>
 
+        {game.missingParts?.trim() && (
+          <p className="rounded-2xl bg-amber-500/10 p-3 text-sm text-amber-800 dark:text-amber-300">⚠ Matériel manquant ou abîmé — voir ci-dessous.</p>
+        )}
+
+        <EditableMarkdown
+          label="Matériel manquant / abîmé"
+          value={game.missingParts}
+          onSave={(v) => save({ missingParts: v.trim() })}
+          defaultOpen={Boolean(game.missingParts?.trim())}
+          empty="Rien à signaler : le jeu est complet."
+        />
+
+        <Expansions game={game} onChange={(expansions) => save({ expansions })} />
+
         <EditableMarkdown label="Notes" value={game.notes} onSave={(v) => save({ notes: v })} defaultOpen={Boolean(game.notes)} empty="Aucune note." />
+
+        {game.autofillNote && (
+          <p className="rounded-2xl bg-slate-500/10 p-3 text-xs text-slate-600 dark:text-slate-300">BGG : {game.autofillNote}</p>
+        )}
 
         {!isEnriched(game) && (
           <p className="rounded-2xl bg-sky-500/10 p-3 text-sm text-sky-800 dark:text-sky-300">

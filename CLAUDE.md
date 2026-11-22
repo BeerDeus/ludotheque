@@ -32,11 +32,14 @@ Saisi par l'utilisateur :
 | status | `'owned' \| 'wishlist' \| 'watch'` | |
 | playersMin, playersMax | number | 0 = inconnu |
 | durationMin | number | durée typique en minutes, 0 = inconnue |
+| ageMin? | number | âge minimum conseillé |
 | priceBought?, priceTarget? | number | euros |
 | shop?, url? | string | url = lien d'achat |
 | priority | 1 \| 2 \| 3 | 1 = haute |
 | notes | string | markdown |
 | tags | string[] | minuscules |
+| missingParts? | md | matériel manquant / abîmé (badge « incomplet ») |
+| expansions? | `{ id, name, owned, bggId?, notes? }[]` | extensions possédées ou suivies — **jamais modifiées par l'enrichissement** |
 | createdAt | Timestamp | |
 
 Enrichi par Claude :
@@ -45,6 +48,11 @@ Enrichi par Claude :
 |---|---|---|
 | bggId | number | id BoardGameGeek |
 | coverUrl | string | URL image de couverture (BGG `cf.geekdo-images.com` de préférence) |
+| thumbUrl | string | miniature (liste) |
+| yearPublished | number | année de sortie |
+| bggRating | number | note moyenne BGG (1 décimale) |
+| bggExpansions | `{ bggId, name }[]` | extensions connues sur BGG (suggestions dans l'app) |
+| autofillNote | string | message de l'autofill BGG (ambiguïté, introuvable) |
 | complexity | number 1–5 | poids BGG arrondi à 0,5 près |
 | rulesSummary | md | 8–15 lignes : thème, but du jeu, comment on gagne, mécaniques principales |
 | setup | md | liste à puces, 5–10 étapes de mise en place |
@@ -71,12 +79,39 @@ node scripts/games.mjs add <json> [--family F]        # objet ou tableau
 node scripts/games.mjs delete <ref>
 node scripts/games.mjs access show|allow <email>|revoke <email>|open true|false
 node scripts/games.mjs rules deploy                   # publie firestore.rules (= npm run rules:deploy)
+node scripts/games.mjs export [--pending]             # liste compacte gzip+base64 (logs CI)
+node scripts/games.mjs apply enrichments [--applied f]  # applique enrichments/<fid>__<gid>.json
+node scripts/games.mjs autofill [ref] [--all] [--force] # API XML BGG (BGG_API_TOKEN) : image, âge, joueurs…
 ```
+
+### Autofill BGG (automatique)
+
+Workflow `BGG autofill` (toutes les heures + après chaque enrichissement) : pour chaque jeu nouveau, renommé
+ou dont le `bggId` a changé, cherche le jeu sur BGG (noms alternatifs inclus, ex. titres FR) et remplit
+`coverUrl`, `thumbUrl`, `ageMin`, `playersMin/Max`, `durationMin`, `yearPublished`, `complexity`, `bggRating`,
+`bggExpansions` — sans écraser une saisie existante. Ambigu → `autofillNote` listant les candidats ; on tranche
+en posant `bggId` (app : champ « ID BGG », ou enrichissement).
 
 `<json>` = JSON inline, `@fichier.json` ou `-` (stdin). Une valeur `null` supprime le champ.
 **Pour `update`, toujours passer par un fichier** (`@`) : le markdown français contient des apostrophes qui cassent les quotes du shell.
 
 ## Procédure « enrichis les jeux »
+
+### Depuis une session cloud (pas de JSON de compte de service en local)
+
+Tout passe par GitHub Actions (secret `FIREBASE_SERVICE_ACCOUNT`). Repo **public** : rien de personnel dans les fichiers/logs.
+
+1. Lancer le workflow `firebase-admin.yml` avec `command=export-pending` (outil GitHub `actions_run_trigger`, ref = branche par défaut).
+2. Lire les logs du job (`get_job_logs`, `tail_lines: 300`), extraire les lignes entre `LUDO_EXPORT_BEGIN` et `LUDO_EXPORT_END`,
+   puis : `tr -d '\n' | base64 -d | gunzip` → JSON `[{ ref, name, playersMin, …, bggId, autofillNote, expansions }]`.
+   (Base64 obligatoire : GitHub masque les `{` `}` dans les logs à cause du secret JSON multi-lignes.)
+3. Rechercher / rédiger comme ci-dessous, puis écrire **un fichier par jeu** : `enrichments/<familyId>__<gameId>.json`
+   (`ref` = `familyId/gameId`). Mêmes champs que pour `update`. Ne pas inclure `expansions`.
+4. Commit + push sur la branche par défaut → workflow « Appliquer les enrichissements » : écrit dans Firestore,
+   supprime les fichiers (commit bot `[skip ci]` → faire `git pull` avant le push suivant), lance l'autofill.
+5. Vérifier le run (`actions_list` → `list_workflow_jobs` → logs : `✓ <nom>` par jeu).
+
+### Depuis la machine de l'utilisateur (JSON local)
 
 Quand l'utilisateur dit « enrichis les jeux » (ou « enrichis <nom> ») :
 
@@ -85,8 +120,9 @@ Quand l'utilisateur dit « enrichis les jeux » (ou « enrichis <nom> ») :
    1. Identifier le jeu sans ambiguïté : WebSearch / WebFetch sur BoardGameGeek (bggId, image, poids, joueurs, durée), site de l'éditeur, règles officielles (PDF éditeur), FAQ.
    2. **Si incertitude** (homonymes, édition/version inconnue, jeu introuvable, infos contradictoires) : **demander à l'utilisateur** avant d'écrire, ne pas deviner.
    3. Rédiger **en français, avec tes propres mots** — ne jamais copier/coller ni paraphraser de près le livret de règles ; synthétiser.
-   4. Remplir **tous** les champs enrichis (cf. tableau) + `sources` (URLs réellement consultées).
-   5. Champs de base `playersMin`, `playersMax`, `durationMin` : les compléter **uniquement s'ils valent 0** (ne jamais écraser une saisie utilisateur). Ne pas toucher `status`, prix, `priority`, `notes`, `tags`.
+   4. Remplir **tous** les champs enrichis (cf. tableau) + `sources` (URLs réellement consultées). `bggId` exact en priorité :
+      l'autofill complète ensuite image, miniature, note, extensions BGG.
+   5. Champs de base `playersMin`, `playersMax`, `durationMin`, `ageMin` : les compléter **uniquement s'ils sont vides/0** (ne jamais écraser une saisie utilisateur). Ne pas toucher `status`, prix, `priority`, `notes`, `tags`, `missingParts`, `expansions`.
    6. Écrire le JSON dans un fichier temporaire (ex. `/tmp/ludo-<id>.json`) puis `node scripts/games.mjs update <familyId>/<id> @/tmp/ludo-<id>.json`. Vérifier la sortie.
 3. Récap final en liste :
    - jeux traités (nom → complexité, sources principales)
