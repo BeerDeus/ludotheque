@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router';
 import BggAttribution from '../components/BggAttribution';
 import Cover from '../components/Cover';
 import CoverPicker from '../components/CoverPicker';
+import Lightbox from '../components/Lightbox';
 import { EditableField, EditableMarkdown } from '../components/Editable';
 import Expansions from '../components/Expansions';
 import GameForm from '../components/GameForm';
@@ -27,6 +28,7 @@ export default function DetailPage() {
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [picking, setPicking] = useState(false);
+  const [viewing, setViewing] = useState(false);
   const game = games.find((g) => g.id === id);
 
   const back = (
@@ -68,7 +70,7 @@ export default function DetailPage() {
       />
       <main className="mx-auto flex max-w-3xl flex-col gap-4 px-3 pt-4 pb-16">
         <section className="flex gap-4">
-          <button className="relative shrink-0" onClick={() => setPicking(true)} aria-label="Changer l'image">
+          <button className="relative shrink-0" onClick={() => (game.coverUrl || game.thumbUrl ? setViewing(true) : setPicking(true))} aria-label="Voir l'image">
             <Cover name={game.name} url={game.coverUrl || game.thumbUrl} className="size-32 rounded-2xl text-3xl shadow-md" />
             <span className="absolute right-1.5 bottom-1.5 grid size-7 place-items-center rounded-full bg-black/60 text-sm text-white">📷</span>
           </button>
@@ -227,6 +229,24 @@ export default function DetailPage() {
 
       {editing && <GameForm game={game} onClose={() => setEditing(false)} />}
       {picking && <CoverPicker game={game} onClose={() => setPicking(false)} />}
+      {viewing && (
+        <Lightbox
+          src={game.coverUrl || game.thumbUrl}
+          alt={game.name}
+          onClose={() => setViewing(false)}
+          actions={
+            <button
+              className="btn-soft bg-white/15 text-white"
+              onClick={() => {
+                setViewing(false);
+                setPicking(true);
+              }}
+            >
+              📷 Changer l’image
+            </button>
+          }
+        />
+      )}
     </>
   );
 }

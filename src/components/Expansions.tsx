@@ -1,4 +1,10 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useRef, useState, type FormEvent } from 'react';
+import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { useSession } from '../lib/context';
+import { db } from '../lib/firebase';
+import { fileToCompactDataUrl } from '../lib/image';
+import { toast } from '../lib/toast';
+import Lightbox from './Lightbox';
 import { normalize } from '../lib/format';
 import type { Expansion, ExpansionKind, Game } from '../lib/types';
 import { cx } from '../lib/ui';
@@ -12,34 +18,95 @@ const GROUPS: { kind: ExpansionKind; title: string; hint: string; icon: string; 
   { kind: 'expansion', title: 'Extensions', hint: 'nécessitent le jeu de base', icon: '🧩', box: 'border-slate-500/20 bg-slate-500/5' },
 ];
 
-function Row({ e, onUpdate, onRemove }: { e: Expansion; onUpdate: (p: Partial<Expansion>) => void; onRemove: () => void }) {
+function Row({ e, gameId, onUpdate, onRemove }: { e: Expansion; gameId: string; onUpdate: (p: Partial<Expansion>) => void; onRemove: () => void }) {
+  const { family } = useSession();
   const [editing, setEditing] = useState(false);
+  const [view, setView] = useState<{ src?: string; loading: boolean } | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const imgRef = doc(db, 'families', family.id, 'games', gameId, 'images', e.id);
+
+  const open = async () => {
+    if (!e.thumb) return fileRef.current?.click();
+    setView({ src: e.thumb, loading: true });
+    try {
+      const snap = await getDoc(imgRef);
+      setView({ src: (snap.data()?.dataUrl as string | undefined) ?? e.thumb, loading: false });
+    } catch {
+      setView({ src: e.thumb, loading: false });
+    }
+  };
+
+  const onFile = async (f?: File) => {
+    if (!f) return;
+    try {
+      const [full, thumb] = await Promise.all([fileToCompactDataUrl(f, 800, 220_000), fileToCompactDataUrl(f, 128, 12_000)]);
+      void setDoc(imgRef, { dataUrl: full, source: 'photo' }).catch((err: Error) => toast(`Erreur : ${err.message}`));
+      onUpdate({ thumb });
+      toast('Photo enregistrée');
+    } catch {
+      toast('Image illisible');
+    }
+  };
+
+  const removePhoto = () => {
+    void deleteDoc(imgRef);
+    onUpdate({ thumb: undefined });
+  };
+
   return (
     <li className="flex flex-col gap-1 py-2">
-      <div className="flex items-center gap-2">
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(ev) => void onFile(ev.target.files?.[0])} />
+      <div className="flex items-start gap-2.5">
         <button
-          onClick={() => onUpdate({ owned: !e.owned })}
-          className={cx('chip shrink-0 px-2.5 py-1', e.owned ? 'bg-emerald-600 text-white' : 'bg-slate-500/15 text-slate-600 dark:text-slate-300')}
-          title="Changer le statut"
+          onClick={() => void open()}
+          className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-slate-500/10 text-lg"
+          aria-label={e.thumb ? `Voir l'image de ${e.name}` : `Ajouter une photo de ${e.name}`}
         >
-          {e.owned ? '✓ Possédée' : 'Non possédée'}
+          {e.thumb ? <img src={e.thumb} alt="" className="size-full object-cover" /> : <span className="opacity-60">{kindOf(e) === 'standalone' ? '📦' : '🧩'}</span>}
         </button>
-        <span className={cx('min-w-0 flex-1 truncate text-sm', !e.owned && 'text-slate-500 dark:text-slate-400')}>{e.name}</span>
+        <div className="min-w-0 flex-1">
+          <p className={cx('text-sm leading-snug break-words', e.owned ? 'font-medium' : 'text-slate-600 dark:text-slate-400')}>{e.name}</p>
+          {e.notes && !editing && <p className="mt-0.5 text-xs text-slate-500">{e.notes}</p>}
+          <div className="mt-1 flex items-center gap-1">
+            <button
+              onClick={() => onUpdate({ owned: !e.owned })}
+              className={cx('chip px-2 py-0.5 text-[11px]', e.owned ? 'bg-emerald-600 text-white' : 'bg-slate-500/15 text-slate-600 dark:text-slate-300')}
+              title="Changer le statut"
+            >
+              {e.owned ? '✓ Possédée' : 'Non possédée'}
+            </button>
+          </div>
+        </div>
         <button className="btn-ghost p-1.5" onClick={() => setEditing((v) => !v)} aria-label="Modifier">
           <Icon name="edit" className="size-4" />
         </button>
       </div>
-      {editing ? (
+      {editing && (
         <div className="flex flex-col gap-2 rounded-xl bg-slate-500/5 p-2">
           <input
             className="input py-1 text-sm"
             autoFocus
+            defaultValue={e.name}
+            aria-label="Nom"
+            onBlur={(ev) => ev.target.value.trim() && ev.target.value.trim() !== e.name && onUpdate({ name: ev.target.value.trim() })}
+            onKeyDown={(ev) => ev.key === 'Enter' && (ev.target as HTMLInputElement).blur()}
+          />
+          <input
+            className="input py-1 text-sm"
             placeholder="Note (matériel manquant, prix visé…)"
             defaultValue={e.notes ?? ''}
             onBlur={(ev) => ev.target.value.trim() !== (e.notes ?? '') && onUpdate({ notes: ev.target.value.trim() || undefined })}
             onKeyDown={(ev) => ev.key === 'Enter' && (ev.target as HTMLInputElement).blur()}
           />
-          <div className="flex items-center justify-between gap-2 text-xs">
+          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+            <button className="btn-soft px-2 py-1 text-xs" onClick={() => fileRef.current?.click()}>
+              📷 {e.thumb ? 'Changer la photo' : 'Ajouter une photo'}
+            </button>
+            {e.thumb && (
+              <button className="btn-ghost px-2 py-1 text-xs" onClick={removePhoto}>
+                Retirer la photo
+              </button>
+            )}
             <button className="btn-soft px-2 py-1 text-xs" onClick={() => onUpdate({ kind: kindOf(e) === 'standalone' ? 'expansion' : 'standalone' })}>
               → {kindOf(e) === 'standalone' ? 'Extension' : 'Boîte autonome'}
             </button>
@@ -48,13 +115,24 @@ function Row({ e, onUpdate, onRemove }: { e: Expansion; onUpdate: (p: Partial<Ex
                 BGG ↗
               </a>
             )}
-            <button className="btn-danger px-2 py-1 text-xs" onClick={onRemove}>
+            <button className="btn-danger ml-auto px-2 py-1 text-xs" onClick={onRemove}>
               <Icon name="trash" className="size-3.5" /> Retirer
             </button>
           </div>
         </div>
-      ) : (
-        e.notes && <p className="pl-1 text-xs text-slate-500">{e.notes}</p>
+      )}
+      {view && (
+        <Lightbox
+          src={view.src}
+          alt={e.name}
+          loading={view.loading}
+          onClose={() => setView(null)}
+          actions={
+            <button className="btn-soft bg-white/15 text-white" onClick={() => fileRef.current?.click()}>
+              📷 Remplacer par ma photo
+            </button>
+          }
+        />
       )}
     </li>
   );
@@ -113,7 +191,7 @@ export default function Expansions({ game, onChange }: { game: Game; onChange: (
               </h4>
               <ul className="flex flex-col divide-y divide-slate-200 dark:divide-slate-800">
                 {items.map((e) => (
-                  <Row key={e.id} e={e} onUpdate={(p) => update(e.id, p)} onRemove={() => remove(e)} />
+                  <Row key={e.id} e={e} gameId={game.id} onUpdate={(p) => update(e.id, p)} onRemove={() => remove(e)} />
                 ))}
               </ul>
             </section>

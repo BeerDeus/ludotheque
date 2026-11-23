@@ -32,6 +32,8 @@ export interface Expansion {
   owned: boolean;
   /** défaut : 'expansion' */
   kind?: ExpansionKind;
+  /** miniature (data URL ~128 px) ; l'image en grand est dans games/{gid}/images/{id} */
+  thumb?: string;
   bggId?: number;
   notes?: string;
 }

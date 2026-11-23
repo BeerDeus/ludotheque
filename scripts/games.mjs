@@ -11,7 +11,7 @@ import { applicationDefault, cert, initializeApp } from 'firebase-admin/app';
 import { getSecurityRules } from 'firebase-admin/security-rules';
 import { FieldValue, Timestamp, getFirestore } from 'firebase-admin/firestore';
 import { findGame, things, toGamePatch } from './lib/bgg.mjs';
-import { coverFromPages, toDataUrl, wikipediaImage } from './lib/covers.mjs';
+import { bytesFromPages, coverFromPages, toDataUrl, wikipediaImage } from './lib/covers.mjs';
 
 const USAGE = `Usage: node scripts/games.mjs <commande> [args] [--family <fid>]
 
@@ -43,7 +43,7 @@ Familles / accès
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
 
 const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'myRating', 'notes', 'tags', 'missingParts', 'expansions'];
-const ENRICHED_FIELDS = ['expansionsAdd', 'bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
+const ENRICHED_FIELDS = ['expansionsAdd', 'expansionImages', 'bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
 const ALLOWED = new Set([...BASE_FIELDS, ...ENRICHED_FIELDS]);
 const STATUSES = ['owned', 'wishlist', 'watch'];
 
@@ -167,6 +167,8 @@ function validate(data, { partial }) {
         ...(e.kind === 'standalone' ? { kind: 'standalone' } : {}),
         ...(e.bggId ? { bggId: Number(e.bggId) } : {}),
         ...(e.notes ? { notes: String(e.notes) } : {}),
+        ...(e.thumb ? { thumb: String(e.thumb) } : {}),
+        ...(Array.isArray(e.coverPages) ? { coverPages: e.coverPages } : {}),
       };
     });
   }
@@ -186,6 +188,35 @@ function mergeExpansionsAdd(data, current = []) {
   const fresh = add.filter((e) => !have.has(key(e.name)));
   if (fresh.length) data.expansions = [...current, ...fresh];
   console.log(`  extensions : +${fresh.length} (${add.length - fresh.length} déjà présente(s))`);
+}
+
+/**
+ * Images des boîtes/extensions : `coverPages` sur un élément de expansions(Add), ou
+ * `expansionImages: { "<nom>": [urls] }` pour des éléments existants. Grand format → images/{id}, miniature → e.thumb.
+ */
+async function resolveExpansionImages(ref, data, current = []) {
+  const map = data.expansionImages;
+  delete data.expansionImages;
+  const key = (n) => n.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const byName = new Map(Object.entries(map ?? {}).map(([k, v]) => [key(k), v]));
+  const list = data.expansions ?? (byName.size ? current.map((e) => ({ ...e })) : null);
+  if (!list) return;
+  let n = 0;
+  for (const e of list) {
+    const pages = e.coverPages ?? byName.get(key(e.name));
+    delete e.coverPages;
+    if (!Array.isArray(pages) || !pages.length) continue;
+    const hit = await bytesFromPages(pages);
+    if (!hit) {
+      console.log(`  ⚠ pas d'image pour « ${e.name} »`);
+      continue;
+    }
+    await ref.collection('images').doc(e.id).set({ dataUrl: await toDataUrl(hit.bytes, 800, 220_000), source: hit.source, updatedAt: FieldValue.serverTimestamp() });
+    e.thumb = await toDataUrl(hit.bytes, 128, 12_000);
+    n++;
+  }
+  data.expansions = list;
+  if (n) console.log(`  images boîtes/extensions : ${n}`);
 }
 
 /** coverPages (pages produit / URLs d'image) → coverUrl (data URL compacte). Mute `data`. */
@@ -219,6 +250,7 @@ const commands = {
     const snap = await resolveGame(ref);
     const data = validate(readJson(json), { partial: true });
     mergeExpansionsAdd(data, snap.data().expansions);
+    await resolveExpansionImages(snap.ref, data, snap.data().expansions);
     await resolveCoverPages(data, snap.data().name);
     if (!flags.noEnrich) Object.assign(data, { enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' });
     await snap.ref.set(data, { merge: true });
@@ -295,6 +327,7 @@ const commands = {
         const data = validate(JSON.parse(readFileSync(join(dir, f), 'utf8')), { partial: true });
         delete data.expansions; // jamais écrasées par un enrichissement
         mergeExpansionsAdd(data, snap.data().expansions);
+        await resolveExpansionImages(ref, data, snap.data().expansions);
         await resolveCoverPages(data, snap.data().name);
         await ref.set({ ...data, enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' }, { merge: true });
         applied.push(join(dir, f));

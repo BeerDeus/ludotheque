@@ -86,6 +86,14 @@ service cloud.firestore {
           && ((m == uid() && !isOwner(fid)) || (isOwner(fid) && m != uid()));
       }
 
+      match /games/{gid}/images/{iid} {
+        // images en grand des boîtes/extensions (data URL JPEG compacte)
+        allow read, delete: if isMember(fid);
+        allow create, update: if isMember(fid)
+          && request.resource.data.dataUrl is string
+          && request.resource.data.dataUrl.size() < 400000;
+      }
+
       match /games/{gid} {
         allow read, delete: if isMember(fid);
         allow create, update: if isMember(fid)

@@ -74,25 +74,31 @@ export async function wikipediaImage(name) {
   return null;
 }
 
-export async function toDataUrl(bytes) {
-  const base = sharp(bytes, { failOn: 'none' }).rotate().resize(600, 600, { fit: 'inside', withoutEnlargement: true }).flatten({ background: '#ffffff' });
+export async function toDataUrl(bytes, maxSide = 600, maxBytes = MAX_BYTES) {
+  const base = sharp(bytes, { failOn: 'none' }).rotate().resize(maxSide, maxSide, { fit: 'inside', withoutEnlargement: true }).flatten({ background: '#ffffff' });
   for (const quality of [80, 70, 60, 50, 40]) {
     const out = await base.clone().jpeg({ quality, mozjpeg: true }).toBuffer();
-    if (out.length <= MAX_BYTES) return `data:image/jpeg;base64,${out.toString('base64')}`;
+    if (out.length <= maxBytes) return `data:image/jpeg;base64,${out.toString('base64')}`;
   }
-  const out = await base.clone().resize(400, 400, { fit: 'inside' }).jpeg({ quality: 50 }).toBuffer();
+  const out = await base.clone().resize(Math.round(maxSide * 0.66), Math.round(maxSide * 0.66), { fit: 'inside' }).jpeg({ quality: 45 }).toBuffer();
   return `data:image/jpeg;base64,${out.toString('base64')}`;
 }
 
-/** Essaie chaque page dans l'ordre ; renvoie { coverUrl, coverSource } ou null */
-export async function coverFromPages(pages, log = console.log) {
+/** Essaie chaque page dans l'ordre ; renvoie { bytes, source } ou null */
+export async function bytesFromPages(pages, log = console.log) {
   for (const page of pages) {
     try {
       const { bytes } = await imageFromPage(page);
-      return { coverUrl: await toDataUrl(bytes), coverSource: page };
+      return { bytes, source: page };
     } catch (e) {
       log(`  · ${page} : ${e.message}`);
     }
   }
   return null;
+}
+
+/** Essaie chaque page dans l'ordre ; renvoie { coverUrl, coverSource } ou null */
+export async function coverFromPages(pages, log = console.log) {
+  const hit = await bytesFromPages(pages, log);
+  return hit ? { coverUrl: await toDataUrl(hit.bytes), coverSource: hit.source } : null;
 }
