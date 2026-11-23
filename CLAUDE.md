@@ -70,6 +70,11 @@ Pour corriger une liste existante : `expansionsPatch: { "<nom actuel>": { name?,
 
 **Images** : toutes stockées **carrées**, complétées par un fond blanc (CI `toDataUrl`, appli `fileToCompactDataUrl`).
 Ré-encodage global : workflow `firebase-admin` → `squarify`.
+**Toujours vérifier visuellement** après ajout d'images : workflow `firebase-admin` → `sheets` (planches contact
+jaquette + boîtes/extensions avec noms, base64 entre `LUDO_SHEET_BEGIN <gameId>` / `LUDO_SHEET_END`). Télécharger le log
+via `get_job_logs` (return_content=false → URL), décoder les JPEG et les regarder. Refuser : illustrations, bandeaux,
+logos de boutique, photos de matériel seul. Préférer ludum.fr / espritjeu.com / play-in.com (og:image = la boîte).
+Image douteuse sans alternative → `expansionsPatch: { "<nom>": { clearImage: true } }` (pas d'image plutôt qu'une fausse).
 
 Niveau de détail : **intermédiaire** — structuré et utilisable à table pour se rafraîchir la mémoire, sans être exhaustif (pas de cas particuliers de toutes les cartes).
 
