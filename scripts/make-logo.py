@@ -21,10 +21,6 @@ d20+='<path d="'+''.join(f"M{p[0]} {p[1]}L{q[0]} {q[1]}" for p,q in edges)+'" st
 d20+=poly((T,UR,LR,B,LL,UL),'none',' stroke="#5a3c0c" stroke-width="1.15" stroke-linejoin="round"')
 # reflet
 d20+=poly(((T[0]-.8,T[1]+2.2),(a[0]-1.3,a[1]+.9),(UL[0]+2.6,UL[1]+.5)),'#fffbe8',' fill-opacity=".5"')
-# 20 gravé
-ty=round(cy+0.06*R+2.05,2)
-d20+=f'<text x="{cx}" y="{ty+.45}" text-anchor="middle" font-family="Cinzel, Georgia, \'Times New Roman\', serif" font-weight="700" font-size="6.3" fill="#fff4cf" fill-opacity=".7">20</text>'
-d20+=f'<text x="{cx}" y="{ty}" text-anchor="middle" font-family="Cinzel, Georgia, \'Times New Roman\', serif" font-weight="700" font-size="6.3" fill="#6a4710">20</text>'
 defs='''<defs>
 <linearGradient id="lg-face" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#fdedb9"/><stop offset="1" stop-color="#efc95f"/></linearGradient>
 <linearGradient id="lg-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7dc8f"/><stop offset="1" stop-color="#c9962e"/></linearGradient>
