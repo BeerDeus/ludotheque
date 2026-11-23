@@ -63,6 +63,14 @@ Enrichi par Claude :
 | sources | string[] | URLs réellement consultées |
 | enrichedAt / enrichedBy | Timestamp / string | posés automatiquement par `update` |
 
+**Langue / disponibilité (règle utilisateur)** : uniquement ce qui existe **en français**. Noms **français officiels**
+uniquement (pas de « (VO) », pas de titre anglais entre parenthèses). Une boîte/extension disponible seulement en VO
+**n'est pas ajoutée** (vérifier une fiche VF chez un éditeur/boutique FR : Matagot, Intrafin, Asmodee, play-in, philibert…).
+Pour corriger une liste existante : `expansionsPatch: { "<nom actuel>": { name?, notes?, kind?, remove: true } }`.
+
+**Images** : toutes stockées **carrées**, complétées par un fond blanc (CI `toDataUrl`, appli `fileToCompactDataUrl`).
+Ré-encodage global : workflow `firebase-admin` → `squarify`.
+
 Niveau de détail : **intermédiaire** — structuré et utilisable à table pour se rafraîchir la mémoire, sans être exhaustif (pas de cas particuliers de toutes les cartes).
 
 ## Script admin `scripts/games.mjs`

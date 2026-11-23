@@ -1,0 +1,20 @@
+{
+  "expansionsPatch": {
+    "Amazonis & Vastitas": {
+      "remove": true
+    },
+    "Utopia & Cimmeria": {
+      "remove": true
+    },
+    "Terraforming Mars : Expédition Arès": {
+      "remove": true
+    }
+  },
+  "expansionImages": {
+    "Venus Next": [
+      "https://www.philibertnet.com/fr/intrafin/53701-terraforming-mars-vf-venus-next-5425037740098.html",
+      "https://www.ludum.fr/gestion-optimisation/terraforming-mars-venus-next-extension-754"
+    ]
+  },
+  "variants": "- **Ère des Corporations** : cartes supplémentaires et parties plus longues (version « experte »).\n- **Solo** : terraformer Mars avant la fin de la 14ᵉ génération.\n- **Draft** des cartes en phase de recherche.\n- Extensions en français : **Hellas & Elysium**, **Venus Next**, **Prélude**, **Prélude 2**, **Colonies**, **Turmoil**."
+}

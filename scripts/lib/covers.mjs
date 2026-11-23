@@ -74,13 +74,17 @@ export async function wikipediaImage(name) {
   return null;
 }
 
+/** Image carrée (maxSide × maxSide), complétée par un fond blanc, JPEG ≤ maxBytes → data URL */
 export async function toDataUrl(bytes, maxSide = 600, maxBytes = MAX_BYTES) {
-  const base = sharp(bytes, { failOn: 'none' }).rotate().resize(maxSide, maxSide, { fit: 'inside', withoutEnlargement: true }).flatten({ background: '#ffffff' });
+  const base = sharp(bytes, { failOn: 'none' })
+    .rotate()
+    .flatten({ background: '#ffffff' })
+    .resize(maxSide, maxSide, { fit: 'contain', background: '#ffffff' });
   for (const quality of [80, 70, 60, 50, 40]) {
     const out = await base.clone().jpeg({ quality, mozjpeg: true }).toBuffer();
     if (out.length <= maxBytes) return `data:image/jpeg;base64,${out.toString('base64')}`;
   }
-  const out = await base.clone().resize(Math.round(maxSide * 0.66), Math.round(maxSide * 0.66), { fit: 'inside' }).jpeg({ quality: 45 }).toBuffer();
+  const out = await base.clone().resize(Math.round(maxSide * 0.66), Math.round(maxSide * 0.66), { fit: 'contain', background: '#ffffff' }).jpeg({ quality: 45 }).toBuffer();
   return `data:image/jpeg;base64,${out.toString('base64')}`;
 }
 

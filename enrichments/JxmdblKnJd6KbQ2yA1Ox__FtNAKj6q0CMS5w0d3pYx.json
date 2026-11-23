@@ -1,0 +1,17 @@
+{
+  "expansionsPatch": {
+    "Les Chefs": {
+      "name": "Les Chefs de Small World"
+    },
+    "Sky Island": {
+      "name": "Sky Islands"
+    },
+    "Tunnels": {
+      "remove": true
+    },
+    "Plateau 6 joueurs": {
+      "remove": true
+    }
+  },
+  "variants": "- Plateaux recto/verso adaptés à **2, 3, 4 ou 5 joueurs**.\n- Nombreuses extensions de peuples et pouvoirs (**Maauuudits !**, **Honneur aux dames**, **Même pas peur !**, **Royal Bonus**…, regroupées aujourd'hui dans les **Power Packs**) ; **Small World Underground** est une version autonome compatible."
+}

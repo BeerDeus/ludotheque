@@ -24,6 +24,7 @@ Jeux
   delete <ref>                Supprime un jeu
   export [--pending]          Liste compacte (gzip+base64 entre marqueurs) pour les logs CI publics
   apply <dir> [--applied f]   Applique <dir>/<familyId>__<gameId>.json (update enrichi) ; f = fichiers appliqués
+  squarify                    Re-encode toutes les images stockées en carré (fond blanc)
   covers [ref] [--all]        Image manquante → cherche sur Wikipédia (FR/EN), stockée en JPEG compact
                               (dans un JSON d'update/apply : "coverPages": [urls de pages produit ou d'images])
   autofill [ref] [--all] [--force]
@@ -43,7 +44,7 @@ Familles / accès
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
 
 const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'myRating', 'notes', 'tags', 'missingParts', 'expansions'];
-const ENRICHED_FIELDS = ['expansionsAdd', 'expansionImages', 'bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
+const ENRICHED_FIELDS = ['expansionsAdd', 'expansionsPatch', 'expansionImages', 'bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
 const ALLOWED = new Set([...BASE_FIELDS, ...ENRICHED_FIELDS]);
 const STATUSES = ['owned', 'wishlist', 'watch'];
 
@@ -178,6 +179,45 @@ function validate(data, { partial }) {
   return Object.fromEntries(Object.entries(data).map(([k, v]) => [k, v === null ? FieldValue.delete() : v]));
 }
 
+/**
+ * expansionsPatch : { "<nom actuel>": { name?, notes?, kind?, remove?: true } } — renomme/corrige/retire
+ * des éléments existants (le statut possédé est conservé). Appliqué avant expansionsAdd.
+ */
+function applyExpansionsPatch(data, current = []) {
+  const patch = data.expansionsPatch;
+  delete data.expansionsPatch;
+  if (!patch || typeof patch !== 'object') return current;
+  const key = (n) => n.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const byKey = new Map(Object.entries(patch).map(([k, v]) => [key(k), v]));
+  let removed = 0;
+  let changed = 0;
+  const next = [];
+  for (const e of current) {
+    const p = byKey.get(key(e.name));
+    if (!p) {
+      next.push(e);
+      continue;
+    }
+    if (p.remove) {
+      removed++;
+      continue;
+    }
+    const upd = { ...e };
+    if (typeof p.name === 'string' && p.name.trim()) upd.name = p.name.trim();
+    if ('notes' in p) {
+      if (p.notes) upd.notes = String(p.notes);
+      else delete upd.notes;
+    }
+    if (p.kind === 'standalone') upd.kind = 'standalone';
+    if (p.kind === 'expansion') delete upd.kind;
+    next.push(upd);
+    changed++;
+  }
+  console.log(`  extensions : ${changed} corrigée(s), ${removed} retirée(s)`);
+  data.expansions = next;
+  return next;
+}
+
 /** expansionsAdd : ajoute à la liste existante les éléments absents (même nom normalisé), sans toucher aux autres */
 function mergeExpansionsAdd(data, current = []) {
   const add = data.expansionsAdd;
@@ -249,8 +289,9 @@ const commands = {
   async update([ref, json]) {
     const snap = await resolveGame(ref);
     const data = validate(readJson(json), { partial: true });
-    mergeExpansionsAdd(data, snap.data().expansions);
-    await resolveExpansionImages(snap.ref, data, snap.data().expansions);
+    const base = applyExpansionsPatch(data, snap.data().expansions);
+    mergeExpansionsAdd(data, base);
+    await resolveExpansionImages(snap.ref, data, base);
     await resolveCoverPages(data, snap.data().name);
     if (!flags.noEnrich) Object.assign(data, { enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' });
     await snap.ref.set(data, { merge: true });
@@ -326,8 +367,9 @@ const commands = {
         if (!snap.exists) throw new Error('jeu introuvable');
         const data = validate(JSON.parse(readFileSync(join(dir, f), 'utf8')), { partial: true });
         delete data.expansions; // jamais écrasées par un enrichissement
-        mergeExpansionsAdd(data, snap.data().expansions);
-        await resolveExpansionImages(ref, data, snap.data().expansions);
+        const base = applyExpansionsPatch(data, snap.data().expansions);
+        mergeExpansionsAdd(data, base);
+        await resolveExpansionImages(ref, data, base);
         await resolveCoverPages(data, snap.data().name);
         await ref.set({ ...data, enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' }, { merge: true });
         applied.push(join(dir, f));
@@ -340,6 +382,39 @@ const commands = {
     if (flags.applied) writeFileSync(flags.applied, applied.join('\n') + (applied.length ? '\n' : ''));
     console.log(`${applied.length} appliqué(s), ${failed} échec(s)`);
     if (failed) process.exitCode = 1;
+  },
+
+  /** Re-encode toutes les images stockées en carré fond blanc (jaquettes, grands formats, miniatures) */
+  async squarify() {
+    const fromData = (u) => Buffer.from(u.split(',')[1], 'base64');
+    const isData = (u) => typeof u === 'string' && u.startsWith('data:image/');
+    const snaps = (await db.collectionGroup('games').get()).docs;
+    let n = 0;
+    for (const s of snaps) {
+      const g = s.data();
+      const patch = {};
+      if (isData(g.coverUrl)) patch.coverUrl = await toDataUrl(fromData(g.coverUrl));
+      if (Array.isArray(g.expansions) && g.expansions.length) {
+        const list = [];
+        for (const e of g.expansions) {
+          const img = await s.ref.collection('images').doc(e.id).get();
+          const full = img.exists ? img.data().dataUrl : null;
+          if (isData(full)) {
+            const bytes = fromData(full);
+            await img.ref.set({ dataUrl: await toDataUrl(bytes, 800, 220_000) }, { merge: true });
+            list.push({ ...e, thumb: await toDataUrl(bytes, 128, 12_000) });
+            n++;
+          } else if (isData(e.thumb)) list.push({ ...e, thumb: await toDataUrl(fromData(e.thumb), 128, 12_000) });
+          else list.push(e);
+        }
+        patch.expansions = list;
+      }
+      if (Object.keys(patch).length) {
+        await s.ref.set(patch, { merge: true });
+        console.log(`✓ ${g.name}`);
+      }
+    }
+    console.log(`${n} image(s) de boîtes/extensions re-encodée(s)`);
   },
 
   /** Images manquantes : cherche sur Wikipédia (FR/EN). Ne retente pas un jeu déjà essayé sous le même nom. */

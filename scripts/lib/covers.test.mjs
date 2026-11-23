@@ -13,5 +13,6 @@ const url = await toDataUrl(big);
 assert.match(url, /^data:image\/jpeg;base64,/);
 const meta = await sharp(Buffer.from(url.split(',')[1], 'base64')).metadata();
 assert.equal(meta.width, 600);
+assert.equal(meta.height, 600, 'carré');
 assert.ok(url.length * 0.75 < 180_000);
 console.log('covers.test OK');
