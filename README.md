@@ -84,7 +84,7 @@ Secrets du repo (Settings > Secrets and variables > Actions) :
   (usage perso, non commercial) → copier le token → l'ajouter en secret.
 
 Workflows :
-- *Firebase admin* (manuel) : `export-pending` / `export-all` (liste pour Claude), `autofill` / `autofill-all`,
+- *Firebase admin* (manuel) : `export-pending` / `export-all` (liste pour Claude), `autofill` / `autofill-all` / `autofill-reset` (vide puis re-remplit depuis BGG),
   `rules-deploy` (aussi auto à chaque push modifiant `firestore.rules`), `access-open` / `access-close` / `access-allow` (+ email) / `access-show`, `seed`.
 - *BGG autofill* (toutes les heures) : complète les jeux nouveaux/renommés depuis BGG.
 - *Appliquer les enrichissements* (push dans `enrichments/`) : écrit les enrichissements rédigés par Claude.

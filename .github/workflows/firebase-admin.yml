@@ -12,7 +12,7 @@ on:
         type: choice
         required: true
         default: export-pending
-        options: [export-pending, export-all, sheets, squarify, covers, covers-all, autofill, autofill-all, rules-deploy, access-open, access-close, access-allow, access-show, seed]
+        options: [export-pending, export-all, sheets, squarify, covers, covers-all, autofill, autofill-all, autofill-reset, rules-deploy, access-open, access-close, access-allow, access-show, seed]
       email:
         description: Email (pour access-allow)
         required: false
@@ -66,5 +66,6 @@ jobs:
             covers-all) node scripts/games.mjs covers --all ;;
             autofill) node scripts/games.mjs autofill ;;
             autofill-all) node scripts/games.mjs autofill --all ;;
+            autofill-reset) node scripts/games.mjs autofill --all --reset ;;
             *) echo "Commande inconnue: $CMD"; exit 1 ;;
           esac

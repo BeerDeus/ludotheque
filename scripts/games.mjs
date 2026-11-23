@@ -32,6 +32,7 @@ Jeux
                               Remplit image, âge, joueurs, durée, année, complexité, note, extensions BGG
                               via l'API XML BGG (BGG_API_TOKEN requis). Par défaut : jeux jamais traités
                               ou renommés. --force : écrase aussi les champs déjà remplis.
+                              --reset : vide d'abord les champs remplis par l'autofill (sauf images perso)
 
 Familles / accès
   families                    Liste des familles (id, nom, membres, nb de jeux)
@@ -61,6 +62,7 @@ for (let i = 0; i < argv.length; i++) {
   else if (a === '--no-enrich') flags.noEnrich = true;
   else if (a === '--all') flags.all = true;
   else if (a === '--force') flags.force = true;
+  else if (a === '--reset') flags.reset = true;
   else if (a === '--applied') flags.applied = argv[++i];
   else if (a === '-h' || a === '--help') flags.help = true;
   else pos.push(a);
@@ -541,6 +543,32 @@ const commands = {
         });
     }
     console.log(`${snaps.length} jeu(x) à traiter`);
+    if (flags.reset) {
+      // vide les champs que l'autofill sait remplir (images perso conservées) puis relit les jeux
+      for (const s of snaps) {
+        const g = s.data();
+        await s.ref.update({
+          playersMin: 0,
+          playersMax: 0,
+          durationMin: 0,
+          ...Object.fromEntries(['ageMin', 'yearPublished', 'complexity', 'bggRating', 'bggExpansions', 'autofillNote'].map((k) => [k, FieldValue.delete()])),
+          ...(g.customCover ? {} : { coverUrl: FieldValue.delete(), thumbUrl: FieldValue.delete() }),
+        });
+      }
+      snaps = await Promise.all(snaps.map((s) => s.ref.get()));
+      console.log(`reset : ${snaps.length} jeu(x) vidé(s)`);
+    }
+    const summary = (p) =>
+      [
+        p.playersMin && `${p.playersMin}–${p.playersMax} j`,
+        p.durationMin && `${p.durationMin} min`,
+        p.ageMin && `${p.ageMin}+`,
+        p.yearPublished,
+        p.complexity && `poids ${p.complexity}`,
+        p.bggRating && `note ${p.bggRating}`,
+        p.bggExpansions && `${p.bggExpansions.length} ext.`,
+        p.coverUrl && 'image',
+      ].filter(Boolean).join(', ');
     const write = (snap, patch) =>
       snap.ref.set(
         { ...patch, autofilledAt: FieldValue.serverTimestamp(), autofillName: snap.data().name, autofillBggId: patch.bggId ?? snap.data().bggId ?? null },
@@ -559,8 +587,9 @@ const commands = {
           console.log(`? ${s.data().name} : bggId introuvable`);
           continue;
         }
-        await write(s, { ...toGamePatch(s.data(), d, { force: flags.force }), autofillNote: FieldValue.delete() });
-        console.log(`✓ ${s.data().name} → ${d.name} (${d.bggId})`);
+        const patch = toGamePatch(s.data(), d, { force: flags.force });
+        await write(s, { ...patch, autofillNote: FieldValue.delete() });
+        console.log(`✓ ${s.data().name} → ${d.name} (${d.bggId}) : ${summary(patch)}`);
       }
     }
     // 2) jeux sans bggId : recherche par nom
@@ -569,8 +598,9 @@ const commands = {
       try {
         const r = await findGame(g.name, token);
         if (r.match) {
-          await write(s, { ...toGamePatch(g, r.match, { force: flags.force }), autofillNote: FieldValue.delete() });
-          console.log(`✓ ${g.name} → ${r.match.name} (${r.match.bggId})`);
+          const patch = toGamePatch(g, r.match, { force: flags.force });
+          await write(s, { ...patch, autofillNote: FieldValue.delete() });
+          console.log(`✓ ${g.name} → ${r.match.name} (${r.match.bggId}) : ${summary(patch)}`);
         } else if (r.ambiguous) {
           const list = r.ambiguous.map((d) => `${d.name}${d.yearPublished ? ` (${d.yearPublished})` : ''} #${d.bggId}`).join(' ; ');
           await write(s, { autofillNote: `plusieurs jeux possibles, préciser le bggId : ${list}` });
