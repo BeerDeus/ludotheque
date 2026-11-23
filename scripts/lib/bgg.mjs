@@ -5,9 +5,24 @@ import { XMLParser } from 'fast-xml-parser';
 const BASE = 'https://boardgamegeek.com/xmlapi2';
 const DELAY_MS = 2500; // BGG demande de ne pas marteler l'API
 
+// BGG double-encode certaines entités (« &amp;#039; ») : on décode ce qui reste après le parseur XML
+export const decodeEntities = (v) =>
+  typeof v !== 'string'
+    ? v
+    : v
+        .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+        .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+
 const parser = new XMLParser({
   ignoreAttributes: false,
   attributeNamePrefix: '',
+  attributeValueProcessor: (_, v) => decodeEntities(v),
+  tagValueProcessor: (_, v) => decodeEntities(v),
   isArray: (name) => ['item', 'name', 'link'].includes(name),
 });
 

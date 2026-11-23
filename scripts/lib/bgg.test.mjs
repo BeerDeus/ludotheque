@@ -1,7 +1,7 @@
 // node scripts/lib/bgg.test.mjs — test du parsing sans réseau
 import assert from 'node:assert/strict';
 import { XMLParser } from 'fast-xml-parser';
-import { parseThing, toGamePatch } from './bgg.mjs';
+import { decodeEntities, parseThing, toGamePatch } from './bgg.mjs';
 
 const xml = `<?xml version="1.0" encoding="utf-8"?><items termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
 <item type="boardgame" id="9209">
@@ -33,3 +33,7 @@ assert.equal(patch.playersMax, 5);
 assert.equal(patch.ageMin, 8);
 assert.equal(patch.coverUrl, 'https://cf.geekdo-images.com/full.jpg');
 console.log('bgg.test OK');
+
+assert.equal(decodeEntities('Aeon&#039;s End'), "Aeon's End");
+assert.equal(decodeEntities('Dungeons &amp; Dragons'), 'Dungeons & Dragons');
+console.log('decodeEntities OK');
