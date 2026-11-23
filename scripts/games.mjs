@@ -181,7 +181,7 @@ function validate(data, { partial }) {
 }
 
 /**
- * expansionsPatch : { "<nom actuel>": { name?, notes?, kind?, remove?: true } } — renomme/corrige/retire
+ * expansionsPatch : { "<nom actuel>": { name?, notes?, kind?, remove?: true, clearImage?: true } } — renomme/corrige/retire
  * des éléments existants (le statut possédé est conservé). Appliqué avant expansionsAdd.
  */
 function applyExpansionsPatch(data, current = []) {
@@ -193,6 +193,7 @@ function applyExpansionsPatch(data, current = []) {
   let removed = 0;
   let changed = 0;
   const next = [];
+  const clearIds = [];
   for (const e of current) {
     const p = byKey.get(key(e.name));
     if (!p) {
@@ -209,6 +210,10 @@ function applyExpansionsPatch(data, current = []) {
       if (p.notes) upd.notes = String(p.notes);
       else delete upd.notes;
     }
+    if (p.clearImage) {
+      delete upd.thumb;
+      clearIds.push(e.id);
+    }
     if (p.kind === 'standalone') upd.kind = 'standalone';
     if (p.kind === 'expansion') delete upd.kind;
     next.push(upd);
@@ -216,6 +221,7 @@ function applyExpansionsPatch(data, current = []) {
   }
   console.log(`  extensions : ${changed} corrigée(s), ${removed} retirée(s)`);
   data.expansions = next;
+  data.__clearImages = clearIds;
   return next;
 }
 
@@ -293,6 +299,8 @@ const commands = {
     const base = applyExpansionsPatch(data, snap.data().expansions);
     mergeExpansionsAdd(data, base);
     await resolveExpansionImages(snap.ref, data, base);
+    for (const id of data.__clearImages ?? []) await snap.ref.collection('images').doc(id).delete();
+    delete data.__clearImages;
     await resolveCoverPages(data, snap.data().name);
     if (!flags.noEnrich) Object.assign(data, { enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' });
     await snap.ref.set(data, { merge: true });
@@ -371,6 +379,8 @@ const commands = {
         const base = applyExpansionsPatch(data, snap.data().expansions);
         mergeExpansionsAdd(data, base);
         await resolveExpansionImages(ref, data, base);
+        for (const id of data.__clearImages ?? []) await ref.collection('images').doc(id).delete();
+        delete data.__clearImages;
         await resolveCoverPages(data, snap.data().name);
         await ref.set({ ...data, enrichedAt: FieldValue.serverTimestamp(), enrichedBy: 'claude' }, { merge: true });
         applied.push(join(dir, f));
