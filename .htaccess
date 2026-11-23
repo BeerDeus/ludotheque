@@ -1,0 +1,31 @@
+# Ludothèque — Hostinger (Apache/LiteSpeed)
+Options -MultiViews -Indexes
+
+# Le déploiement Git de Hostinger laisse un dossier .git : on le masque
+RedirectMatch 404 /\.git
+
+AddType application/manifest+json .webmanifest
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # Fichiers / dossiers existants servis tels quels
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  # Fallback SPA (react-router)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Toujours revalider le shell et le service worker (mises à jour PWA)
+  <FilesMatch "^(index\.html|sw\.js|registerSW\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  # Assets hashés par Vite : cache long
+  <FilesMatch "-[A-Za-z0-9_-]{8,}\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
