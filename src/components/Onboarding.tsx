@@ -32,8 +32,8 @@ export default function Onboarding({ user }: { user: User }) {
   return (
     <div className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center gap-6 p-6">
       <div className="flex flex-col items-center gap-2 text-center">
-        <Logo className="size-12" />
-        <h1 className="text-xl font-bold">Bienvenue {user.displayName?.split(' ')[0] ?? ''}</h1>
+        <Logo framed className="size-20" />
+        <h1 className="font-display text-xl font-bold">Bienvenue {user.displayName?.split(' ')[0] ?? ''}</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
           La ludothèque est partagée par famille. Rejoins celle d’un proche avec son code, ou crée la tienne.
         </p>

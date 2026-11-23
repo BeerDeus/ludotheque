@@ -51,7 +51,7 @@ export default function CoverPicker({ game, onClose }: { game: Game; onClose: ()
 
         <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => void onFile(e.target.files?.[0])} />
         <button className="btn-soft py-3" disabled={busy} onClick={() => fileRef.current?.click()}>
-          📷 Prendre une photo / choisir une image
+          <Icon name="camera" className="size-5" /> Prendre une photo / choisir une image
         </button>
 
         <div className="flex flex-col gap-2">
@@ -70,9 +70,9 @@ export default function CoverPicker({ game, onClose }: { game: Game; onClose: ()
               setPreview('');
             }}
           />
-          <a className="text-sm text-indigo-600 dark:text-indigo-400" href={imageSearchUrl(game.name)} target="_blank" rel="noreferrer noopener">
+          <a className="text-sm text-accent-600 dark:text-accent-400" href={imageSearchUrl(game.name)} target="_blank" rel="noreferrer noopener">
             <Icon name="search" className="mr-1 inline size-4" />
-            Chercher une image de « {game.name} » (appui long sur l’image → « Copier l’adresse de l’image »)
+            Chercher une image de « {game.name} » (appui long sur l’image, puis « Copier l’adresse de l’image »)
           </a>
         </div>
 

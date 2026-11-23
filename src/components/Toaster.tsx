@@ -20,7 +20,7 @@ export default function Toaster() {
           <span className="min-w-0 flex-1">{t.text}</span>
           {t.action && (
             <button
-              className="font-semibold text-indigo-300 dark:text-indigo-600"
+              className="font-semibold text-accent-300 dark:text-accent-600"
               onClick={() => {
                 t.action!.run();
                 setItems((prev) => prev.filter((x) => x.id !== t.id));

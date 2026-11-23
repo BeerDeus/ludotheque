@@ -1,5 +1,6 @@
 import type { Filters } from './context';
 import { isEnriched, normalize, relevantPrice } from './format';
+import { lastPlayed, levelOf, playsCount } from './levels';
 import type { Game } from './types';
 
 export function applyFilters(games: Game[], f: Filters): Game[] {
@@ -8,6 +9,13 @@ export function applyFilters(games: Game[], f: Filters): Game[] {
     if (f.status !== 'all' && g.status !== f.status) return false;
     if (f.pendingOnly && isEnriched(g)) return false;
     if (f.incompleteOnly && !g.missingParts?.trim()) return false;
+    if (f.levels?.length) {
+      const l = levelOf(g).level;
+      if (!l || !f.levels.includes(l)) return false;
+    }
+    if (f.modes?.length && (!g.mode || !f.modes.includes(g.mode))) return false;
+    if (f.neverPlayed && playsCount(g) > 0) return false;
+    if (f.loanedOnly && !g.loanedTo?.trim()) return false;
     if (f.age != null && g.ageMin && g.ageMin > f.age) return false;
     if (q) {
       const hay = `${g.name} ${g.tags.join(' ')} ${g.shop ?? ''} ${g.notes} ${(g.expansions ?? []).map((e) => e.name).join(' ')}`;
@@ -47,6 +55,15 @@ export function applyFilters(games: Game[], f: Filters): Game[] {
         const ra = a.myRating ?? 0;
         const rb = b.myRating ?? 0;
         r = !ra || !rb ? (!ra && !rb ? 0 : !ra ? 1 : -1) : (rb - ra) * dir;
+        break;
+      }
+      case 'plays':
+        r = num(playsCount(b), playsCount(a)) * (f.dir === 'asc' ? 1 : -1);
+        break;
+      case 'lastPlayed': {
+        const la = lastPlayed(a) ?? '';
+        const lb = lastPlayed(b) ?? '';
+        r = !la || !lb ? (!la && !lb ? 0 : !la ? 1 : -1) : lb.localeCompare(la) * (f.dir === 'asc' ? 1 : -1);
         break;
       }
       case 'priority':

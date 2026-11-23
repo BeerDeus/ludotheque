@@ -7,6 +7,8 @@ import Header from '../components/Header';
 import Icon from '../components/Icon';
 import QuickAdd from '../components/QuickAdd';
 import Spinner from '../components/Spinner';
+import WantedExpansions from '../components/WantedExpansions';
+import { wantedOf } from '../lib/levels';
 import { useGames } from '../lib/context';
 import { applyFilters } from '../lib/filter';
 import { STATUS_LABEL_PLURAL } from '../lib/types';
@@ -22,13 +24,14 @@ export default function ListPage() {
       <Header />
       <main className="mx-auto flex max-w-3xl flex-col gap-3 px-3 pt-3" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         <FilterBar />
+        {filters.status === 'wishlist' && !filters.q && <WantedExpansions games={games} />}
         {loading ? (
           <div className="grid place-items-center py-16">
             <Spinner />
           </div>
         ) : error ? (
           <p className="rounded-xl bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-400">{error}</p>
-        ) : list.length === 0 ? (
+        ) : list.length === 0 && !(filters.status === 'wishlist' && wantedOf(games).length) ? (
           <div className="flex flex-col items-center gap-3 py-16 text-center text-slate-500">
             <p>
               {games.length === 0
@@ -58,7 +61,7 @@ export default function ListPage() {
         <BggAttribution />
       </main>
 
-      <BottomNav onAdd={() => setAdding(true)} />
+      <BottomNav onAdd={() => setAdding(true)} wantedExpansions={wantedOf(games).length} />
 
       {adding && <QuickAdd initialStatus={filters.status === 'all' ? 'owned' : filters.status} onClose={() => setAdding(false)} />}
     </>

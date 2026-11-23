@@ -4,8 +4,11 @@ import { allTags } from '../lib/filter';
 import { parseTags } from '../lib/format';
 import { updateGame } from '../lib/games';
 import { toast } from '../lib/toast';
-import { PRIORITY_LABEL, type Game, type GameBase, type Priority } from '../lib/types';
+import { MODE_ICON } from '../lib/icons';
+import { levelOf } from '../lib/levels';
+import { LEVELS, LEVEL_LABEL, MODES, MODE_LABEL, PRIORITY_LABEL, type Game, type GameBase, type Priority } from '../lib/types';
 import { cx } from '../lib/ui';
+import ChoiceChips from './ChoiceChips';
 import Modal from './Modal';
 import StarRating from './StarRating';
 import StatusControl from './StatusControl';
@@ -30,6 +33,9 @@ export default function GameForm({ game, onClose }: { game: Game; onClose: () =>
     url: game.url ?? '',
     priority: (game.priority ?? 2) as Priority,
     myRating: game.myRating,
+    level: game.level,
+    mode: game.mode,
+    loanedTo: game.loanedTo ?? '',
     tags: (game.tags ?? []).join(', '),
     notes: game.notes ?? '',
     missingParts: game.missingParts ?? '',
@@ -56,6 +62,9 @@ export default function GameForm({ game, onClose }: { game: Game; onClose: () =>
       url: f.url.trim(),
       priority: f.priority,
       myRating: f.myRating,
+      level: f.level,
+      mode: f.mode,
+      loanedTo: f.loanedTo.trim(),
       tags: parseTags(f.tags),
       notes: f.notes,
       missingParts: f.missingParts.trim(),
@@ -89,6 +98,15 @@ export default function GameForm({ game, onClose }: { game: Game; onClose: () =>
           <StarRating value={f.myRating} onChange={(v) => set('myRating', v)} size="lg" />
         </div>
 
+        <div>
+          <span className="label">Niveau</span>
+          <ChoiceChips options={LEVELS} labels={LEVEL_LABEL} value={f.level} autoValue={levelOf({ complexity: game.complexity }).level} onChange={(v) => set('level', v)} />
+        </div>
+        <div>
+          <span className="label">Type de jeu</span>
+          <ChoiceChips options={MODES} labels={MODE_LABEL} icons={MODE_ICON} value={f.mode} onChange={(v) => set('mode', v)} />
+        </div>
+
         <div className="grid grid-cols-4 gap-2">
           {field('gf-pmin', 'J. min', numInput('gf-pmin', 'playersMin', 99))}
           {field('gf-pmax', 'J. max', numInput('gf-pmax', 'playersMax', 99))}
@@ -112,7 +130,7 @@ export default function GameForm({ game, onClose }: { game: Game; onClose: () =>
                   key={p}
                   type="button"
                   onClick={() => set('priority', p)}
-                  className={cx('rounded-xl py-1.5 text-sm', f.priority === p ? 'bg-indigo-600 text-white' : 'bg-slate-200/70 dark:bg-slate-800')}
+                  className={cx('rounded-xl py-1.5 text-sm', f.priority === p ? 'bg-accent-600 text-white' : 'bg-slate-200/70 dark:bg-slate-800')}
                 >
                   {PRIORITY_LABEL[p]}
                 </button>
@@ -135,6 +153,8 @@ export default function GameForm({ game, onClose }: { game: Game; onClose: () =>
             </datalist>
           </>,
         )}
+
+        {owned && field('gf-loan', 'Prêté à', <input id="gf-loan" className="input" placeholder="Personne" value={f.loanedTo} onChange={(e) => set('loanedTo', e.target.value)} />)}
 
         {owned &&
           field(

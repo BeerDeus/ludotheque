@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import type { User } from 'firebase/auth';
-import type { Family, Game, Status } from './types';
+import type { Family, Game, Level, PlayMode, Status } from './types';
 
 export interface Session {
   user: User;
@@ -13,7 +13,7 @@ export function useSession() {
   return s;
 }
 
-export type SortKey = 'name' | 'rating' | 'priority' | 'price' | 'duration' | 'recent';
+export type SortKey = 'name' | 'rating' | 'priority' | 'price' | 'duration' | 'recent' | 'lastPlayed' | 'plays';
 export type ViewMode = 'list' | 'grid';
 
 export interface Filters {
@@ -26,6 +26,10 @@ export interface Filters {
   age: number | null;
   pendingOnly: boolean;
   incompleteOnly: boolean;
+  levels: Level[];
+  modes: PlayMode[];
+  neverPlayed: boolean;
+  loanedOnly: boolean;
   sort: SortKey;
   dir: 'asc' | 'desc';
   view: ViewMode;
@@ -40,6 +44,10 @@ export const DEFAULT_FILTERS: Filters = {
   age: null,
   pendingOnly: false,
   incompleteOnly: false,
+  levels: [],
+  modes: [],
+  neverPlayed: false,
+  loanedOnly: false,
   sort: 'name',
   dir: 'asc',
   view: 'list',

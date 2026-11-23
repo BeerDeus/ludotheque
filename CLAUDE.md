@@ -39,7 +39,12 @@ Saisi par l'utilisateur :
 | notes | string | markdown |
 | tags | string[] | minuscules |
 | missingParts? | md | matériel manquant / abîmé (badge « incomplet ») |
-| expansions? | `{ id, name, owned, bggId?, notes? }[]` | extensions possédées ou suivies — **jamais modifiées par l'enrichissement** |
+| myRating? | 1–5 | note perso (étoiles) |
+| level? | `'ambiance' \| 'familial' \| 'initie' \| 'expert'` | sinon déduit de `complexity` (<1,75 familial, <2,75 initié, sinon expert) |
+| mode? | `'coop' \| 'competitif' \| 'equipe' \| 'solo'` | type de jeu |
+| plays? | `{ id, date: 'YYYY-MM-DD', players?, winner?, note? }[]` | journal des parties — **jamais modifié par l'enrichissement** |
+| loanedTo? | string | « prêté à » |
+| expansions? | `{ id, name, owned, wanted?, kind?, thumb?, bggId?, notes? }[]` (wanted = en wishlist) | extensions possédées ou suivies — **jamais modifiées par l'enrichissement** |
 | createdAt | Timestamp | |
 
 Enrichi par Claude :
@@ -133,7 +138,8 @@ Quand l'utilisateur dit « enrichis les jeux » (ou « enrichis <nom> ») :
    1. Identifier le jeu sans ambiguïté : WebSearch / WebFetch sur BoardGameGeek (bggId, image, poids, joueurs, durée), site de l'éditeur, règles officielles (PDF éditeur), FAQ.
    2. **Si incertitude** (homonymes, édition/version inconnue, jeu introuvable, infos contradictoires) : **demander à l'utilisateur** avant d'écrire, ne pas deviner.
    3. Rédiger **en français, avec tes propres mots** — ne jamais copier/coller ni paraphraser de près le livret de règles ; synthétiser.
-   4. Remplir **tous** les champs enrichis (cf. tableau) + `sources` (URLs réellement consultées).
+   4. Remplir **tous** les champs enrichis (cf. tableau) + `sources` (URLs réellement consultées), **plus `level` et `mode`**
+      s'ils sont absents (ne jamais écraser un choix de l'utilisateur).
       **Image** : ajouter `"coverPages": [url1, url2, …]` = pages produit FR (play-in, espritjeu, philibert, ludum, éditeur…)
       trouvées par WebSearch, ou URLs d'image directes. La CI télécharge l'image og:image de la première page qui
       répond, la réduit (600 px, JPEG ≤ 180 Ko) et la stocke dans `coverUrl` (`coverSource` = page). **Toujours une page produit

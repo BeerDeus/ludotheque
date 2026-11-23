@@ -15,6 +15,7 @@
     "rules:deploy": "node scripts/games.mjs rules deploy"
   },
   "dependencies": {
+    "@fontsource/cinzel": "^5.3.0",
     "firebase": "^13.4.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

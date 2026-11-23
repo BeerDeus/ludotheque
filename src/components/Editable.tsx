@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import Icon from './Icon';
+import Icon, { type IconName } from './Icon';
 import Markdown from './Markdown';
 
 type InputKind = 'text' | 'number' | 'url' | 'decimal';
@@ -59,7 +59,9 @@ export function EditableMarkdown({
   onSave,
   defaultOpen,
   empty = 'Pas encore renseigné.',
+  icon,
 }: {
+  icon?: IconName;
   label: string;
   value?: string;
   onSave: (v: string) => void;
@@ -71,7 +73,10 @@ export function EditableMarkdown({
   return (
     <details className="card group overflow-hidden" open={defaultOpen}>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 font-semibold">
-        <span>{label}</span>
+        <span className="flex items-center gap-2">
+          {icon && <Icon name={icon} className="size-5 text-accent-600 dark:text-accent-400" />}
+          <span className="font-display text-[15px]">{label}</span>
+        </span>
         <span className="flex items-center gap-1">
           {!value && <span className="chip bg-slate-500/10 text-xs font-normal text-slate-500">vide</span>}
           <Icon name="back" className="size-4 -rotate-90 transition group-open:rotate-90" />

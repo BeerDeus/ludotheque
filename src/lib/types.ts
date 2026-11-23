@@ -25,11 +25,31 @@ export const PRIORITY_LABEL: Record<Priority, string> = {
 
 export type ExpansionKind = 'standalone' | 'expansion';
 
+export type Level = 'ambiance' | 'familial' | 'initie' | 'expert';
+export const LEVELS: Level[] = ['ambiance', 'familial', 'initie', 'expert'];
+export const LEVEL_LABEL: Record<Level, string> = { ambiance: 'Ambiance', familial: 'Familial', initie: 'Initié', expert: 'Expert' };
+
+export type PlayMode = 'coop' | 'competitif' | 'equipe' | 'solo';
+export const MODES: PlayMode[] = ['coop', 'competitif', 'equipe', 'solo'];
+export const MODE_LABEL: Record<PlayMode, string> = { coop: 'Coopératif', competitif: 'Compétitif', equipe: 'En équipes', solo: 'Solo' };
+
+/** Partie jouée */
+export interface Play {
+  id: string;
+  /** YYYY-MM-DD */
+  date: string;
+  players?: number;
+  winner?: string;
+  note?: string;
+}
+
 /** Élément d'une gamme : boîte autonome (jouable seule) ou extension */
 export interface Expansion {
   id: string;
   name: string;
   owned: boolean;
+  /** en wishlist (si non possédée) */
+  wanted?: boolean;
   /** défaut : 'expansion' */
   kind?: ExpansionKind;
   /** miniature (data URL ~128 px) ; l'image en grand est dans games/{gid}/images/{id} */
@@ -58,6 +78,12 @@ export interface GameBase {
   priority: Priority;
   /** Note personnelle 1–5 étoiles */
   myRating?: number;
+  /** Niveau (sinon déduit de la complexité) */
+  level?: Level;
+  mode?: PlayMode;
+  plays?: Play[];
+  /** Prêté à… */
+  loanedTo?: string;
   notes: string;
   tags: string[];
   /** Matériel manquant / abîmé (markdown) */

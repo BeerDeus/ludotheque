@@ -6,6 +6,8 @@ import ListPage from './pages/ListPage';
 import DetailPage from './pages/DetailPage';
 import FamilyPage from './pages/FamilyPage';
 import AlreadyInFamily from './pages/AlreadyInFamily';
+import PickPage from './pages/PickPage';
+import StatsPage from './pages/StatsPage';
 import Toaster from './components/Toaster';
 
 export default function App() {
@@ -26,6 +28,8 @@ export default function App() {
           <Route path="/" element={<ListPage />} />
           <Route path="/jeu/:id" element={<DetailPage />} />
           <Route path="/famille" element={<FamilyPage />} />
+          <Route path="/que-jouer" element={<PickPage />} />
+          <Route path="/stats" element={<StatsPage />} />
           <Route path="/rejoindre/:code" element={<AlreadyInFamily />} />
           <Route path="*" element={<ListPage />} />
         </Routes>

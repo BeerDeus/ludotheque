@@ -12,9 +12,9 @@ export const STATUS_STYLE: Record<Status, { chip: string; active: string; dot: s
     dot: 'bg-violet-500',
   },
   watch: {
-    chip: 'bg-amber-500/15 text-amber-700 dark:text-amber-300',
-    active: 'bg-amber-500 text-white',
-    dot: 'bg-amber-500',
+    chip: 'bg-sky-500/15 text-sky-700 dark:text-sky-300',
+    active: 'bg-sky-600 text-white',
+    dot: 'bg-sky-500',
   },
 };
 

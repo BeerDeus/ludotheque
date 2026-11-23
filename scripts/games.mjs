@@ -44,7 +44,7 @@ Familles / accès
 <json> : JSON inline, @fichier.json, ou - (stdin).
 Famille par défaut : --family, sinon $LUDO_FAMILY, sinon l'unique famille existante.`;
 
-const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'myRating', 'notes', 'tags', 'missingParts', 'expansions'];
+const BASE_FIELDS = ['name', 'status', 'playersMin', 'playersMax', 'durationMin', 'ageMin', 'priceBought', 'priceTarget', 'shop', 'url', 'priority', 'myRating', 'level', 'mode', 'plays', 'loanedTo', 'notes', 'tags', 'missingParts', 'expansions'];
 const ENRICHED_FIELDS = ['expansionsAdd', 'expansionsPatch', 'expansionImages', 'bggId', 'coverUrl', 'thumbUrl', 'customCover', 'coverPages', 'coverSource', 'yearPublished', 'bggRating', 'bggExpansions', 'autofillNote', 'complexity', 'rulesSummary', 'setup', 'turnStructure', 'endCondition', 'tips', 'variants', 'sources'];
 const ALLOWED = new Set([...BASE_FIELDS, ...ENRICHED_FIELDS]);
 const STATUSES = ['owned', 'wishlist', 'watch'];
@@ -155,6 +155,8 @@ function validate(data, { partial }) {
   if (unknown.length) die(`Champs inconnus : ${unknown.join(', ')}\nAutorisés : ${[...ALLOWED].join(', ')}`);
   if (!partial && (typeof data.name !== 'string' || !data.name.trim())) die('name requis.');
   if ('status' in data && !STATUSES.includes(data.status)) die(`status invalide (${STATUSES.join('|')}).`);
+  if ('level' in data && data.level != null && !['ambiance', 'familial', 'initie', 'expert'].includes(data.level)) die('level : ambiance|familial|initie|expert');
+  if ('mode' in data && data.mode != null && !['coop', 'competitif', 'equipe', 'solo'].includes(data.mode)) die('mode : coop|competitif|equipe|solo');
   if ('priority' in data && ![1, 2, 3].includes(data.priority)) die('priority doit valoir 1, 2 ou 3.');
   if ('complexity' in data && data.complexity != null && !(data.complexity >= 1 && data.complexity <= 5)) die('complexity entre 1 et 5.');
   for (const k of ['tags', 'sources', 'expansions', 'expansionsAdd', 'bggExpansions', 'coverPages']) if (k in data && data[k] != null && !Array.isArray(data[k])) die(`${k} doit être un tableau.`);
@@ -167,6 +169,7 @@ function validate(data, { partial }) {
         name: e.name.trim(),
         owned: Boolean(e.owned),
         ...(e.kind === 'standalone' ? { kind: 'standalone' } : {}),
+        ...(e.wanted && !e.owned ? { wanted: true } : {}),
         ...(e.bggId ? { bggId: Number(e.bggId) } : {}),
         ...(e.notes ? { notes: String(e.notes) } : {}),
         ...(e.thumb ? { thumb: String(e.thumb) } : {}),

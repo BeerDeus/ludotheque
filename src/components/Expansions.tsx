@@ -8,14 +8,35 @@ import Lightbox from './Lightbox';
 import { normalize } from '../lib/format';
 import type { Expansion, ExpansionKind, Game } from '../lib/types';
 import { cx } from '../lib/ui';
-import Icon from './Icon';
+import Icon, { type IconName } from './Icon';
 
 const newId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
 const kindOf = (e: Expansion): ExpansionKind => e.kind ?? 'expansion';
 
-const GROUPS: { kind: ExpansionKind; title: string; hint: string; icon: string; box: string }[] = [
-  { kind: 'standalone', title: 'Boîtes autonomes', hint: 'jouables seules', icon: '📦', box: 'border-indigo-500/25 bg-indigo-500/5' },
-  { kind: 'expansion', title: 'Extensions', hint: 'nécessitent le jeu de base', icon: '🧩', box: 'border-slate-500/20 bg-slate-500/5' },
+type ExpState = 'none' | 'wanted' | 'owned';
+const stateOf = (e: Pick<Expansion, 'owned' | 'wanted'>): ExpState => (e.owned ? 'owned' : e.wanted ? 'wanted' : 'none');
+const NEXT: Record<ExpState, ExpState> = { none: 'wanted', wanted: 'owned', owned: 'none' };
+const patchFor = (s: ExpState): Partial<Expansion> => ({ owned: s === 'owned', wanted: s === 'wanted' ? true : undefined });
+const STATE_UI: Record<ExpState, { label: string; icon: IconName; cls: string }> = {
+  owned: { label: 'Possédée', icon: 'shield', cls: 'bg-emerald-600 text-white' },
+  wanted: { label: 'Souhaitée', icon: 'potion', cls: 'bg-violet-600 text-white' },
+  none: { label: 'Non possédée', icon: 'close', cls: 'bg-slate-500/15 text-slate-600 dark:text-slate-300' },
+};
+const RANK: Record<ExpState, number> = { owned: 0, wanted: 1, none: 2 };
+
+function StateChip({ state, onClick, small }: { state: ExpState; onClick: () => void; small?: boolean }) {
+  const ui = STATE_UI[state];
+  return (
+    <button type="button" onClick={onClick} className={cx('chip transition', small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1', ui.cls)} title="Toucher pour changer : non possédée, souhaitée, possédée">
+      <Icon name={ui.icon} className="size-3.5" />
+      {ui.label}
+    </button>
+  );
+}
+
+const GROUPS: { kind: ExpansionKind; title: string; hint: string; icon: IconName; box: string }[] = [
+  { kind: 'standalone', title: 'Boîtes autonomes', hint: 'jouables seules', icon: 'chest', box: 'border-accent-500/25 bg-accent-500/5' },
+  { kind: 'expansion', title: 'Extensions', hint: 'nécessitent le jeu de base', icon: 'scroll', box: 'border-slate-500/20 bg-slate-500/5' },
 ];
 
 function Row({ e, gameId, onUpdate, onRemove }: { e: Expansion; gameId: string; onUpdate: (p: Partial<Expansion>) => void; onRemove: () => void }) {
@@ -62,19 +83,17 @@ function Row({ e, gameId, onUpdate, onRemove }: { e: Expansion; gameId: string; 
           className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-slate-500/10 text-lg"
           aria-label={e.thumb ? `Voir l'image de ${e.name}` : `Ajouter une photo de ${e.name}`}
         >
-          {e.thumb ? <img src={e.thumb} alt="" className="size-full object-cover" /> : <span className="opacity-60">{kindOf(e) === 'standalone' ? '📦' : '🧩'}</span>}
+          {e.thumb ? (
+            <img src={e.thumb} alt="" className="size-full object-cover" />
+          ) : (
+            <Icon name={kindOf(e) === 'standalone' ? 'chest' : 'scroll'} className="size-6 opacity-50" />
+          )}
         </button>
         <div className="min-w-0 flex-1">
-          <p className={cx('text-sm leading-snug break-words', e.owned ? 'font-medium' : 'text-slate-600 dark:text-slate-400')}>{e.name}</p>
+          <p className={cx('text-sm leading-snug break-words', e.owned ? 'font-medium' : e.wanted ? 'font-medium text-violet-700 dark:text-violet-300' : 'text-slate-600 dark:text-slate-400')}>{e.name}</p>
           {e.notes && !editing && <p className="mt-0.5 text-xs text-slate-500">{e.notes}</p>}
           <div className="mt-1 flex items-center gap-1">
-            <button
-              onClick={() => onUpdate({ owned: !e.owned })}
-              className={cx('chip px-2 py-0.5 text-[11px]', e.owned ? 'bg-emerald-600 text-white' : 'bg-slate-500/15 text-slate-600 dark:text-slate-300')}
-              title="Changer le statut"
-            >
-              {e.owned ? '✓ Possédée' : 'Non possédée'}
-            </button>
+            <StateChip small state={stateOf(e)} onClick={() => onUpdate(patchFor(NEXT[stateOf(e)]))} />
           </div>
         </div>
         <button className="btn-ghost p-1.5" onClick={() => setEditing((v) => !v)} aria-label="Modifier">
@@ -100,7 +119,7 @@ function Row({ e, gameId, onUpdate, onRemove }: { e: Expansion; gameId: string; 
           />
           <div className="flex flex-wrap items-center gap-1.5 text-xs">
             <button className="btn-soft px-2 py-1 text-xs" onClick={() => fileRef.current?.click()}>
-              📷 {e.thumb ? 'Changer la photo' : 'Ajouter une photo'}
+              <Icon name="camera" className="size-3.5" /> {e.thumb ? 'Changer la photo' : 'Ajouter une photo'}
             </button>
             {e.thumb && (
               <button className="btn-ghost px-2 py-1 text-xs" onClick={removePhoto}>
@@ -108,11 +127,11 @@ function Row({ e, gameId, onUpdate, onRemove }: { e: Expansion; gameId: string; 
               </button>
             )}
             <button className="btn-soft px-2 py-1 text-xs" onClick={() => onUpdate({ kind: kindOf(e) === 'standalone' ? 'expansion' : 'standalone' })}>
-              → {kindOf(e) === 'standalone' ? 'Extension' : 'Boîte autonome'}
+              <Icon name={kindOf(e) === 'standalone' ? 'scroll' : 'chest'} className="size-3.5" /> {kindOf(e) === 'standalone' ? 'En extension' : 'En boîte autonome'}
             </button>
             {e.bggId && (
               <a className="text-orange-600" href={`https://boardgamegeek.com/boardgame/${e.bggId}`} target="_blank" rel="noreferrer">
-                BGG ↗
+                BGG <Icon name="external" className="inline size-3" />
               </a>
             )}
             <button className="btn-danger ml-auto px-2 py-1 text-xs" onClick={onRemove}>
@@ -129,7 +148,7 @@ function Row({ e, gameId, onUpdate, onRemove }: { e: Expansion; gameId: string; 
           onClose={() => setView(null)}
           actions={
             <button className="btn-soft bg-white/15 text-white" onClick={() => fileRef.current?.click()}>
-              📷 Remplacer par ma photo
+              <Icon name="camera" className="size-4" /> Remplacer par ma photo
             </button>
           }
         />
@@ -141,7 +160,7 @@ function Row({ e, gameId, onUpdate, onRemove }: { e: Expansion; gameId: string; 
 export default function Expansions({ game, onChange }: { game: Game; onChange: (list: Expansion[]) => void }) {
   const list = useMemo(() => game.expansions ?? [], [game.expansions]);
   const [name, setName] = useState('');
-  const [owned, setOwned] = useState(true);
+  const [state, setState] = useState<ExpState>('owned');
   const [kind, setKind] = useState<ExpansionKind>('expansion');
   const [showBgg, setShowBgg] = useState(false);
   const [q, setQ] = useState('');
@@ -156,21 +175,25 @@ export default function Expansions({ game, onChange }: { game: Game; onChange: (
   const submit = (ev: FormEvent) => {
     ev.preventDefault();
     if (!name.trim()) return;
-    add({ name: name.trim(), owned, ...(kind === 'standalone' ? { kind } : {}) });
+    add({ name: name.trim(), ...patchFor(state), owned: state === 'owned', ...(kind === 'standalone' ? { kind } : {}) });
     setName('');
   };
 
   const ownedCount = list.filter((e) => e.owned).length;
   const sorted = (k: ExpansionKind) =>
-    list.filter((e) => kindOf(e) === k).sort((a, b) => Number(b.owned) - Number(a.owned) || a.name.localeCompare(b.name, 'fr'));
+    list.filter((e) => kindOf(e) === k).sort((a, b) => RANK[stateOf(a)] - RANK[stateOf(b)] || a.name.localeCompare(b.name, 'fr'));
 
   return (
     <details className="card overflow-hidden" open={list.length > 0}>
       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-4 py-3 font-semibold">
-        <span>Boîtes & extensions</span>
+        <span className="flex shrink-0 items-center gap-2">
+          <Icon name="chest" className="size-5 text-accent-600 dark:text-accent-400" />
+          <span className="font-display text-[15px]">Boîtes & extensions</span>
+        </span>
         {list.length > 0 && (
           <span className="chip bg-slate-500/10 text-xs font-normal text-slate-500">
-            {ownedCount} possédée{ownedCount > 1 ? 's' : ''} / {list.length}
+            {ownedCount}/{list.length}
+            {list.some((e) => e.wanted && !e.owned) && ` · ${list.filter((e) => e.wanted && !e.owned).length} souhait`}
           </span>
         )}
       </summary>
@@ -182,8 +205,9 @@ export default function Expansions({ game, onChange }: { game: Game; onChange: (
           return (
             <section key={g.kind} className={cx('rounded-2xl border px-3 pt-2.5 pb-1', g.box)}>
               <h4 className="flex items-baseline justify-between gap-2">
-                <span className="text-sm font-semibold">
-                  {g.icon} {g.title} <span className="text-xs font-normal text-slate-500">· {g.hint}</span>
+                <span className="flex items-center gap-1.5 text-sm font-semibold">
+                  <Icon name={g.icon} className="size-4 text-accent-600 dark:text-accent-400" />
+                  {g.title} <span className="text-xs font-normal text-slate-500">· {g.hint}</span>
                 </span>
                 <span className="shrink-0 text-xs text-slate-500">
                   {own}/{items.length}
@@ -206,18 +230,12 @@ export default function Expansions({ game, onChange }: { game: Game; onChange: (
                 key={k}
                 type="button"
                 onClick={() => setKind(k)}
-                className={cx('chip px-2.5 py-1', kind === k ? 'bg-indigo-600 text-white' : 'bg-slate-500/15 text-slate-600 dark:text-slate-300')}
+                className={cx('chip px-2.5 py-1', kind === k ? 'bg-accent-600 text-white' : 'bg-slate-500/15 text-slate-600 dark:text-slate-300')}
               >
                 {k === 'standalone' ? 'Boîte autonome' : 'Extension'}
               </button>
             ))}
-            <button
-              type="button"
-              className={cx('chip px-2.5 py-1', owned ? 'bg-emerald-600 text-white' : 'bg-slate-500/15 text-slate-600 dark:text-slate-300')}
-              onClick={() => setOwned((o) => !o)}
-            >
-              {owned ? '✓ Possédée' : 'Non possédée'}
-            </button>
+            <StateChip state={state} onClick={() => setState(NEXT[state])} />
             <button className="btn-primary ml-auto px-3 py-1" aria-label="Ajouter" disabled={!name.trim()}>
               <Icon name="plus" className="size-4" />
             </button>
@@ -226,7 +244,7 @@ export default function Expansions({ game, onChange }: { game: Game; onChange: (
 
         {(game.bggExpansions?.length ?? 0) > 0 && (
           <div>
-            <button className="btn-ghost px-0 text-xs text-indigo-600 dark:text-indigo-400" onClick={() => setShowBgg((s) => !s)}>
+            <button className="btn-ghost px-0 text-xs text-accent-600 dark:text-accent-400" onClick={() => setShowBgg((s) => !s)}>
               {showBgg ? 'Masquer' : 'Voir'} les extensions connues sur BGG ({game.bggExpansions!.length})
             </button>
             {showBgg && (
@@ -239,8 +257,8 @@ export default function Expansions({ game, onChange }: { game: Game; onChange: (
                       <button className="chip bg-emerald-600/15 text-emerald-700 dark:text-emerald-300" onClick={() => add({ name: x.name, bggId: x.bggId, owned: true })}>
                         + possédée
                       </button>
-                      <button className="chip bg-slate-500/15" onClick={() => add({ name: x.name, bggId: x.bggId, owned: false })}>
-                        + suivie
+                      <button className="chip bg-slate-500/15" onClick={() => add({ name: x.name, bggId: x.bggId, owned: false, wanted: true })}>
+                        + souhaitée
                       </button>
                     </li>
                   ))}

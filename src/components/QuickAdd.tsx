@@ -121,7 +121,8 @@ export default function QuickAdd({ initialStatus, onClose }: { initialStatus: St
               />
               {dup && (
                 <button type="button" className="mt-1.5 text-left text-xs text-amber-600 dark:text-amber-400" onClick={() => navigate(`/jeu/${dup.id}`)}>
-                  ⚠ Déjà dans ta ludothèque ({STATUS_LABEL[dup.status]}) — voir la fiche
+                  <Icon name="warning" className="mr-1 inline size-3.5" />
+                  Déjà dans ta ludothèque ({STATUS_LABEL[dup.status]}) — voir la fiche
                 </button>
               )}
               <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
@@ -129,7 +130,7 @@ export default function QuickAdd({ initialStatus, onClose }: { initialStatus: St
               </p>
             </div>
 
-            <button type="button" className="flex items-center gap-1 self-start text-sm text-indigo-600 dark:text-indigo-400" onClick={() => setMore((m) => !m)}>
+            <button type="button" className="flex items-center gap-1 self-start text-sm text-accent-600 dark:text-accent-400" onClick={() => setMore((m) => !m)}>
               <Icon name="back" className={cx('size-4 transition', more ? 'rotate-90' : '-rotate-90')} />
               {more ? 'Moins d’options' : 'Prix, boutique, tags, notes…'}
             </button>
@@ -155,7 +156,7 @@ export default function QuickAdd({ initialStatus, onClose }: { initialStatus: St
                           key={p}
                           type="button"
                           onClick={() => setPriority(p)}
-                          className={cx('rounded-xl py-1.5 text-sm', priority === p ? 'bg-indigo-600 text-white' : 'bg-slate-200/70 dark:bg-slate-800')}
+                          className={cx('rounded-xl py-1.5 text-sm', priority === p ? 'bg-accent-600 text-white' : 'bg-slate-200/70 dark:bg-slate-800')}
                         >
                           {PRIORITY_LABEL[p]}
                         </button>

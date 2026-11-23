@@ -1,8 +1,48 @@
 @import 'tailwindcss';
+@import '@fontsource/cinzel/600.css';
+@import '@fontsource/cinzel/700.css';
 @plugin '@tailwindcss/typography';
 
+/* Palette « ludothèque » : anthracite chaud, crème, accent terracotta/cuivre, or pour les blasons. */
 @theme {
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Cinzel', Georgia, 'Times New Roman', serif;
+
+  /* neutres chauds (remplacent le slate par défaut) */
+  --color-slate-50: #faf9f5;
+  --color-slate-100: #f0eee6;
+  --color-slate-200: #e3dfd3;
+  --color-slate-300: #cbc6b8;
+  --color-slate-400: #9d988c;
+  --color-slate-500: #77736b;
+  --color-slate-600: #5a5752;
+  --color-slate-700: #403e3a;
+  --color-slate-800: #2d2c29;
+  --color-slate-900: #222120;
+  --color-slate-950: #191817;
+
+  /* accent terracotta / cuivre */
+  --color-accent-50: #fcf3ef;
+  --color-accent-100: #f8e2d8;
+  --color-accent-200: #f1c3b0;
+  --color-accent-300: #e89e82;
+  --color-accent-400: #e2896a;
+  --color-accent-500: #d97757;
+  --color-accent-600: #c15f3c;
+  --color-accent-700: #a04b2f;
+  --color-accent-800: #833f2a;
+  --color-accent-900: #6b3524;
+
+  /* or (étoiles, blasons) */
+  --color-gold-300: #f2d27e;
+  --color-gold-400: #e6bb4f;
+  --color-gold-500: #cf9d2f;
+  --color-gold-600: #a97b1f;
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
 }
 
 @layer base {
@@ -10,8 +50,15 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+    @apply bg-slate-100 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
     min-height: 100dvh;
+    background-image: radial-gradient(ellipse at top, color-mix(in oklab, var(--color-accent-500) 7%, transparent), transparent 60%);
+    background-attachment: fixed;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
   input,
   select,
@@ -24,7 +71,7 @@
   @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition active:scale-[.97] disabled:opacity-50 disabled:pointer-events-none;
 }
 @utility btn-primary {
-  @apply btn bg-indigo-600 text-white hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400;
+  @apply btn bg-accent-600 text-white shadow-sm shadow-accent-900/20 hover:bg-accent-500 dark:bg-accent-500 dark:text-slate-950 dark:hover:bg-accent-400;
 }
 @utility btn-ghost {
   @apply btn text-slate-700 hover:bg-slate-200/70 dark:text-slate-200 dark:hover:bg-slate-800;
@@ -36,13 +83,13 @@
   @apply btn bg-red-600/10 text-red-700 hover:bg-red-600/20 dark:text-red-400;
 }
 @utility input {
-  @apply w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100;
+  @apply w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-slate-900 outline-none placeholder:text-slate-400 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/30 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100;
 }
 @utility label {
   @apply mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400;
 }
 @utility card {
-  @apply rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900;
+  @apply rounded-2xl border border-slate-200 bg-slate-50 shadow-sm shadow-slate-900/5 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none;
 }
 @utility chip {
   @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium;
