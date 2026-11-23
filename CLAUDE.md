@@ -127,7 +127,9 @@ Quand l'utilisateur dit « enrichis les jeux » (ou « enrichis <nom> ») :
       montrant la boîte** (pas Wikipédia : ses images sont souvent du matériel, pas la boîte ; `covers` reste manuel).
       Pour un jeu déjà enrichi, un fichier `{ "coverPages": [...] }` suffit.
       **Gammes** (boîtes autonomes + extensions) : une seule fiche au nom de la gamme ; `expansionsAdd: [{ name, owned, kind: 'standalone'|'expansion' }]`
-      ajoute les éléments absents de `expansions` sans toucher à ceux saisis par l'utilisateur. `bggId` exact en priorité :
+      ajoute les éléments absents de `expansions` sans toucher à ceux saisis par l'utilisateur.
+      Image d'un élément : `coverPages` dans l'élément d'`expansionsAdd`, ou `expansionImages: { "<nom exact>": [urls] }`
+      pour des éléments existants → grand format dans `games/{gid}/images/{id}`, miniature dans `expansions[].thumb`. `bggId` exact en priorité :
       l'autofill complète ensuite image, miniature, note, extensions BGG.
    5. Champs de base `playersMin`, `playersMax`, `durationMin`, `ageMin` : les compléter **uniquement s'ils sont vides/0** (ne jamais écraser une saisie utilisateur). Ne pas toucher `status`, prix, `priority`, `notes`, `tags`, `missingParts`, `expansions`.
    6. Écrire le JSON dans un fichier temporaire (ex. `/tmp/ludo-<id>.json`) puis `node scripts/games.mjs update <familyId>/<id> @/tmp/ludo-<id>.json`. Vérifier la sortie.
