@@ -1,0 +1,39 @@
+{
+  "bggId": 284083,
+  "playersMin": 2,
+  "playersMax": 5,
+  "durationMin": 20,
+  "ageMin": 10,
+  "yearPublished": 2019,
+  "complexity": 2,
+  "level": "familial",
+  "mode": "coop",
+  "rulesSummary": "Jeu de **plis coopératif** (Kosmos / Iello). L'équipage d'un vaisseau part à la recherche de la 9ᵉ planète à travers une **campagne de 50 missions** de difficulté croissante.\n\n- Chaque mission donne des **tâches** : tel joueur doit remporter le pli contenant telle carte.\n- On joue des plis classiques (obligation de fournir la couleur, fusées = atout).\n- La **communication est très limitée** : un seul indice par joueur et par mission.\n- On gagne ou on perd ensemble ; une mission ratée se rejoue.",
+  "setup": "- Mélanger et distribuer toutes les cartes (couleurs 1 à 9 + fusées 1 à 4).\n- Le joueur qui a la **fusée 4** est le commandant.\n- Lire la mission dans le carnet : révéler les cartes Tâche, que les joueurs choisissent à tour de rôle (en commençant par le commandant).\n- Chaque joueur prend son jeton de communication.",
+  "turnStructure": "1. Le commandant (puis le gagnant du pli précédent) ouvre le pli.\n2. Chacun doit **fournir la couleur** demandée s'il le peut ; sinon il joue n'importe quelle carte (une **fusée** l'emporte sur les couleurs).\n3. La carte la plus forte de la couleur demandée (ou la plus haute fusée) remporte le pli.\n4. **Communication** (avant un pli) : un joueur peut poser une carte face visible et son jeton pour indiquer si c'est sa plus haute, sa plus basse ou sa seule carte de cette couleur.",
+  "endCondition": "La mission est **réussie** dès que toutes les tâches sont accomplies par les bons joueurs ; elle échoue dès qu'une tâche devient impossible (carte remportée par le mauvais joueur). On passe alors à la mission suivante ou on recommence.",
+  "tips": "- Utilisez la communication tôt : plus tard, elle sert moins.\n- Gardez vos fusées pour sécuriser une tâche délicate.\n- Le joueur qui doit prendre une tâche a souvent intérêt à **ne pas** ouvrir le pli.\n- Règle souvent oubliée : on ne parle pas de ses cartes, même indirectement.",
+  "variants": "- **Variante 2 joueurs** (avec un 3ᵉ joueur fictif, JARVIS).\n- Mode **détresse** et options de difficulté.\n- Jeu autonome suivant : **The Crew : Mission Sous-Marine** (32 missions).",
+  "expansionsAdd": [
+    {
+      "name": "The Crew : Mission Sous-Marine",
+      "owned": false,
+      "kind": "standalone",
+      "coverPages": [
+        "https://www.play-in.com/fr/produit/336679/the-crew-mission-sous-marine",
+        "https://www.ludum.fr/jeux-de-strategie-inities/the-crew-mission-sous-marine-1417"
+      ],
+      "notes": "suite autonome, 32 missions"
+    }
+  ],
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/291060/the-crew",
+    "https://www.philibertnet.com/en/iello/86975-the-crew-3760175517211.html",
+    "https://www.espritjeu.com/jeu-d-ambiance/the-crew.html"
+  ],
+  "sources": [
+    "https://www.espritjeu.com/jeu-d-ambiance/the-crew.html",
+    "https://www.play-in.com/fr/produit/291060/the-crew",
+    "https://www.ludum.fr/jeux-de-strategie-inities/the-crew-mission-sous-marine-1417"
+  ]
+}

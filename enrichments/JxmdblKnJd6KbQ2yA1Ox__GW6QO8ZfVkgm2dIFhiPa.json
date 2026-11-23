@@ -1,0 +1,49 @@
+{
+  "bggId": 13,
+  "playersMin": 3,
+  "playersMax": 4,
+  "durationMin": 75,
+  "ageMin": 10,
+  "yearPublished": 1995,
+  "complexity": 2.5,
+  "level": "familial",
+  "mode": "competitif",
+  "rulesSummary": "Le grand classique du jeu de **développement et de négociation**. Sur une île faite d'hexagones, chacun bâtit routes, colonies et villes en récoltant 5 ressources (bois, argile, laine, blé, minerai) selon les **lancers de dés**.\n\n- Chaque tour, les dés déterminent quelles tuiles produisent.\n- On **échange** des ressources avec les autres joueurs ou avec la banque/les ports.\n- On marque des points avec ses colonies (1), villes (2), cartes Développement et titres (route la plus longue, armée la plus puissante).\n- **Le premier à 10 points de victoire gagne.**",
+  "setup": "- Assembler l'île (19 tuiles terrain) entourée de la mer et des ports ; poser les jetons numérotés.\n- Placer le **voleur** sur le désert.\n- Chaque joueur pose **2 colonies et 2 routes** (ordre aller puis retour) ; la 2ᵉ colonie rapporte immédiatement ses ressources.\n- Préparer la banque de ressources et la pioche de cartes Développement.",
+  "turnStructure": "1. **Production** : lancer 2 dés ; chaque tuile portant ce nombre fait produire les colonies (1) et villes (2) adjacentes.\n   - Sur un **7** : quiconque a plus de 7 cartes en défausse la moitié ; le joueur actif déplace le voleur et vole une carte à un voisin de la tuile.\n2. **Commerce** : échanges libres avec les autres joueurs, ou avec la banque à 4:1 (3:1 ou 2:1 avec un port).\n3. **Construction** : route, colonie (à 2 intersections minimum d'une autre), ville (remplace une colonie) ou carte Développement.\n\nUne carte Développement peut être jouée à son tour (pas celle achetée ce tour-ci).",
+  "endCondition": "Dès qu'un joueur atteint **10 points de victoire pendant son tour**, il gagne. Points : colonie 1, ville 2, cartes Point de victoire, route la plus longue (5+ routes) 2, armée la plus puissante (3+ chevaliers) 2.",
+  "tips": "- Placez vos premières colonies sur des numéros **6 et 8** et variez les ressources.\n- L'argile et le bois sont rares en début de partie : sécurisez-en.\n- Un port 2:1 sur une ressource que vous produisez beaucoup change tout.\n- Règle oubliée : la règle de distance (pas de colonie adjacente à une autre).",
+  "variants": "- Extensions en français : **Marins**, **Villes & Chevaliers**, **Marchands & Barbares**, et l'extension **5-6 joueurs**.",
+  "expansionsAdd": [
+    {
+      "name": "Extension 5-6 joueurs",
+      "owned": false,
+      "coverPages": [
+        "https://www.play-in.com/fr/produit/615667/catan-jeu-de-base-5-6-joueurs"
+      ]
+    },
+    {
+      "name": "Marins",
+      "owned": false,
+      "coverPages": [
+        "https://www.play-in.com/fr/produit/615668/catan-marins"
+      ]
+    },
+    {
+      "name": "Villes & Chevaliers",
+      "owned": false
+    },
+    {
+      "name": "Marchands & Barbares",
+      "owned": false
+    }
+  ],
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/615666/catan-jeu-de-base"
+  ],
+  "sources": [
+    "https://www.play-in.com/fr/produit/615666/catan-jeu-de-base",
+    "https://www.play-in.com/fr/articles/5-jeux-de-societe/guide/quel-jeu-et-extension-catan-choisir",
+    "https://www.espritjeu.com/catan-big-box.html"
+  ]
+}

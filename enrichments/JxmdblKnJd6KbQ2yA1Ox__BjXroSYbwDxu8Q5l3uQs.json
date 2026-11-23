@@ -1,0 +1,26 @@
+{
+  "name": "Amis de Merde",
+  "playersMin": 3,
+  "playersMax": 22,
+  "durationMin": 30,
+  "ageMin": 18,
+  "yearPublished": 2023,
+  "level": "ambiance",
+  "mode": "competitif",
+  "rulesSummary": "Jeu d'**ambiance pour adultes** (VO « Shitty Friends », VF Olé!). On lit des questions qui demandent de désigner **qui, dans le groupe**, serait le plus susceptible de faire telle chose (souvent peu flatteuse).\n\n- Tout le monde vote en même temps pour une autre personne (jamais soi-même).\n- La personne la plus désignée **récupère la carte**.\n- **Le premier à cumuler 5 cartes perd** (ou « gagne » le titre d'ami de merde du groupe).\n- Une extension « épicée » incluse durcit les questions.",
+  "setup": "- Mélanger les cartes (retirer ou ajouter les cartes épicées selon le groupe).\n- Placer la pioche au centre.\n- S'installer en cercle pour que tout le monde puisse pointer du doigt.",
+  "turnStructure": "1. Un joueur pioche une carte et lit la question à voix haute.\n2. Compte à rebours : tout le monde **pointe du doigt** simultanément la personne visée (pas soi-même).\n3. La personne la plus désignée prend la carte devant elle.\n4. En cas d'égalité, les personnes à égalité se départagent (débat, vote à main levée…).\n5. On passe la lecture au voisin.",
+  "endCondition": "Dès qu'un joueur a **5 cartes** devant lui, la partie s'arrête : c'est l'« ami de merde » de la soirée.",
+  "tips": "- Adaptez le paquet au groupe : retirez les cartes trop intimes si besoin.\n- Le jeu est meilleur à partir de 5–6 joueurs qui se connaissent bien.\n- Laissez la place aux justifications : c'est là que se trouvent les meilleurs moments.",
+  "variants": "- Cartes « épicées » (18+) à ajouter ou non.\n- Même concept : **Collègues de Merde** (version bureau).",
+  "coverPages": [
+    "https://www.espritjeu.com/jeux-d-ambiance/amis-de-merde.html",
+    "https://www.play-in.com/fr/produit/515943/amis-de-merde",
+    "https://www.ludum.fr/jeux-d-ambiance-entre-adultes/amis-de-merde-6239"
+  ],
+  "sources": [
+    "https://www.espritjeu.com/jeux-d-ambiance/amis-de-merde.html",
+    "https://www.play-in.com/fr/produit/515943/amis-de-merde",
+    "https://www.ludum.fr/jeux-d-ambiance-entre-adultes/amis-de-merde-6239"
+  ]
+}

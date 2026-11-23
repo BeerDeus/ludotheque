@@ -1,0 +1,47 @@
+{
+  "name": "Codenames",
+  "bggId": 178900,
+  "playersMin": 2,
+  "playersMax": 8,
+  "durationMin": 15,
+  "ageMin": 10,
+  "yearPublished": 2015,
+  "complexity": 1.5,
+  "level": "ambiance",
+  "mode": "equipe",
+  "rulesSummary": "Jeu d'**association de mots en équipes** (Iello). Deux équipes, rouge et bleue, ont chacune un **maître-espion** qui connaît l'identité secrète des 25 cartes-mots posées sur la table.\n\n- Le maître-espion donne **un seul mot + un nombre** pour faire deviner plusieurs agents de son équipe à la fois.\n- Ses coéquipiers touchent les cartes une par une.\n- Il faut éviter les agents adverses, les civils… et surtout **l'assassin** (défaite immédiate).\n- La première équipe à contacter tous ses agents gagne.",
+  "setup": "- Former deux équipes et désigner un maître-espion par équipe (assis du même côté).\n- Disposer **25 cartes Nom de code** en grille 5×5.\n- Piocher une **carte Clé** et la placer dans le support : elle indique quels mots sont rouges, bleus, neutres et l'assassin ; la couleur du bord indique l'équipe qui commence (elle a 9 agents, l'autre 8).",
+  "turnStructure": "1. Le maître-espion de l'équipe active donne un indice : **un mot + un nombre** (ex. « Océan 3 »).\n2. Les agents discutent puis touchent une carte :\n   - leur couleur → on recouvre d'un agent et on peut continuer ;\n   - civil ou agent adverse → le tour s'arrête ;\n   - **assassin** → l'équipe perd immédiatement.\n3. On peut faire **un essai de plus** que le nombre annoncé.\n4. On passe à l'autre équipe.",
+  "endCondition": "Une équipe gagne dès que **tous ses agents** sont découverts (même si c'est l'équipe adverse qui les révèle). Toucher l'assassin fait perdre immédiatement.",
+  "tips": "- Un indice qui vise 2 mots sûrs vaut mieux qu'un indice à 4 risqué.\n- Repérez l'assassin avant de donner un indice : écartez tout mot qui pourrait y mener.\n- Les indices des tours précédents peuvent encore servir avec l'essai bonus.\n- Interdit : mots de la grille, parties de mots, gestes ou intonations.",
+  "variants": "- **2–3 joueurs** : variante coopérative incluse.\n- Jeux autonomes de la gamme : **Codenames Duo** (coopératif à 2) et **Codenames Images**.",
+  "expansionsAdd": [
+    {
+      "name": "Codenames Duo",
+      "owned": false,
+      "kind": "standalone",
+      "coverPages": [
+        "https://www.play-in.com/fr/produit/613033/codenames-duo"
+      ],
+      "notes": "coopératif, idéal à 2"
+    },
+    {
+      "name": "Codenames Images",
+      "owned": false,
+      "kind": "standalone",
+      "coverPages": [
+        "https://www.play-in.com/fr/produit/618794/codenames-images"
+      ],
+      "notes": "images à la place des mots"
+    }
+  ],
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/607731/codenames",
+    "https://www.ludum.fr/jeu-dambiance/codenames-313"
+  ],
+  "sources": [
+    "https://www.play-in.com/fr/produit/607731/codenames",
+    "https://www.ludum.fr/jeu-dambiance/codenames-313",
+    "https://www.fnac.com/Jeu-d-ambiance-Iello-Codenames/a9570105/w-4"
+  ]
+}
