@@ -125,6 +125,7 @@ Tout passe par GitHub Actions (secret `FIREBASE_SERVICE_ACCOUNT`). Repo **public
    (Base64 obligatoire : GitHub masque les `{` `}` dans les logs à cause du secret JSON multi-lignes.)
 3. Rechercher / rédiger comme ci-dessous, puis écrire **un fichier par jeu** : `enrichments/<familyId>__<gameId>.json`
    (`ref` = `familyId/gameId`). Mêmes champs que pour `update`. Ne pas inclure `expansions`.
+   **Créer un jeu** : fichier `enrichments/<familyId>__new-<slug>.json` avec `name` (+ `status`, défaut `watch`) et les champs enrichis.
 4. Commit + push sur la branche par défaut → workflow « Appliquer les enrichissements » : écrit dans Firestore,
    supprime les fichiers (commit bot `[skip ci]` → faire `git pull` avant le push suivant), lance l'autofill.
 5. Vérifier le run (`actions_list` → `list_workflow_jobs` → logs : `✓ <nom>` par jeu).

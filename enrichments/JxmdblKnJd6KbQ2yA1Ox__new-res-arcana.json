@@ -1,0 +1,52 @@
+{
+  "name": "Res Arcana",
+  "status": "watch",
+  "bggId": 262712,
+  "yearPublished": 2019,
+  "playersMin": 2,
+  "playersMax": 4,
+  "durationMin": 45,
+  "ageMin": 12,
+  "complexity": 2.5,
+  "level": "initie",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/247807/res-arcana",
+    "https://www.espritjeu.com/jeux-de-strategie/res-arcana.html",
+    "https://www.ludum.fr/8386-gamme-res-arcana"
+  ],
+  "expansionsAdd": [
+    {
+      "name": "Lux et Tenebrae",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.espritjeu.com/res-arcana-lux-et-tenebrae.html",
+        "https://www.play-in.com/fr/produit/267444/res-arcana-extension-lux-tenebrae"
+      ],
+      "notes": "Démons, nouvelles cartes, jusqu'à 5 joueurs."
+    },
+    {
+      "name": "Perlae Imperii",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-inities/res-arcana-perlae-imperii-extension-1595",
+        "https://www.espritjeu.com/jeux-de-strategie/res-arcana-perlae-imperii.html"
+      ],
+      "notes": "Nouvelle essence (perles), victoire à 13 PV."
+    }
+  ],
+  "rulesSummary": "Des mages rivalisent pour dominer des **lieux de pouvoir** et bâtir des **monuments**. Moteur de ressources court et tendu : chaque joueur n'a que **8 cartes** pour toute la partie.\n\n- 5 essences : **Or, Vie, Élan, Calme, Mort**.\n- Vos cartes (artefacts, familiers, dragons, créatures…) produisent des essences et offrent des pouvoirs à activer en les **inclinant**.\n- Un **objet magique** (changé à chaque fin de manche) complète votre moteur.\n- Les lieux de pouvoir et monuments, chers, rapportent les **points de victoire**.\n\nPremier à **10 PV** en fin de manche déclenche la victoire. Parties rapides, beaucoup de combos.",
+  "setup": "- Mélanger les artefacts ; chaque joueur reçoit 8 cartes (draft conseillé) et choisit 1 mage parmi 2.\n- Disposer 5 lieux de pouvoir (une face de chaque paire, au hasard).\n- Paquet monuments : 2 face visible.\n- Objets magiques au centre ; chaque joueur en choisit un (ordre inverse du tour).\n- 1 essence de chaque type par joueur ; piocher 3 cartes de son deck.",
+  "turnStructure": "**Collecte** : chacun récupère les essences produites par ses cartes (et ce qui est stocké dessus).\n\n**Actions** (une par tour, jusqu'à ce que tous passent) :\n1. **Poser une carte** de sa main en payant son coût.\n2. **Acquérir** un lieu de pouvoir ou un monument (payer le coût).\n3. **Activer un pouvoir** en inclinant la carte (coût éventuel).\n4. **Défausser** une carte → 1 Or ou 2 autres essences.\n5. **Passer** : échanger son objet magique, piocher une carte (le premier à passer devient premier joueur).\n\nFin de manche : redresser les cartes, vérifier les PV.",
+  "endCondition": "À la fin d'une manche, si au moins un joueur a **10 PV ou plus**, la partie s'arrête. Le plus haut total gagne ; égalité → plus d'essences restantes (or compté double selon les règles), sinon victoire partagée.",
+  "tips": "- Un moteur simple et rapide vaut mieux qu'un combo parfait trop lent : la partie dure ~5 manches.\n- Le **draft** est la moitié du jeu : cherchez des cartes qui produisent l'essence de votre objectif.\n- Surveillez les **dragons** adverses : leurs attaques coûtent de la Vie à tout le monde.\n- Passer tôt pour prendre le bon objet magique peut être décisif.",
+  "variants": "- Draft ou distribution aléatoire des 8 cartes.\n- Extensions VF : *Lux et Tenebrae* (5 joueurs, démons), *Perlae Imperii* (perles).",
+  "sources": [
+    "https://www.play-in.com/fr/produit/247807/res-arcana",
+    "https://www.ludum.fr/8386-gamme-res-arcana",
+    "https://www.espritjeu.com/res-arcana-lux-et-tenebrae.html",
+    "https://www.ludum.fr/jeux-de-strategie-inities/res-arcana-perlae-imperii-extension-1595"
+  ]
+}

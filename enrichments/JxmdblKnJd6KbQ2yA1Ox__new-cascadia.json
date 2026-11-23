@@ -1,0 +1,41 @@
+{
+  "name": "Cascadia",
+  "status": "watch",
+  "bggId": 295947,
+  "yearPublished": 2021,
+  "playersMin": 1,
+  "playersMax": 4,
+  "durationMin": 45,
+  "ageMin": 10,
+  "complexity": 2,
+  "level": "familial",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.ludum.fr/jeux-de-societe-strategie/cascadia-2007",
+    "https://www.play-in.com/fr/produit/369491/cascadia"
+  ],
+  "expansionsAdd": [
+    {
+      "name": "Paysages",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-en-famille/cascadia-paysages-extension-5401",
+        "https://www.espritjeu.com/jeux-de-strategie/cascadia-paysages.html"
+      ],
+      "notes": "Jusqu'à 6 joueurs + cartes Paysages (points de repère)."
+    }
+  ],
+  "rulesSummary": "Vous composez un paysage du **Nord-Ouest américain** (forêts, montagnes, prairies, marais, rivières) et y installez de la **faune**. Jeu de pose de tuiles et de jetons **calme et accessible**, Spiel des Jahres 2022.\n\n- À son tour, on prend une **paire** : une tuile habitat + un jeton animal (ours, wapiti, saumon, buse, renard).\n- La tuile agrandit votre territoire ; l'animal se pose sur une tuile qui l'accepte.\n- 5 **cartes de décompte** (une par animal) fixent comment chaque espèce rapporte des points (groupes, lignes, voisins…).\n- Les plus **grandes zones** contiguës de chaque habitat rapportent aussi.\n\nPas d'interaction agressive : chacun construit son tableau, en lisant ce que prennent les autres.",
+  "setup": "- Chaque joueur reçoit une tuile de départ (triangle de 3 habitats).\n- Pile de tuiles : 20 × nombre de joueurs + 3 ; sac de jetons faune.\n- Choisir **1 carte de décompte par animal** (les cartes A sont conseillées pour débuter).\n- Au centre : 4 paires tuile + jeton face visible.\n- Jetons Nature à côté.",
+  "turnStructure": "1. (Optionnel) Si les 4 jetons sont identiques → ils sont **remplacés** ; si 3 identiques, on peut les remplacer.\n2. **Prendre une paire** tuile + jeton (ou dépenser un **jeton Nature** pour prendre tuile et jeton dépareillés, ou remplacer des jetons au choix).\n3. **Poser la tuile** adjacente à votre territoire.\n4. **Poser le jeton** sur une tuile vide montrant cet animal (sinon le remettre dans le sac). Un jeton posé sur une tuile clé de voûte rapporte un jeton Nature.\n5. Compléter l'offre centrale.",
+  "endCondition": "Fin après **20 tours** par joueur (pile épuisée). Décompte : cartes faune, plus grandes zones de chaque habitat (+ bonus pour la plus grande zone de la table), 1 PV par jeton Nature restant. Égalité → plus de jetons Nature.",
+  "tips": "- Les tuiles **clé de voûte** (un seul animal possible) donnent des jetons Nature : précieux.\n- Ne visez pas tous les objectifs : concentrez-vous sur 2–3 animaux qui se combinent bien.\n- Gardez un œil sur les grandes zones d'habitat, elles pèsent lourd au total.\n- On oublie souvent le remplacement gratuit quand les 4 jetons sont identiques.",
+  "variants": "- **Solo** inclus, mode **famille** et variantes de difficulté, **défis/scénarios** du livret.\n- Extension VF : *Paysages* (jusqu'à 6 joueurs, cartes de points de repère).",
+  "sources": [
+    "https://www.ludum.fr/jeux-de-societe-strategie/cascadia-2007",
+    "https://www.play-in.com/fr/produit/369491/cascadia",
+    "https://www.ludum.fr/jeux-de-strategie-en-famille/cascadia-paysages-extension-5401",
+    "https://www.espritjeu.com/jeux-de-strategie/cascadia-paysages.html"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "name": "Spirit Island",
+  "status": "watch",
+  "bggId": 162886,
+  "yearPublished": 2017,
+  "playersMin": 1,
+  "playersMax": 4,
+  "durationMin": 120,
+  "ageMin": 13,
+  "complexity": 4,
+  "level": "expert",
+  "mode": "coop",
+  "coverPages": [
+    "https://www.ludum.fr/gestion-optimisation/spirit-island-4eme-edition-748",
+    "https://www.play-in.com/fr/produit/240236/spirit-island"
+  ],
+  "expansionsAdd": [
+    {
+      "name": "Branches et Griffes",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/gestion-optimisation/spirit-island-branches-et-griffes-extension-749",
+        "https://www.espritjeu.com/de-branches-et-de-griffes-ext-spirit-island-a7314.html"
+      ],
+      "notes": "2 Esprits, adversaire France, événements, jetons Bêtes/Maladie/Discorde/Sauvage."
+    },
+    {
+      "name": "Terre Fracturée",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/gestion-optimisation/spirit-island-terre-fracturee-extension-1646",
+        "https://www.play-in.com/fr/produit/352900/spirit-island-extension-terre-fracturee"
+      ],
+      "notes": "10 Esprits, 2 adversaires, scénarios, jusqu'à 6 joueurs."
+    },
+    {
+      "name": "Nature Incarnée",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/gestion-optimisation/spirit-island-nature-incarnee-extension-6457",
+        "https://www.play-in.com/fr/produit/559562/spirit-island-extension-nature-incarnee"
+      ],
+      "notes": "Nécessite Terre Fracturée."
+    },
+    {
+      "name": "Horizons de Spirit Island",
+      "owned": false,
+      "kind": "standalone",
+      "coverPages": [
+        "https://www.play-in.com/fr/produit/550837/horizons-de-spirit-island"
+      ],
+      "notes": "Boîte autonome plus accessible (5 Esprits simples)."
+    }
+  ],
+  "rulesSummary": "Vous incarnez des **Esprits de la nature** qui protègent une île contre des colons envahisseurs. **Coopératif** à forte réflexion : on gagne ou on perd ensemble.\n\n- Chaque Esprit est très **asymétrique** : pistes de présence, pouvoirs innés, cartes Pouvoir uniques.\n- Les Envahisseurs suivent un cycle prévisible : **Explorer → Construire → Ravager**. On voit où ils vont frapper et on anticipe.\n- Les Esprits **effraient** (Peur) et **détruisent** les envahisseurs, aidés par les **Dahans** (habitants) qui ripostent.\n- Le **Fléau** (blight) abîme l'île à chaque ravage trop violent.\n\nOn gagne en accumulant assez de Peur pour que les colons renoncent ; on perd si l'île est ravagée, si un Esprit est détruit ou si le paquet Envahisseur est épuisé.",
+  "setup": "- Un plateau d'île par joueur (assemblés selon le nombre de joueurs).\n- Chaque joueur choisit un Esprit : panneau, cartes Pouvoir uniques, présence de départ selon le panneau.\n- Placer Dahans, villes, bourgs et Fléau de départ indiqués sur les plateaux.\n- Paquet Peur : 9 cartes, séparées par niveaux de Terreur.\n- Carte Fléau (côté « île saine ») + 2 jetons Fléau par joueur + 1.\n- Paquet Envahisseur : 3 cartes de niveau I, 4 de niveau II, 5 de niveau III (ordre croissant) ; faire une première Exploration.",
+  "turnStructure": "1. **Croissance** : choisir une option de croissance (récupérer ses cartes, gagner des Pouvoirs, placer de la présence, gagner de l'énergie…).\n2. **Gain d'énergie** selon la piste de présence découverte.\n3. **Jouer des Pouvoirs** : payer leur coût en énergie, dans la limite de cartes jouables.\n4. **Pouvoirs rapides** : résolus maintenant (Esprits dans l'ordre souhaité).\n5. **Phase Envahisseurs** :\n   1. Effet de l'île ravagée (si la carte Fléau est retournée) ;\n   2. Cartes **Peur** gagnées : on les résout ;\n   3. **Ravager** (dégâts aux terres et aux Dahans, Fléau si 2+ dégâts) ;\n   4. **Construire** (bourg ou ville) ;\n   5. **Explorer** (nouveaux explorateurs) ;\n   6. décaler les cartes Envahisseur.\n6. **Pouvoirs lents**.\n7. **Le temps passe** : défausser les cartes jouées, soigner les dégâts.",
+  "endCondition": "**Victoire** selon le niveau de Terreur : Terreur I = plus aucun envahisseur sur l'île ; II = plus de bourgs ni villes ; III = plus de villes ; ou toutes les cartes Peur gagnées.\n**Défaite** : plus de Fléau sur la carte Fléau, un Esprit sans présence, ou le paquet Envahisseur doit être pioché alors qu'il est vide.",
+  "tips": "- Commencez avec des Esprits **faciles** (Rivière, Foudre, Vitalité de la Terre, Ombres).\n- Lisez la ligne Envahisseurs : ravage au tour suivant = priorité absolue.\n- Croître en présence tôt paie plus tard (énergie et cartes jouables).\n- Les Dahans sont des alliés : protégez-les, ils ripostent.\n- On oublie souvent : le Fléau **en cascade** si une terre déjà flétrie en reçoit un nouveau.\n- Communiquez beaucoup, la coordination entre Esprits est la clé.",
+  "variants": "- **Solo** natif (un ou deux Esprits).\n- **Adversaires** (Prusse, Angleterre, Suède…) et **scénarios** pour ajuster la difficulté.\n- Extensions VF : *Branches et Griffes*, *Terre Fracturée* (jusqu'à 6), *Nature Incarnée* ; boîte autonome *Horizons de Spirit Island*.",
+  "sources": [
+    "https://www.ludum.fr/gestion-optimisation/spirit-island-4eme-edition-748",
+    "https://www.play-in.com/fr/produit/240236/spirit-island",
+    "https://www.ludum.fr/gestion-optimisation/spirit-island-branches-et-griffes-extension-749",
+    "https://www.play-in.com/fr/produit/352900/spirit-island-extension-terre-fracturee",
+    "https://www.ludum.fr/gestion-optimisation/spirit-island-nature-incarnee-extension-6457",
+    "https://www.play-in.com/fr/produit/550837/horizons-de-spirit-island"
+  ]
+}

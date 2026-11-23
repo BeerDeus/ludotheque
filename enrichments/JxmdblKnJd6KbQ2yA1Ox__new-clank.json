@@ -1,0 +1,71 @@
+{
+  "name": "Clank !",
+  "status": "watch",
+  "bggId": 201808,
+  "yearPublished": 2016,
+  "playersMin": 2,
+  "playersMax": 4,
+  "durationMin": 60,
+  "ageMin": 12,
+  "complexity": 2,
+  "level": "initie",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.espritjeu.com/jeux-de-societe/clank.html",
+    "https://www.play-in.com/fr/produit/212221/clank"
+  ],
+  "expansionsAdd": [
+    {
+      "name": "Trésors Engloutis",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.espritjeu.com/clank-tresors-engloutis.html",
+        "https://www.ludum.fr/10129-gamme-clank-le-jeu"
+      ],
+      "notes": "Nouveau plateau sous-marin."
+    },
+    {
+      "name": "La Malédiction de la Momie",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-inities/clank-la-malediction-de-la-momie-extension-405",
+        "https://www.espritjeu.com/clank-la-malediction-de-la-momie.html"
+      ],
+      "notes": "Pyramide + Momie qui maudit les joueurs."
+    },
+    {
+      "name": "La Grande Aventure",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-inities/clank-la-grande-aventure-extension-1486",
+        "https://www.espritjeu.com/jeux-de-strategie/clank-la-grande-aventure.html"
+      ]
+    },
+    {
+      "name": "Clank ! Catacombes",
+      "owned": false,
+      "kind": "standalone",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-inities/clank-catacombes-7897",
+        "https://www.play-in.com/fr/produit/550771/clank-catacombes"
+      ],
+      "notes": "Boîte autonome : donjon modulaire en tuiles."
+    }
+  ],
+  "rulesSummary": "Des voleurs s'infiltrent dans le donjon d'un **dragon** pour lui dérober un artefact… sans faire trop de bruit. **Deck-building + course** sur un plateau.\n\n- Chaque carte donne des ressources : **Compétence** (acheter), **Épées** (combattre), **Bottes** (se déplacer).\n- Le bruit, ce sont les cubes **Clank !** : ils vont dans le sac du dragon. Quand il attaque, chaque cube tiré à votre couleur = 1 blessure.\n- Il faut descendre dans les profondeurs prendre **un artefact**, puis remonter et sortir vivant.\n\nPlus on va loin, plus les artefacts valent cher… mais plus le retour est risqué. On gagne avec le plus de points (artefacts, trésors, or, cartes).",
+  "setup": "- Plateau (face au choix), marqueur de rage du dragon selon le nombre de joueurs.\n- Artefacts, œufs, trésors, clés, sacs et couronnes sur leurs cases ; boutique du marché.\n- Rangée du donjon : 6 cartes du paquet Donjon ; cartes de réserve (Mercenaire, Explorer, Gemme secrète, Gobelin).\n- Chaque joueur : deck de 10 cartes (6 Cambriolage, 2 Trébucher, 1 Esquive, 1 Grimpette), 30 cubes, pion à l'entrée.\n- Quelques cubes Clank ! de départ dans la zone de bruit selon l'ordre du tour (compensation, voir règle).\n- Piocher 5 cartes.",
+  "turnStructure": "1. **Jouer toutes les cartes** de sa main (5) et cumuler Compétence, Épées, Bottes.\n2. Dans l'ordre voulu :\n   - **acheter** des cartes du donjon ou de la réserve (Compétence) ;\n   - **vaincre** des monstres (Épées) → or ou bonus ;\n   - **se déplacer** (1 Botte par tunnel ; certains tunnels exigent plus ou font perdre des PV) ;\n   - utiliser **l'entrée** d'un ruisseau, d'une salle de cristal (stoppe le mouvement) ou **le marché**.\n3. Ajouter ses cubes Clank ! générés dans la zone de bruit (ou en retirer).\n4. **Fin de tour** : remplir la rangée du donjon ; si une nouvelle carte a le symbole dragon → **attaque du dragon** (les cubes de la zone vont dans le sac, on tire autant de cubes que la rage).\n5. Défausser, piocher 5 cartes.",
+  "endCondition": "Quand un joueur sort du donjon (ou est assommé), il avance sur la **piste de fin** : à chacun de ses tours, le dragon attaque, puis tout le monde est éliminé à la fin.\nAssommé **dans les profondeurs** = 0 point. Hors des profondeurs = on garde ses points. Sortir avec un artefact donne le jeton **Maîtrise** (+20). Décompte : artefacts, œufs, trésors, or, cartes. Plus haut total gagne.",
+  "tips": "- Prenez un artefact **tôt** si la rangée du donjon est menaçante : un petit artefact sorti vaut mieux qu'un gros bloqué.\n- Achetez des cartes qui **rapportent des Bottes** : la mobilité gagne des parties.\n- Les clés et le sac à dos changent la partie : planifiez le marché.\n- Retirez du bruit dès que possible, surtout en fin de partie.\n- On oublie souvent : on ne peut porter qu'**un seul artefact** (sauf sac à dos).",
+  "variants": "- Plateau recto/verso (deux donjons).\n- Extensions VF : *Trésors Engloutis*, *La Malédiction de la Momie*, *La Grande Aventure* (campagne de donjons).\n- Boîte autonome : *Clank ! Catacombes* (donjon en tuiles).",
+  "sources": [
+    "https://www.espritjeu.com/jeux-de-societe/clank.html",
+    "https://www.ludum.fr/10129-gamme-clank-le-jeu",
+    "https://www.ludum.fr/jeux-de-strategie-inities/clank-la-malediction-de-la-momie-extension-405",
+    "https://www.ludum.fr/jeux-de-strategie-inities/clank-la-grande-aventure-extension-1486",
+    "https://www.ludum.fr/blog/nos-selections/clank-les-14-jeux-de-societe-et-extensions"
+  ]
+}

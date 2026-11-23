@@ -368,13 +368,33 @@ const commands = {
 
   async apply([dir]) {
     if (!dir) die('apply <dir>');
-    const files = readdirSync(dir).filter((f) => /^[A-Za-z0-9]+__[A-Za-z0-9]+\.json$/.test(f));
+    // <familyId>__<gameId>.json = enrichir un jeu existant ; <familyId>__new-<slug>.json = créer le jeu (name requis)
+    const files = readdirSync(dir).filter((f) => /^[A-Za-z0-9]+__(new-[a-z0-9-]+|[A-Za-z0-9]+)\.json$/.test(f));
     const applied = [];
     let failed = 0;
     for (const f of files) {
       const [fid, gid] = f.replace(/\.json$/, '').split('__');
-      const ref = db.doc(`families/${fid}/games/${gid}`);
+      const creating = gid.startsWith('new-');
+      const ref = creating ? db.collection(`families/${fid}/games`).doc() : db.doc(`families/${fid}/games/${gid}`);
       try {
+        if (creating) {
+          const fam = await db.doc(`families/${fid}`).get();
+          if (!fam.exists) throw new Error('famille introuvable');
+          const init = JSON.parse(readFileSync(join(dir, f), 'utf8'));
+          if (typeof init.name !== 'string' || !init.name.trim()) throw new Error('name requis pour créer un jeu');
+          await ref.set({
+            name: init.name.trim(),
+            status: STATUSES.includes(init.status) ? init.status : 'watch',
+            playersMin: 0,
+            playersMax: 0,
+            durationMin: 0,
+            priority: 2,
+            notes: '',
+            tags: [],
+            createdAt: FieldValue.serverTimestamp(),
+          });
+          console.log(`+ créé : ${init.name} (${ref.id})`);
+        }
         const snap = await ref.get();
         if (!snap.exists) throw new Error('jeu introuvable');
         const data = validate(JSON.parse(readFileSync(join(dir, f), 'utf8')), { partial: true });

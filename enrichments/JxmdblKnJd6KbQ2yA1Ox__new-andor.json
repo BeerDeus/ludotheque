@@ -1,0 +1,65 @@
+{
+  "name": "Andor",
+  "status": "watch",
+  "bggId": 127398,
+  "yearPublished": 2012,
+  "playersMin": 2,
+  "playersMax": 4,
+  "durationMin": 90,
+  "ageMin": 10,
+  "complexity": 2.5,
+  "level": "initie",
+  "mode": "coop",
+  "coverPages": [
+    "https://www.ludum.fr/narratif-immersif-inities/andor-214",
+    "https://www.play-in.com/fr/produit/201579/andor"
+  ],
+  "expansionsAdd": [
+    {
+      "name": "Nouveaux Héros",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/narratif-immersif-inities/andor-nouveaux-heros-extension-3246"
+      ],
+      "notes": "Jusqu'à 6 joueurs."
+    },
+    {
+      "name": "Le Dernier Espoir",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/narratif-immersif-inities/andor-le-dernier-espoir-extension-479"
+      ]
+    },
+    {
+      "name": "Les Légendes Oubliées : Esprits ancestraux",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/narratif-immersif-inities/andor-les-legendes-oubliees-esprits-ancestraux-extension-2596"
+      ]
+    },
+    {
+      "name": "La Légende de Gardétoile",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/narratif-immersif-inities/andor-la-legende-de-gardetoile-extension-3247"
+      ]
+    }
+  ],
+  "rulesSummary": "Aventure **coopérative et narrative** : un groupe de héros défend le royaume d'Andor à travers des **légendes** (scénarios) racontées par des cartes. As d'Or et Kennerspiel 2013.\n\n- Chaque héros (guerrier, archère, nain, magicien) a ses forces et ses pouvoirs.\n- Le **temps** est la ressource clé : se déplacer ou combattre coûte des heures dans une journée limitée.\n- Des **créatures** avancent vers le château ; trop d'entre elles y entrent = défaite.\n- Le **narrateur** avance sur la piste de légende et déclenche de nouveaux événements ; il faut remplir les objectifs avant qu'il n'atteigne la lettre finale.\n\nLa légende 1 sert de tutoriel interactif, idéale pour découvrir.",
+  "setup": "- Plateau du royaume, choisir une légende (commencer par la 1, tutoriel).\n- Chaque joueur prend un héros : plateau, figurine, cube de force et de volonté, marqueur de temps sur l'aube.\n- Placer créatures, brumes, puits, marqueurs indiqués par les cartes Légende.\n- Boucliers du château selon le nombre de héros.\n- Narrateur sur la lettre A de la piste de légende.",
+  "turnStructure": "À son tour, un héros fait **une action** (ou passe) :\n\n1. **Se déplacer** : 1 heure par case ; révéler les brumes traversées.\n2. **Combattre** une créature (seul ou à plusieurs) : chaque round coûte 1 heure ; lancer ses dés selon sa volonté, garder le meilleur (+ force) ; comparer à la créature, la différence fait perdre de la volonté.\n3. **Passer**, ou **finir sa journée** (aube suivante).\n\n- Une journée = **7 heures** ; 3 heures supplémentaires possibles en payant de la volonté.\n- Actions gratuites : échanger, utiliser des objets, acheter chez le marchand.\n\n**Lever du soleil** (quand tous ont fini leur journée) : événement, les créatures avancent vers le château, les puits se remplissent, le narrateur avance.",
+  "endCondition": "**Victoire** : la tâche de la légende est accomplie quand le narrateur atteint la lettre finale (souvent N) et que le château tient.\n**Défaite** : trop de créatures entrées au château (plus de boucliers) ou objectif non rempli à temps.",
+  "tips": "- Le temps est plus précieux que l'or : planifiez les trajets ensemble.\n- Ne tuez pas toutes les créatures : chaque victoire fait **avancer le narrateur**.\n- Combattez à plusieurs : les dés s'additionnent efficacement.\n- Visitez les **puits** pour récupérer de la volonté.\n- On oublie souvent : les créatures qui arrivent sur une case occupée sautent à la case suivante sur la flèche.",
+  "variants": "- Légendes bonus gratuites sur le site de l'éditeur (dont des légendes **solo**).\n- Extensions VF : *Nouveaux Héros* (5–6 joueurs), *Le Dernier Espoir*, *Esprits ancestraux*, *La Légende de Gardétoile*.",
+  "sources": [
+    "https://www.ludum.fr/narratif-immersif-inities/andor-214",
+    "https://www.play-in.com/fr/produit/201579/andor",
+    "https://www.ludum.fr/10136-gamme-andor-le-jeu",
+    "https://franco.wiki/fr/Andor_(jeu).html",
+    "https://www.ludum.fr/narratif-immersif-inities/andor-nouveaux-heros-extension-3246"
+  ]
+}

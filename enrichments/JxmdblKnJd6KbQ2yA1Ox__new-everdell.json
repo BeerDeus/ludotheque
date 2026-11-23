@@ -1,0 +1,69 @@
+{
+  "name": "Everdell",
+  "status": "watch",
+  "bggId": 199792,
+  "yearPublished": 2018,
+  "playersMin": 1,
+  "playersMax": 4,
+  "durationMin": 80,
+  "ageMin": 10,
+  "complexity": 2.5,
+  "level": "initie",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.ludum.fr/jeux-de-strategie-inities/everdell-1000",
+    "https://www.play-in.com/fr/produit/291491/everdell"
+  ],
+  "expansionsAdd": [
+    {
+      "name": "Pearlbrook",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-inities/everdell-pearlbrook-extension-1578"
+      ],
+      "notes": "Rivière, perles, ambassadeur grenouille."
+    },
+    {
+      "name": "Spirecrest",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-inities/everdell-spirecrest-extension-1761",
+        "https://www.play-in.com/fr/produit/391010/everdell-extension-spirecrest"
+      ],
+      "notes": "Expéditions dans les montagnes, grands critters."
+    },
+    {
+      "name": "Bellfaire",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.philibertnet.com/en/matagot/99490-everdell-extension-bellfaire-3760146642737.html"
+      ],
+      "notes": "Jusqu'à 6 joueurs, modules combinables."
+    },
+    {
+      "name": "Mistwood",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/jeux-de-strategie-inities/everdell-mistwood-extension-1764"
+      ],
+      "notes": "Forêt brumeuse, adversaires automatisés."
+    }
+  ],
+  "rulesSummary": "Dans la vallée d'Everdell, chaque joueur développe une **ville de petits animaux** au fil des saisons. **Placement d'ouvriers + construction de tableau** (jusqu'à 15 cartes).\n\n- 4 ressources : **brindilles, résine, cailloux, baies**.\n- Cartes **Construction** (bâtiments) et **Créatures** ; une construction permet souvent de poser gratuitement la créature associée.\n- Cartes vertes = production (relancées au printemps et en automne), bleues = gouvernance, rouges = destinations, violettes = prospérité (points en fin de partie), beiges = voyageurs.\n- **Événements** et **Voyages** donnent des points supplémentaires.\n\nOn joue jusqu'à la fin de l'automne : le plus de points gagne.",
+  "setup": "- Plateau, Arbre Éternel (avec les ouvriers supplémentaires des saisons), ressources en réserve.\n- Prairie : 8 cartes face visible au centre ; 3 ou 4 lieux de forêt selon le nombre de joueurs.\n- 4 événements basiques + 4 événements spéciaux au hasard.\n- Chaque joueur : 2 ouvriers ; cartes de départ 5/6/7/8 selon l'ordre du tour.",
+  "turnStructure": "À son tour, **une seule action** :\n\n1. **Placer un ouvrier** sur un lieu (base, forêt, destination, événement) → ressources, cartes ou points.\n2. **Jouer une carte** de sa main ou de la Prairie, en payant son coût en ressources (ou gratuitement via la construction liée / l'occupation).\n3. **Préparer la saison** (quand tous vos ouvriers sont posés) : récupérer ses ouvriers, en gagner de nouveaux et l'effet de saison :\n   - **printemps** : production des cartes vertes ;\n   - **été** : prendre 2 cartes de la Prairie ;\n   - **automne** : production à nouveau.\n\nChacun avance à son rythme : les joueurs ne sont pas forcément dans la même saison.",
+  "endCondition": "Un joueur qui ne peut ou ne veut plus agir après l'automne **passe** ; la partie se termine quand tous ont passé. Décompte : PV des cartes, jetons PV, bonus des cartes violettes, voyages et événements. Égalité → plus d'événements réalisés, puis plus de ressources restantes.",
+  "tips": "- Les **cartes vertes** tôt dans la partie font décoller l'économie.\n- Pensez aux **paires construction/créature** : poser gratuitement est énorme.\n- La limite de **15 cartes** arrive vite : gardez de la place pour les cartes violettes de fin.\n- Surveillez les événements spéciaux et réservez des cartes pour les accomplir.\n- On oublie souvent la récupération des ouvriers et l'effet de saison dans **Préparer la saison**.",
+  "variants": "- **Solo** contre Rugwort le rat (inclus).\n- Extensions VF : *Pearlbrook*, *Spirecrest*, *Bellfaire* (jusqu'à 6 joueurs), *Mistwood*.",
+  "sources": [
+    "https://www.ludum.fr/jeux-de-strategie-inities/everdell-1000",
+    "https://www.play-in.com/fr/produit/291491/everdell",
+    "https://www.ludum.fr/8381-gamme-everdell",
+    "https://www.ludum.fr/blog/nos-selections/everdell-les-11-jeux-de-societe-et-extensions",
+    "https://www.ludum.fr/jeux-de-strategie-inities/everdell-pearlbrook-extension-1578"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "name": "Dune : Imperium",
+  "status": "watch",
+  "bggId": 316554,
+  "yearPublished": 2020,
+  "playersMin": 1,
+  "playersMax": 4,
+  "durationMin": 120,
+  "ageMin": 14,
+  "complexity": 3,
+  "level": "expert",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.ludum.fr/gestion-optimisation/dune-imperium-1559",
+    "https://www.play-in.com/fr/produit/344484/dune-imperium"
+  ],
+  "expansionsAdd": [
+    {
+      "name": "L'Avènement d'Ix",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/gestion-optimisation/dune-imperium-l-avenement-d-ix-extension-2513"
+      ],
+      "notes": "CHOAM, frégates, technologies, plateau Ix."
+    },
+    {
+      "name": "Immortalité",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.play-in.com/fr/produit/460836/dune-imperium-extension-immortalite"
+      ],
+      "notes": "Tleilaxu, recherche et greffes."
+    },
+    {
+      "name": "Lignées",
+      "owned": false,
+      "kind": "expansion",
+      "coverPages": [
+        "https://www.ludum.fr/gestion-optimisation/dune-imperium-lignees-extension-10859"
+      ],
+      "notes": "Compatible Dune : Imperium et Insurrection."
+    },
+    {
+      "name": "Dune : Imperium – Insurrection",
+      "owned": false,
+      "kind": "standalone",
+      "coverPages": [
+        "https://www.ludum.fr/gestion-optimisation/dune-imperium-insurrection-6883",
+        "https://www.play-in.com/fr/produit/531592/dune-imperium-insurrection"
+      ],
+      "notes": "Boîte autonome, espions, mode 6 joueurs."
+    }
+  ],
+  "rulesSummary": "Dans l'univers de *Dune*, vous dirigez une grande maison qui cherche à dominer Arrakis. Mélange de **deck-building** et de **placement d'ouvriers**, avec un combat à chaque manche.\n\n- Une carte jouée envoie un **agent** sur un espace du plateau dont le symbole correspond (Arrakis, Landsraad, factions…).\n- 4 **factions** (Empereur, Guilde spatiale, Bene Gesserit, Fremen) : monter leur influence rapporte des PV et une **alliance**.\n- Ressources : **solaris, épice, eau**, et des **troupes** à envoyer au **conflit** de la manche.\n- Les cartes **Intrigue** (secrètes) apportent coups bas et retournements.\n\nPremier à **10 PV** déclenche la fin de partie à la fin de la manche.",
+  "setup": "- Plateau, pistes d'influence des 4 factions, marqueurs de PV sur 1.\n- Chaque joueur choisit un **dirigeant** (capacités uniques), prend 10 cartes de départ, ses agents, cubes de troupes, ressources de départ (eau 1).\n- Paquet Conflit : 1 carte niveau I, 5 niveau II, 4 niveau III (I en dessus).\n- Rangée Imperium : 5 cartes ; réserves de cartes Ornithoptère/Épice/Guilde.\n- Paquet Intrigue mélangé ; piocher 5 cartes.",
+  "turnStructure": "1. **Début de manche** : révéler la carte Conflit, piocher 5 cartes.\n2. **Tours des joueurs** : à son tour, soit\n   - **tour d'agent** : jouer une carte pour envoyer un agent sur un espace libre au symbole correspondant (coût éventuel), appliquer effets de carte + espace, déployer des troupes au conflit si espace de combat ;\n   - **tour de révélation** (une fois, quand on n'a plus d'agents ou qu'on le souhaite) : révéler les cartes restantes → **persuasion** (acheter des cartes) et **épées** (force au combat).\n3. **Combat** : force = troupes ×2 + épées (+ intrigues de combat) ; récompenses selon le rang.\n4. **Fabricants** : ajouter de l'épice sur les espaces de désert non visités.\n5. **Rappel** des agents, défausse ; passage du premier joueur.",
+  "endCondition": "Fin à la fin d'une manche si un joueur a **10 PV** ou si le paquet Conflit est épuisé. Cartes Intrigue de fin de partie jouées, puis le plus de PV gagne. Égalités : épice, puis solaris, puis eau, puis troupes en garnison.",
+  "tips": "- Ne combattez pas toutes les manches : choisissez les conflits qui rapportent des PV.\n- L'**épice** est le carburant de tout : visez une source régulière.\n- Un tour de révélation tardif garde des options, mais des cartes à persuasion forte font grossir le deck plus vite.\n- Les alliances se perdent si un rival vous dépasse sur la piste : surveillez-les.\n- On oublie souvent d'envoyer les troupes de la garnison au conflit **depuis un espace de combat** seulement.",
+  "variants": "- **Solo / 2 joueurs** avec rivaux automatisés (cartes House Hagal).\n- Extensions VF : *L'Avènement d'Ix*, *Immortalité*, *Lignées*.\n- Boîte autonome : *Dune : Imperium – Insurrection* (espions, contrats, 6 joueurs en équipes).",
+  "sources": [
+    "https://www.ludum.fr/gestion-optimisation/dune-imperium-1559",
+    "https://www.play-in.com/fr/produit/344484/dune-imperium",
+    "https://www.ludum.fr/8421-gamme-dune-imperium",
+    "https://www.ludum.fr/gestion-optimisation/dune-imperium-insurrection-6883",
+    "https://www.play-in.com/fr/produit/460836/dune-imperium-extension-immortalite"
+  ]
+}
