@@ -12,7 +12,7 @@ on:
         type: choice
         required: true
         default: export-pending
-        options: [export-pending, export-all, squarify, covers, covers-all, autofill, autofill-all, rules-deploy, access-open, access-close, access-allow, access-show, seed]
+        options: [export-pending, export-all, sheets, squarify, covers, covers-all, autofill, autofill-all, rules-deploy, access-open, access-close, access-allow, access-show, seed]
       email:
         description: Email (pour access-allow)
         required: false
@@ -61,6 +61,7 @@ jobs:
             export-pending) node scripts/games.mjs export --pending ;;
             export-all) node scripts/games.mjs export ;;
             squarify) node scripts/games.mjs squarify ;;
+            sheets) node scripts/games.mjs sheets "$FAMILY" ;;
             covers) node scripts/games.mjs covers ;;
             covers-all) node scripts/games.mjs covers --all ;;
             autofill) node scripts/games.mjs autofill ;;

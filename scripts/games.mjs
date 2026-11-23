@@ -5,6 +5,7 @@
 import { randomUUID } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
+import sharp from 'sharp';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { applicationDefault, cert, initializeApp } from 'firebase-admin/app';
@@ -382,6 +383,49 @@ const commands = {
     if (flags.applied) writeFileSync(flags.applied, applied.join('\n') + (applied.length ? '\n' : ''));
     console.log(`${applied.length} appliqué(s), ${failed} échec(s)`);
     if (failed) process.exitCode = 1;
+  },
+
+  /** Planches contact (jaquette + boîtes/extensions avec leur nom), en base64 dans les logs, pour vérification visuelle */
+  async sheets([filter]) {
+    const fromData = (u) => Buffer.from(u.split(',')[1], 'base64');
+    const isData = (u) => typeof u === 'string' && u.startsWith('data:image/');
+    const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const T = 200;
+    const LABEL = 46;
+    const COLS = 5;
+    const snaps = (await db.collectionGroup('games').get()).docs.filter((s) => !filter || s.data().name.toLowerCase().includes(filter.toLowerCase()));
+    for (const s of snaps.sort((a, b) => a.data().name.localeCompare(b.data().name))) {
+      const g = s.data();
+      const items = [{ label: `★ ${g.name}`, img: isData(g.coverUrl) ? fromData(g.coverUrl) : null }];
+      for (const e of g.expansions ?? []) {
+        const doc = await s.ref.collection('images').doc(e.id).get();
+        const full = doc.exists ? doc.data().dataUrl : null;
+        items.push({ label: `${e.kind === 'standalone' ? '📦' : '🧩'} ${e.name}`, img: isData(full) ? fromData(full) : isData(e.thumb) ? fromData(e.thumb) : null });
+      }
+      const rows = Math.ceil(items.length / COLS);
+      const W = COLS * T;
+      const H = rows * (T + LABEL);
+      const composites = [];
+      for (const [i, it] of items.entries()) {
+        const x = (i % COLS) * T;
+        const y = Math.floor(i / COLS) * (T + LABEL);
+        const tile = it.img
+          ? await sharp(it.img).resize(T - 8, T - 8, { fit: 'contain', background: '#ffffff' }).png().toBuffer()
+          : await sharp({ create: { width: T - 8, height: T - 8, channels: 3, background: '#e5e7eb' } }).png().toBuffer();
+        composites.push({ input: tile, left: x + 4, top: y + 4 });
+        const words = esc(`${i}. ${it.label}`).match(/.{1,30}(\s|$)/g) ?? [''];
+        const svg = `<svg width="${T}" height="${LABEL}" xmlns="http://www.w3.org/2000/svg"><style>text{font:12px sans-serif;fill:#111}</style>${words
+          .slice(0, 3)
+          .map((w, j) => `<text x="4" y="${14 + j * 14}">${w.trim()}</text>`)
+          .join('')}</svg>`;
+        composites.push({ input: Buffer.from(svg), left: x, top: y + T });
+      }
+      const jpg = await sharp({ create: { width: W, height: H, channels: 3, background: '#ffffff' } }).composite(composites).jpeg({ quality: 60 }).toBuffer();
+      const b64 = jpg.toString('base64');
+      console.log(`LUDO_SHEET_BEGIN ${s.id}`);
+      for (let i = 0; i < b64.length; i += 4000) console.log(b64.slice(i, i + 4000));
+      console.log('LUDO_SHEET_END');
+    }
   },
 
   /** Re-encode toutes les images stockées en carré fond blanc (jaquettes, grands formats, miniatures) */
