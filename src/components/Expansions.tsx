@@ -7,9 +7,9 @@ import Icon from './Icon';
 const newId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
 const kindOf = (e: Expansion): ExpansionKind => e.kind ?? 'expansion';
 
-const GROUPS: { kind: ExpansionKind; title: string; hint: string }[] = [
-  { kind: 'standalone', title: 'Boîtes autonomes', hint: 'jouables seules, combinables entre elles' },
-  { kind: 'expansion', title: 'Extensions', hint: 'nécessitent une boîte autonome' },
+const GROUPS: { kind: ExpansionKind; title: string; hint: string; icon: string; box: string }[] = [
+  { kind: 'standalone', title: 'Boîtes autonomes', hint: 'jouables seules', icon: '📦', box: 'border-indigo-500/25 bg-indigo-500/5' },
+  { kind: 'expansion', title: 'Extensions', hint: 'nécessitent le jeu de base', icon: '🧩', box: 'border-slate-500/20 bg-slate-500/5' },
 ];
 
 function Row({ e, onUpdate, onRemove }: { e: Expansion; onUpdate: (p: Partial<Expansion>) => void; onRemove: () => void }) {
@@ -96,14 +96,20 @@ export default function Expansions({ game, onChange }: { game: Game; onChange: (
           </span>
         )}
       </summary>
-      <div className="flex flex-col gap-3 border-t border-slate-200 px-4 py-3 dark:border-slate-800">
+      <div className="flex flex-col gap-4 border-t border-slate-200 px-4 py-4 dark:border-slate-800">
         {GROUPS.map((g) => {
           const items = sorted(g.kind);
           if (!items.length) return null;
+          const own = items.filter((e) => e.owned).length;
           return (
-            <section key={g.kind}>
-              <h4 className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-                {g.title} <span className="font-normal normal-case">· {g.hint}</span>
+            <section key={g.kind} className={cx('rounded-2xl border px-3 pt-2.5 pb-1', g.box)}>
+              <h4 className="flex items-baseline justify-between gap-2">
+                <span className="text-sm font-semibold">
+                  {g.icon} {g.title} <span className="text-xs font-normal text-slate-500">· {g.hint}</span>
+                </span>
+                <span className="shrink-0 text-xs text-slate-500">
+                  {own}/{items.length}
+                </span>
               </h4>
               <ul className="flex flex-col divide-y divide-slate-200 dark:divide-slate-800">
                 {items.map((e) => (

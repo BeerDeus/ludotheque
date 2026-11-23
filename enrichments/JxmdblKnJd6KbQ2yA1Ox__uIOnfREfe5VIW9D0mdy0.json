@@ -1,0 +1,20 @@
+{
+  "expansionsAdd": [
+    {
+      "name": "Leaders",
+      "owned": false
+    },
+    {
+      "name": "Cities",
+      "owned": false
+    },
+    {
+      "name": "Armada",
+      "owned": false
+    },
+    {
+      "name": "Édifice",
+      "owned": false
+    }
+  ]
+}

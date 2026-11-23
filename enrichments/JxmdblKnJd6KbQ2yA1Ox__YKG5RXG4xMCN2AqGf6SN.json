@@ -1,0 +1,25 @@
+{
+  "expansionsAdd": [
+    {
+      "name": "Hidden Signs",
+      "owned": false
+    },
+    {
+      "name": "Secrets & Lies",
+      "owned": false,
+      "notes": "cartes Histoire qui remplacent les objets"
+    },
+    {
+      "name": "Mysterium Park",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "version courte, jeu à part"
+    },
+    {
+      "name": "Mysterium Kids",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "version enfants, jeu à part"
+    }
+  ]
+}

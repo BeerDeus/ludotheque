@@ -1,0 +1,22 @@
+{
+  "expansionsAdd": [
+    {
+      "name": "Mer de Sable (Sea of Sand)",
+      "owned": false
+    },
+    {
+      "name": "Liés par le Destin (Bound by Fate)",
+      "owned": false,
+      "notes": "mode 2 contre 2"
+    },
+    {
+      "name": "Sorcebois (Witchwood)",
+      "owned": false
+    },
+    {
+      "name": "Sorcebois : Tout ce qui brille",
+      "owned": false,
+      "notes": "extension de Sorcebois"
+    }
+  ]
+}

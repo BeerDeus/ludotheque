@@ -1,0 +1,14 @@
+{
+  "expansionsAdd": [
+    {
+      "name": "Panthéon",
+      "owned": false,
+      "notes": "divinités"
+    },
+    {
+      "name": "Agora",
+      "owned": false,
+      "notes": "sénat et influence"
+    }
+  ]
+}

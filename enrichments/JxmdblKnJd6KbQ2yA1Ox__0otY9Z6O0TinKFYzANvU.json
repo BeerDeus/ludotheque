@@ -1,0 +1,51 @@
+{
+  "expansionsAdd": [
+    {
+      "name": "Terraforming Mars : Expédition Arès",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "jeu de cartes autonome"
+    },
+    {
+      "name": "Terraforming Mars : Le Jeu de Dés",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "version dés autonome"
+    },
+    {
+      "name": "Prélude",
+      "owned": false
+    },
+    {
+      "name": "Prélude 2",
+      "owned": false
+    },
+    {
+      "name": "Hellas & Elysium",
+      "owned": false,
+      "notes": "2 plateaux"
+    },
+    {
+      "name": "Amazonis & Vastitas",
+      "owned": false,
+      "notes": "2 plateaux"
+    },
+    {
+      "name": "Utopia & Cimmeria",
+      "owned": false,
+      "notes": "2 plateaux"
+    },
+    {
+      "name": "Venus Next",
+      "owned": false
+    },
+    {
+      "name": "Colonies",
+      "owned": false
+    },
+    {
+      "name": "Turmoil",
+      "owned": false
+    }
+  ]
+}

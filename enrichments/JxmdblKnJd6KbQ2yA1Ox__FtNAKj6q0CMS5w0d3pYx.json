@@ -1,0 +1,79 @@
+{
+  "expansionsAdd": [
+    {
+      "name": "Small World Underground",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "combinable avec Small World"
+    },
+    {
+      "name": "Small World of Warcraft",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "version autonome"
+    },
+    {
+      "name": "Maauuudits !",
+      "owned": false
+    },
+    {
+      "name": "Honneur aux dames",
+      "owned": false
+    },
+    {
+      "name": "Même pas peur !",
+      "owned": false
+    },
+    {
+      "name": "Dans la toile",
+      "owned": false
+    },
+    {
+      "name": "Royal Bonus",
+      "owned": false
+    },
+    {
+      "name": "Les Chefs",
+      "owned": false
+    },
+    {
+      "name": "L'Île du Nécromant",
+      "owned": false
+    },
+    {
+      "name": "Contes et Légendes",
+      "owned": false
+    },
+    {
+      "name": "Tunnels",
+      "owned": false
+    },
+    {
+      "name": "Realms",
+      "owned": false,
+      "notes": "plateaux modulables"
+    },
+    {
+      "name": "Plateau 6 joueurs",
+      "owned": false
+    },
+    {
+      "name": "Sky Island",
+      "owned": false
+    },
+    {
+      "name": "River World",
+      "owned": false
+    },
+    {
+      "name": "Power Pack 1",
+      "owned": false,
+      "notes": "regroupe Même pas peur ! + Dans la toile"
+    },
+    {
+      "name": "Power Pack 2",
+      "owned": false,
+      "notes": "regroupe Honneur aux dames + Maauuudits !"
+    }
+  ]
+}

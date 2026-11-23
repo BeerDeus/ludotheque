@@ -1,0 +1,21 @@
+{
+  "expansionsAdd": [
+    {
+      "name": "Gloomhaven",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "campagne séparée ; personnages compatibles"
+    },
+    {
+      "name": "Frosthaven",
+      "owned": false,
+      "kind": "standalone",
+      "notes": "suite, campagne séparée"
+    },
+    {
+      "name": "Set de vignettes amovibles",
+      "owned": false,
+      "notes": "accessoire : autocollants repositionnables"
+    }
+  ]
+}
