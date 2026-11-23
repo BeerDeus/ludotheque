@@ -221,8 +221,6 @@ export default function DetailPage() {
         />
         )}
 
-        {owned && <Plays plays={game.plays} onChange={(plays) => save({ plays })} />}
-
         <Expansions game={game} onChange={(expansions) => save({ expansions })} />
 
         <EditableMarkdown icon="edit" label="Notes" value={game.notes} onSave={(v) => save({ notes: v })} defaultOpen={Boolean(game.notes)} empty="Aucune note." />
@@ -241,6 +239,8 @@ export default function DetailPage() {
         {ENRICHED_SECTIONS.map((s, i) => (
           <EditableMarkdown key={s.key} icon={SECTION_ICON[s.key]} label={s.label} value={game[s.key]} defaultOpen={i === 0 && Boolean(game[s.key])} onSave={(v) => save({ [s.key]: v })} />
         ))}
+
+        {owned && <Plays plays={game.plays} onChange={(plays) => save({ plays })} />}
 
         {game.sources && game.sources.length > 0 && (
           <section className="card p-4 text-sm">
