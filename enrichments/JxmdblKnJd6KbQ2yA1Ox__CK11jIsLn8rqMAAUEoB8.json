@@ -1,0 +1,27 @@
+{
+  "bggId": 475901,
+  "yearPublished": 2026,
+  "playersMin": 3,
+  "playersMax": 6,
+  "durationMin": 20,
+  "ageMin": 10,
+  "complexity": 1.5,
+  "level": "familial",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/672666/longue-vie-au-roi",
+    "https://www.ludum.fr/jeux-de-strategie-inities/longue-vie-au-roi-14197"
+  ],
+  "rulesSummary": "**Jeu de cartes de bluff et de déduction** (Jordy Questeur, illustré par Crocotame – Grrre Games).\n\nChaque joueur tient en main son **royaume** : 7 cartes unité rangées secrètement dans l'ordre de son choix, dont son **Roi**.\n\n- On attaque un royaume voisin par l'une de ses deux **bordures** (noire à gauche, blanche à droite) en annonçant une **valeur** : si c'est juste, l'unité est éliminée et on peut continuer.\n- Chaque type d'unité a une valeur (1 à 5) et un **pouvoir** qu'on peut utiliser en la révélant.\n- Les échecs font monter la **Colère du peuple** : à 3 marqueurs, le peuple se soulève et élimine vos propres unités.\n- Perdre sa dernière **Tête couronnée** (Roi ou Princesse) = élimination.\n\nParties de 20 minutes, chaotiques et pleines de bluff.",
+  "setup": "- Tapis de jeu au centre, marqueurs Colère du peuple en réserve.\n- Choisir les unités de la partie (2 de valeur 1, 2 de valeur 2, 1 de valeur 3, Princesse ou Sorcière, Roi, Ménestrelle) et poser les cartes Référence correspondantes sur le tapis.\n- 1re partie conseillée : Bourreau, Nécromant, Voyante, Archère, Courtisane, Princesse, Roi, Ménestrelle.\n- Distribuer à chacun un Roi + des unités, puis chacun **range secrètement ses 7 cartes** (ordre fixe pour toute la partie, sauf effet).\n- **Annonce** : en commençant par le plus noble, chacun annonce le type d'unité qu'il possède en plus grand nombre (sans dire combien).",
+  "turnStructure": "1. **Activer une unité** (facultatif) : révéler une de ses cartes cachées et appliquer son pouvoir (voir cartes Référence) ; les autres cartes révélées redeviennent cachées. Une seule carte révélée à la fois.\n2. **Attaquer** (obligatoire) un royaume voisin :\n   - choisir la bordure **noire** ou **blanche** et annoncer une valeur (1 à 5) ;\n   - **réussite** : l'unité est éliminée (cimetière) ; on peut **poursuivre** sur la même bordure ou s'arrêter ;\n   - **échec** : l'attaque s'arrête ; si c'était une poursuite, prendre 1 marqueur Colère.\n   - Carte déjà révélée en bordure : attaque réussie automatiquement.\n3. **Le peuple se soulève ?** : à 3 marqueurs ou plus, les défausser par 3 et éliminer 1 de ses propres unités par groupe (Tête couronnée comprise).\n\nQuand une Tête couronnée meurt, tous les autres royaumes (sauf l'attaquant) prennent 1 marqueur Colère.",
+  "endCondition": "Un joueur est **éliminé** quand sa dernière Tête couronnée (Roi ou Princesse) tombe : toutes ses unités partent au cimetière et ses voisins deviennent voisins entre eux.\nLe **dernier royaume** debout gagne immédiatement.",
+  "tips": "- Mémorisez l'annonce de début de partie de chacun : c'est la meilleure info sur son royaume.\n- Placez votre Roi loin des bordures, mais méfiez-vous des unités qui déplacent ou révèlent les cartes.\n- Ne poursuivez pas une attaque sur un pur coup de chance : chaque échec en poursuite nourrit la Colère.\n- Révéler une unité donne une info à tous : choisissez le bon moment.\n- Les cartes Référence au centre rappellent les valeurs : les chiffres sont de la même couleur que les bordures.",
+  "variants": "- Composition des unités au choix (11 types) : configurations proposées pour parties « Colère du peuple » très présente ou plus agressives.\n- Unités optionnelles : Artificier et Barbare (avec leurs dés), Sorcière (à la place de la Princesse), Garde.",
+  "sources": [
+    "https://media.play-in.com/pdf/rules_games/6ab26e36303e82.92497311.pdf",
+    "https://www.play-in.com/fr/produit/672666/longue-vie-au-roi",
+    "https://www.espritjeu.com/longue-vie-au-roi.html",
+    "https://www.ludum.fr/jeux-de-strategie-inities/longue-vie-au-roi-14197"
+  ]
+}
