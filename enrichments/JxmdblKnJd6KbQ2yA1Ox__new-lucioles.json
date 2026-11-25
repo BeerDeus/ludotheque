@@ -1,0 +1,30 @@
+{
+  "name": "Lucioles",
+  "status": "watch",
+  "tags": ["2 joueurs", "campagne"],
+  "bggId": 472706,
+  "yearPublished": 2026,
+  "playersMin": 2,
+  "playersMax": 2,
+  "durationMin": 45,
+  "ageMin": 10,
+  "complexity": 2,
+  "level": "initie",
+  "mode": "coop",
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/677132/lucioles",
+    "https://www.ludum.fr/narratif-immersif-inities/lucioles-14194"
+  ],
+  "rulesSummary": "**Aventure narrative coopérative exclusivement à 2** (Johannes Goupy & Joachim Thôme, illustrations Maud Chalmel – Catch Up Games). Campagne de **8 chapitres** en 3 actes.\n\nNori et Tan, apprentis dresseurs de lucioles, sont séparés dans le monde de Millebois envahi par la **Pénombre** et doivent sauver l'Arbre-Cœur.\n\n- Chaque joueur explore **son propre plateau** sans savoir ce qu'il contient ; **le partenaire seul voit le plan** de ce plateau.\n- Poser une luciole sur une case → le partenaire annonce ce qu'il y a : nid (nouvelles lucioles) ou **scène** à lire dans son livret (histoire, choix, objets).\n- **Communication contrainte** : interdit d'indiquer une position ou une direction.\n- La Pénombre (5 cartes) progresse : si elle est entièrement dans la réserve, l'échec guette.\n\nNouvelles règles débloquées au fil des chapitres (lucioles de couleurs, familiers, clés…).",
+  "setup": "- S'asseoir face à face, choisir qui joue Nori (plateau et livret verts) et Tan (orange).\n- Prendre le **plan du partenaire** pour le chapitre et le glisser dans le socle, dos à dos, sans regarder le sien.\n- Placer le pion personnage du partenaire sur son plateau, à l'endroit indiqué par le plan.\n- Obstacles du chapitre, paquet Aventure, 5 cartes Pénombre et jetons Indice à côté.\n- Mettre en réserve commune les lucioles de départ du chapitre (tirées du sac).\n- Ouvrir le livret d'Aventure à la page du chapitre.",
+  "turnStructure": "Les joueurs alternent ; à son tour, une option :\n\n1. **Placer une luciole** (de la réserve commune) sur une case libre adjacente à son personnage ou à une luciole déjà posée, jamais derrière un obstacle.\n   - Le partenaire pose les obstacles autour et annonce le contenu : **nid** (piocher des lucioles) ou **scène** (numéro à lire dans son livret Personnage).\n   - Fin de scène : décisions, drapeau à poser, Pénombre à ajouter/soigner, carte Aventure à prendre.\n   - Puis appliquer éventuellement le pouvoir de la luciole utilisée.\n2. **Rejouer une scène** marquée d'un drapeau (décision laissée en suspens).\n3. **Donner la priorité** : laisser le partenaire jouer un tour supplémentaire.\n\nPlus de lucioles ? Ajouter 1 Pénombre et en piocher 4 au choix.",
+  "endCondition": "- **Chapitre réussi** quand l'objectif fixé en début de chapitre est atteint ; suivre la section « Fin de partie » et ranger le matériel dans les casiers (la progression est conservée).\n- **Échec** si les **5 cartes Pénombre** sont dans la réserve commune : lire la page indiquée du livret d'Aventure.\n- La campagne se termine au 8e chapitre ; bonus en fin d'actes 1 et 2 si aucune Pénombre n'est en réserve.",
+  "tips": "- Parlez des icônes que vous voyez sur le plan (« il y a un nid quelque part ») sans jamais dire où.\n- Montrez-vous les scènes lues : elles contiennent souvent la clé de l'autre plateau.\n- Économisez les lucioles : en manquer coûte une Pénombre.\n- « Donner la priorité » est précieux quand le partenaire a une piste chaude.\n- Ne lisez jamais en avance les chapitres, plans ou cartes : tout le plaisir est dans la découverte.",
+  "variants": "Aucune variante officielle notable (jeu conçu exclusivement pour 2, campagne unique en 8 chapitres).",
+  "sources": [
+    "https://media.play-in.com/pdf/rules_games/6ad22272847607.20873152.pdf",
+    "https://www.play-in.com/fr/produit/677132/lucioles",
+    "https://www.ludum.fr/narratif-immersif-inities/lucioles-14194",
+    "https://www.espritjeu.com/lucioles.html"
+  ]
+}
