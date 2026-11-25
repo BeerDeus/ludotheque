@@ -104,7 +104,7 @@ node scripts/games.mjs autofill [ref] [--all] [--force] # API XML BGG (BGG_API_T
 
 ### Autofill BGG (automatique)
 
-Workflow `BGG autofill` (toutes les heures + après chaque enrichissement) : pour chaque jeu nouveau, renommé
+Workflow `BGG autofill` (toutes les 5 min + après chaque enrichissement) : pour chaque jeu nouveau, renommé
 ou dont le `bggId` a changé, cherche le jeu sur BGG (noms alternatifs inclus, ex. titres FR) et remplit
 `coverUrl`, `thumbUrl`, `ageMin`, `playersMin/Max`, `durationMin`, `yearPublished`, `complexity`, `bggRating`,
 `bggExpansions` — sans écraser une saisie existante. Ambigu → `autofillNote` listant les candidats ; on tranche

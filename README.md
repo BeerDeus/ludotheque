@@ -86,7 +86,8 @@ Secrets du repo (Settings > Secrets and variables > Actions) :
 Workflows :
 - *Firebase admin* (manuel) : `export-pending` / `export-all` (liste pour Claude), `autofill` / `autofill-all` / `autofill-reset` (vide puis re-remplit depuis BGG),
   `rules-deploy` (aussi auto à chaque push modifiant `firestore.rules`), `access-open` / `access-close` / `access-allow` (+ email) / `access-show`, `seed`.
-- *BGG autofill* (toutes les heures) : complète les jeux nouveaux/renommés depuis BGG.
+- *BGG autofill* (toutes les 5 min, souvent 5–15 min en pratique) : complète les jeux nouveaux/renommés depuis BGG ; aucune requête BGG s’il n’y a rien de nouveau.
+  ⚠ Si le repo passe en privé, revenir à un cron horaire (minutes Actions facturées au-delà de 2000/mois).
 - *Appliquer les enrichissements* (push dans `enrichments/`) : écrit les enrichissements rédigés par Claude.
 
 ⚠ Repo public = logs publics (noms des jeux visibles). Recommandé : passer le repo en privé
