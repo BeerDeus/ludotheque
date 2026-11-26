@@ -1,0 +1,25 @@
+{
+  "yearPublished": 2025,
+  "complexity": 1.5,
+  "level": "familial",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/608833/emblemes",
+    "https://www.ludum.fr/jeux-de-strategie-en-famille/emblemes-9591"
+  ],
+  "expansionsAdd": [
+    { "name": "L'Ombre de la Reine", "owned": false, "kind": "expansion", "coverPages": ["https://www.play-in.com/fr/produit/685773/emblemes-extension-l-ombre-de-la-reine"] }
+  ],
+  "rulesSummary": "**Jeu de cartes de bluff, de placement et de majorité** (Adrien Bonnard & Romaric Galonnier, illustré par Janice Perreux – Savana), dans la lignée de *Courtisans* et *Oriflamme*.\n\nLe roi est mort sans héritier : chaque famille place ses membres au **Château**, au **Village** et au **Port** pour s'emparer du pouvoir… et de l'or.\n\n- Chaque joueur a la même famille de **15 personnages** (valeurs 1 à 15), chacun avec un **pouvoir** (immédiat ou de fin de manche).\n- Tout le monde choisit **en secret** une carte, puis on les révèle **à tour de rôle** et on les place dans le lieu de son choix.\n- Dans chaque lieu, les cartes sont rangées par valeur : les premières places rapportent de l'or en fin de manche… sauf si un Traître inverse le classement !\n\n3 manches, 20 minutes, beaucoup de coups bas dans la bonne humeur.",
+  "setup": "- Choisir un set de lieux (A pour la 1re partie) et poser Château, Village et Port en colonne, sur la face correspondant au nombre de joueurs.\n- Chaque joueur prend les 15 cartes de sa famille, les mélange en pioche et en tire **6**.\n- Chacun reçoit **3 pièces d'or** (visibles ; variante : cachées).\n- Le jeton Premier joueur va au joueur le plus rusé.",
+  "turnStructure": "**3 manches** de 4 tours (à 3 joueurs) ou 3 tours (à 4–5).\n\nChaque tour :\n1. Tous choisissent **secrètement** une carte et la posent face cachée.\n2. À partir du premier joueur, chacun **révèle** sa carte et la place dans le lieu de son choix, en respectant l'**ordre décroissant** des valeurs (égalité : de part et d'autre).\n3. Appliquer les effets **immédiats** (♦) : Garde déplace, Voleuse vole 2 or, Guerrière défausse, Stratège impose un lieu, Courtisane échange une carte choisie…\n4. Le jeton Premier joueur passe à gauche.\n\n**Fin de manche**, lieu par lieu :\n- résoudre les effets de fin de manche (☐) du plus fort au plus faible (Princesse, Sorcière, Traître, Marchand, Espionne, Matelot) ;\n- distribuer l'or des 1re/2e/3e places indiquées sur le lieu ;\n- défausser les cartes récompensées, les autres restent ; repiocher à 6.",
+  "endCondition": "Après la **3e manche**, le joueur le plus riche en or gagne et monte sur le trône.\nÉgalité : le détenteur du jeton Premier joueur, sinon le joueur à égalité le plus proche de lui dans le sens horaire.",
+  "tips": "- Jouer tard dans le tour est un avantage : on voit où les autres se sont placés.\n- Les cartes non récompensées restent : une petite carte placée tôt peut monter au classement à la manche suivante.\n- Le Traître (7) retourne un lieu entier : gardez-le pour le lieu où vos adversaires ont mis leurs grosses cartes.\n- Le Roi (15) est défaussé si une Voleuse est déjà là : vérifiez avant de le poser.\n- Une ou deux parties suffisent pour connaître les 15 pouvoirs ; gardez l'aide de jeu sous les yeux.",
+  "variants": "- Sets de lieux **A, B, C** aux récompenses différentes.\n- Or caché (variante).\n- Extension VF *L'Ombre de la Reine*.\n- Pas de mode 2 joueurs ni solo.",
+  "sources": [
+    "https://www.regles-du-jeu.net/regles-demblemes/",
+    "https://gusandco.net/2025/11/29/emblemes-critique-avis/",
+    "https://www.ludum.fr/jeux-de-strategie-en-famille/emblemes-9591",
+    "https://www.play-in.com/fr/produit/608833/emblemes"
+  ]
+}

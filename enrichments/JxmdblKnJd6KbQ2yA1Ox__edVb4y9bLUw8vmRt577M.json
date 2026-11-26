@@ -1,0 +1,27 @@
+{
+  "bggId": 414317,
+  "yearPublished": 2024,
+  "playersMin": 1,
+  "playersMax": 4,
+  "durationMin": 30,
+  "ageMin": 10,
+  "complexity": 2,
+  "level": "familial",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/532246/harmonies",
+    "https://www.ludum.fr/jeux-de-societe-famille/harmonies-6951"
+  ],
+  "rulesSummary": "**Jeu de placement de jetons et de motifs** (Johan Benvenuto, illustré par Maëva Da Silva – Libellud).\n\nChacun construit son **paysage** sur un plateau hexagonal en posant des jetons colorés : eau, montagnes, arbres, champs, bâtiments. Les jetons s'empilent pour former arbres, montagnes et bâtiments.\n\n- Les **cartes Animal** demandent des motifs précis : une fois le motif réalisé, l'animal s'installe et rapporte des points.\n- On marque aussi pour chaque type de paysage (rivière ou îles, champs, montagnes adjacentes, arbres, bâtiments entourés).\n- Un seul choix obligatoire par tour : prendre un lot de 3 jetons et les poser.\n\nCalme, joli, rapide à expliquer, avec de vrais choix d'optimisation.",
+  "setup": "- Plateau central sur la face 2–4 joueurs ; tous les jetons dans le sac ; **3 jetons** tirés sur chacun des 5 emplacements.\n- 5 cartes Animal face visible à côté, pioche et cubes Animal à portée.\n- Chaque joueur prend un plateau personnel (tous sur la même face : **A** conseillée au début) et une aide de jeu.\n- Premières parties : sans les cartes Esprit de la nature.\n- Premier joueur : le dernier à avoir vu un magnifique paysage.",
+  "turnStructure": "Dans l'ordre de son choix :\n\n1. **Obligatoire – Prendre et placer des jetons** : prendre les 3 jetons d'un emplacement central et les poser sur son plateau.\n   - sur une case vide, ou empilés pour former **arbres** (vert sur 0–2 marron), **montagnes** (1–3 gris), **bâtiments** (rouge sur marron, gris ou rouge) ;\n   - jamais sous un jeton ni sur un cube Animal.\n2. **Optionnel – Prendre 1 carte Animal** (une fois par tour, 4 cartes non complétées max) et y poser ses cubes.\n3. **Optionnel – Poser des cubes Animal** autant de fois que possible : si le motif de la carte est réalisé (orientation libre), poser le cube le plus bas de la carte sur la case indiquée.\n4. Fin de tour : compléter le plateau central (3 jetons) et les cartes Animal visibles.",
+  "endCondition": "Fin quand le **sac est vide** au moment de compléter le centre, ou quand un joueur n'a plus que **2 cases libres** ou moins ; on termine le tour de table.\n**Décompte** : arbres (selon hauteur), montagnes (adjacentes à une autre), champs (5 pts par champ ≥ 2), bâtiments (5 pts si entourés de 3 couleurs), rivière la plus longue (face A) ou îles (face B), + valeur de la case vide la plus basse de chaque carte Animal.\nÉgalité : le plus de cubes Animal posés.",
+  "tips": "- Évitez de prendre plusieurs animaux qui se posent sur la même couleur de jeton au début.\n- Un cube posé reste même si le motif disparaît ensuite : posez dès que possible.\n- Une seule longue rivière vaut beaucoup plus que plusieurs petites (face A).\n- Montagnes isolées = 0 point : groupez-les.\n- Pensez à vos cartes Animal **avant** de choisir le lot de jetons.",
+  "variants": "- **Solo** inclus (face Solo du plateau central, 3 emplacements).\n- Face **B** des plateaux (îles au lieu de la rivière).\n- **Cartes Esprit de la nature** : un objectif personnel supplémentaire par joueur.",
+  "sources": [
+    "https://media.play-in.com/pdf/rules_games/harmonies_fr.pdf",
+    "https://www.play-in.com/fr/produit/532246/harmonies",
+    "https://www.ludum.fr/jeux-de-societe-famille/harmonies-6951",
+    "https://www.regles-du-jeu.net/regles-du-jeu-harmonies/"
+  ]
+}

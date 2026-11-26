@@ -1,0 +1,27 @@
+{
+  "bggId": 473508,
+  "yearPublished": 2026,
+  "playersMin": 1,
+  "playersMax": 5,
+  "durationMin": 35,
+  "ageMin": 8,
+  "complexity": 2,
+  "level": "familial",
+  "mode": "competitif",
+  "coverPages": [
+    "https://www.play-in.com/fr/produit/663411/wingspan-pocket",
+    "https://www.ludum.fr/jeux-de-strategie-inities/wingspan-pocket-14616"
+  ],
+  "rulesSummary": "**Version courte et autonome de Wingspan** (Elizabeth Hargrave, illustré par Natalia Rojas & Ana María Martínez Jaramillo – Stonemaier Games, VF Matagot fin 2026).\n\nUn seul paquet de cartes **double face** : un côté oiseau, un côté nourriture.\n\n- Chaque joueur construit une **rangée d'oiseaux** (une seule ligne, pas d'habitats) à droite de son nid.\n- À chaque tour, on fait une action simple puis on active **tous les pouvoirs** de sa rangée, de gauche à droite : un petit moteur à combos qui grossit vite.\n- **Course** : la partie s'arrête dès qu'un joueur pose son **6e oiseau**.\n\nCe n'est pas une extension : les cartes ne se mélangent pas avec Wingspan.",
+  "setup": "- Chaque joueur : un **nid** (3 œufs, rappel des actions), un marqueur plume, **6 cartes** : 2 côté oiseau sous sa rangée, 4 côté nourriture en main (mode expert : on choisit les côtés, mais une carte n'est jamais retournée ensuite).\n- Marché : 4 piles côté nourriture, la première carte de chacune révélée côté oiseau.\n- Œufs en réserve.\n- Mode avancé : 2 objectifs communs (parmi 18).\n- Solo : module Automa.",
+  "turnStructure": "À son tour, **une** action :\n\n1. **Jouer un oiseau** de sa main dans sa rangée (à droite) en défaussant les cartes nourriture correspondantes et en payant les œufs demandés.\n2. **Pondre** jusqu'à 3 œufs sur ses oiseaux et son nid (dans leur capacité).\n3. **Piocher 2 cartes** parmi les oiseaux visibles et/ou le dessus des piles nourriture (sans les retourner).\n\nPuis **activer les pouvoirs marron** de tous ses oiseaux, de gauche à droite (la plume suit l'activation). Les pouvoirs verts sont permanents (réductions de coût, souplesse sur la nourriture).",
+  "endCondition": "Fin **immédiate** quand un joueur pose son **6e oiseau** ; tout le monde compte alors ses points.\n**Décompte** : points des oiseaux, œufs, cartes glissées sous les oiseaux, + objectifs communs en mode avancé.",
+  "tips": "- C'est une course : un adversaire peut finir alors que vous n'avez que 4 oiseaux, ne construisez pas un moteur trop lent.\n- L'ordre des oiseaux compte : un oiseau qui produit de la nourriture doit être à gauche de celui qui la consomme.\n- Choisir le côté (oiseau ou nourriture) d'une carte au moment de la piocher est la vraie décision du jeu.\n- Particulièrement bon à 2 ; à 5, les activations rallongent les tours.",
+  "variants": "- **Solo** avec Automa.\n- **Mode avancé** : 2 objectifs communs.\n- **Mode expert** : répartition libre des cartes de départ.",
+  "sources": [
+    "https://gusandco.net/2026/07/03/wingspan-pocket-jeu-societe/",
+    "https://www.ludum.fr/blog/nos-tests/test-avis-wingspan-pocket-wingspan-fait-son-chateau-combo",
+    "https://www.ludum.fr/jeux-de-strategie-inities/wingspan-pocket-14616",
+    "https://www.play-in.com/fr/produit/663411/wingspan-pocket"
+  ]
+}
